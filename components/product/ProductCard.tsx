@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Eye, Heart, ShoppingCart, ShieldCheck } from "lucide-react";
+import { motion } from "framer-motion";
 import { Product } from "@/types";
 
 interface ProductCardProps {
@@ -13,6 +14,12 @@ export default function ProductCard({ product }: ProductCardProps) {
   const { name, price, oldPrice, slug, inStock } = product;
   const [isWished, setIsWished] = useState(false);
 
+  // Auto-calculate discount percentage if a valid discount exists
+  const hasDiscount = oldPrice && oldPrice > price;
+  const discountPercent = hasDiscount
+    ? Math.round(((oldPrice - price) / oldPrice) * 100)
+    : 0;
+
   return (
     <div className="bg-white border border-slate-100 rounded-xl overflow-hidden hover:shadow-md hover:border-slate-200/80 hover:-translate-y-1 transition-all duration-200 ease-out flex flex-col group h-full">
       {/* 1. IMAGE CONTAINER (Clean square container, no overlays) */}
@@ -22,9 +29,21 @@ export default function ProductCard({ product }: ProductCardProps) {
           <ShieldCheck className="w-7 h-7" />
         </div>
 
+        {/* Discount Badge (Top Right) */}
+        {hasDiscount && discountPercent > 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="absolute top-2 right-2 z-10 bg-rose-500 text-white text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full shadow-sm transition-transform duration-200 group-hover:-translate-y-[1px] group-hover:scale-105 pointer-events-none"
+          >
+            {discountPercent}% OFF
+          </motion.div>
+        )}
+
         {/* Stock Status Badge (Bottom Left) */}
         {!inStock && (
-          <div className="absolute bottom-2 left-2">
+          <div className="absolute bottom-2 left-2 z-10">
             <span className="bg-rose-50 text-rose-700 border border-rose-200/50 text-[10px] font-semibold px-1.5 py-0.5 rounded uppercase">
               Out of Stock
             </span>
