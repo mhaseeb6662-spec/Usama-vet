@@ -85,12 +85,13 @@ export default function CategoryScroller() {
           className="flex items-start gap-4 sm:gap-6 overflow-x-auto pb-4 scrollbar-none justify-start px-2"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {MOCK_CATEGORIES.map((cat, index) => {
+          {/* Duplicating the categories array to ensure it overflows the screen for the marquee effect */}
+          {[...MOCK_CATEGORIES, ...MOCK_CATEGORIES, ...MOCK_CATEGORIES].map((cat, index) => {
             // Using picsum.photos with a fixed seed based on category id to simulate real category images
             const imageUrl = `https://picsum.photos/seed/${cat.id}/200/200`;
 
             return (
-              <div key={cat.id} className="shrink-0">
+              <div key={`${cat.id}-${index}`} className="shrink-0">
                 <StaggerItem distance={12}>
                   <Link
                     href={`/categories/${cat.slug}`}
