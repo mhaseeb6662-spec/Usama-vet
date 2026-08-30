@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Heart, RefreshCw, ShoppingCart, Star, ShieldCheck } from "lucide-react";
+import { Eye, Heart, ShoppingCart, ShieldCheck } from "lucide-react";
 import { Product } from "@/types";
 
 interface ProductCardProps {
@@ -10,113 +10,83 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { name, brand, price, oldPrice, currency, slug, inStock } = product;
+  const { name, price, oldPrice, slug, inStock } = product;
   const [isWished, setIsWished] = useState(false);
-  const [isCompared, setIsCompared] = useState(false);
-
-  // Calculate discount percentage if old price exists
-  const discountPercent = oldPrice && oldPrice > price
-    ? Math.round(((oldPrice - price) / oldPrice) * 100)
-    : 0;
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md hover:border-emerald-300 transition-all duration-300 flex flex-col group relative h-full">
-      {/* IMAGE CONTAINER */}
-      <div className="aspect-square bg-slate-50 relative flex items-center justify-center border-b border-slate-100 overflow-hidden shrink-0">
-        
-        {/* Placeholder Graphic since image assets are mocked */}
+    <div className="bg-white border border-slate-100 rounded-xl overflow-hidden hover:shadow-md hover:border-slate-200 transition-all duration-300 flex flex-col group h-full">
+      {/* 1. IMAGE CONTAINER (Clean square container, no overlays) */}
+      <div className="aspect-square bg-[#fbfdfc] relative flex items-center justify-center border-b border-slate-100 overflow-hidden shrink-0">
+        {/* Placeholder Graphic */}
         <div className="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
           <ShieldCheck className="w-7 h-7" />
         </div>
-        
-        {/* Discount Badge (Top Left) */}
-        {discountPercent > 0 && (
-          <div className="absolute top-2.5 left-2.5">
-            <span className="bg-red-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded uppercase tracking-wide shadow-sm">
-              -{discountPercent}% OFF
+
+        {/* Stock Status Badge (Bottom Left) */}
+        {!inStock && (
+          <div className="absolute bottom-2 left-2">
+            <span className="bg-rose-50 text-rose-700 border border-rose-200/50 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">
+              Out of Stock
             </span>
           </div>
         )}
-
-        {/* Wishlist & Compare Overlay Buttons (Top Right) */}
-        <div className="absolute top-2.5 right-2.5 flex flex-col gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-          <button
-            onClick={(e) => { e.preventDefault(); setIsWished(!isWished); }}
-            className={`w-7 h-7 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center transition-colors focus:outline-none ${
-              isWished ? "text-red-500 border-red-200 bg-red-50" : "text-slate-500 hover:text-red-500"
-            }`}
-            aria-label="Add to Wishlist"
-          >
-            <Heart className={`w-3.5 h-3.5 ${isWished ? "fill-current" : ""}`} />
-          </button>
-          <button
-            onClick={(e) => { e.preventDefault(); setIsCompared(!isCompared); }}
-            className={`w-7 h-7 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center transition-colors focus:outline-none ${
-              isCompared ? "text-emerald-600 border-emerald-250 bg-emerald-50" : "text-slate-500 hover:text-emerald-600"
-            }`}
-            aria-label="Add to Compare"
-          >
-            <RefreshCw className="w-3 h-3" />
-          </button>
-        </div>
-
-        {/* Stock Status Badge (Bottom Left) */}
-        <div className="absolute bottom-2 left-2">
-          <span
-            className={`text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider ${
-              inStock
-                ? "bg-emerald-50 text-emerald-700 border border-emerald-200/50"
-                : "bg-rose-50 text-rose-700 border border-rose-200/50"
-            }`}
-          >
-            {inStock ? "In Stock" : "Out of Stock"}
-          </span>
-        </div>
       </div>
 
-      {/* DETAIL CONTENT */}
-      <div className="p-3 flex-grow flex flex-col text-left">
-        
-        {/* Brand label */}
-        <span className="text-[9px] uppercase font-bold text-slate-400 tracking-wider block mb-1">
-          {brand}
-        </span>
-        
+      {/* 2. PRODUCT INFO AREA */}
+      <div className="p-3.5 flex-grow flex flex-col text-left">
         {/* Product Title */}
-        <Link href={`/products/${slug}`} className="block focus:outline-none">
-          <h3 className="font-bold text-slate-800 text-xs line-clamp-2 leading-snug mb-1.5 hover:text-emerald-600 transition-colors">
+        <Link href={`/products/${slug}`} className="block focus:outline-none mb-1">
+          <h3 className="font-bold text-slate-800 text-xs sm:text-sm line-clamp-1 leading-snug hover:text-[#009473] transition-colors">
             {name}
           </h3>
         </Link>
 
-        {/* Rating Stars (Small stars matching screenshot card layout) */}
-        <div className="flex items-center gap-0.5 mb-2">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star key={i} className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
-          ))}
-          <span className="text-[9px] text-slate-450 font-medium ml-1">(5.0)</span>
-        </div>
+        {/* Thin Divider Line (Separates Title from Price & Actions like screenshot) */}
+        <div className="border-t border-slate-100/80 my-2" />
 
-        {/* Pricing Area */}
-        <div className="mt-auto pt-2 border-t border-slate-100 flex flex-wrap items-baseline gap-1.5 mb-2.5">
-          <span className="font-black text-slate-900 text-sm">
-            {currency} {price.toLocaleString()}
-          </span>
+        {/* Price Row (Rs. format, old price crossed-out first, new price second) */}
+        <div className="flex items-center gap-2 mb-3.5 text-xs">
           {oldPrice && oldPrice > price && (
-            <span className="text-[10px] text-slate-400 line-through">
-              {currency} {oldPrice.toLocaleString()}
+            <span className="text-slate-400 line-through font-medium">
+              Rs. {oldPrice.toLocaleString()}
             </span>
           )}
+          <span className="font-bold text-slate-900">
+            Rs. {price.toLocaleString()}
+          </span>
         </div>
 
-        {/* Solid Green Add To Cart Button (Full-width like screenshot) */}
-        <button
-          disabled={!inStock}
-          className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-[10px] uppercase tracking-wider py-2 rounded flex items-center justify-center gap-1.5 shadow-sm transition-colors focus:outline-none"
-        >
-          <ShoppingCart className="w-3.5 h-3.5" />
-          <span>Add To Cart</span>
-        </button>
+        {/* 3. ACTIONS ROW (Eye, Heart, Add to cart Button aligned horizontally) */}
+        <div className="mt-auto flex items-center gap-2">
+          {/* Compare/View Button (Circular, white background, green icon) */}
+          <Link
+            href={`/products/${slug}`}
+            className="w-8 h-8 rounded-full border border-slate-200 bg-white hover:bg-[#f0f8f5] text-[#009473] flex items-center justify-center transition-colors shrink-0 focus:outline-none"
+            aria-label="View Product Details"
+          >
+            <Eye className="w-4 h-4" />
+          </Link>
+
+          {/* Wishlist Button (Circular, white background, green icon) */}
+          <button
+            onClick={() => setIsWished(!isWished)}
+            className={`w-8 h-8 rounded-full border border-slate-200 bg-white hover:bg-[#f0f8f5] flex items-center justify-center transition-colors shrink-0 focus:outline-none ${
+              isWished ? "text-red-500 border-red-200 bg-red-50" : "text-[#009473]"
+            }`}
+            aria-label="Add to Wishlist"
+          >
+            <Heart className={`w-4 h-4 ${isWished ? "fill-current" : ""}`} />
+          </button>
+
+          {/* Add to cart Button (Pill, solid green) */}
+          <button
+            disabled={!inStock}
+            className="flex-grow bg-[#009473] hover:bg-[#028467] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-[11px] py-2 px-3 rounded-full flex items-center justify-center gap-1.5 transition-colors focus:outline-none"
+          >
+            <ShoppingCart className="w-3.5 h-3.5" />
+            <span>Add to cart</span>
+          </button>
+        </div>
       </div>
     </div>
   );
