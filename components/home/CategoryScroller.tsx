@@ -8,34 +8,65 @@ import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/Anima
 
 export default function CategoryScroller() {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const exactPositionRef = useRef(0);
+  const directionRef = useRef<1 | -1>(1); // 1 = right, -1 = left
+  const isInitializedRef = useRef(false);
 
-  // Auto-scroll logic for Categories
+  // Smooth Continuous Auto-scroll logic (Ping-Pong)
   useEffect(() => {
-    if (isPaused) return;
+    let animationFrameId: number;
+    let lastTime = performance.now();
 
-    const interval = setInterval(() => {
+    // Sync initial exact position with DOM
+    if (!isInitializedRef.current && scrollRef.current) {
+      exactPositionRef.current = scrollRef.current.scrollLeft;
+      isInitializedRef.current = true;
+    }
+
+    const renderLoop = (time: number) => {
+      const deltaTime = time - lastTime;
+      lastTime = time;
+
       if (scrollRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-        if (Math.ceil(scrollLeft + clientWidth) >= scrollWidth - 5) {
-          scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
-        } else {
-          // Scroll right by approximately one category circle width (e.g., 120px)
-          scrollRef.current.scrollBy({ left: 120, behavior: "smooth" });
+        const { scrollWidth, clientWidth } = scrollRef.current;
+        
+        // Change direction smoothly if we hit the boundaries
+        if (directionRef.current === 1 && Math.ceil(exactPositionRef.current + clientWidth) >= scrollWidth - 2) {
+          directionRef.current = -1; // Turn left
+        } else if (directionRef.current === -1 && exactPositionRef.current <= 2) {
+          directionRef.current = 1; // Turn right
+        }
+
+        // Speed mapping: 0.08 px/ms (normal), 0.015 px/ms (slow on hover)
+        const targetSpeed = isHovered ? 0.015 : 0.08;
+        
+        // Increment exact float position
+        exactPositionRef.current += (targetSpeed * deltaTime * directionRef.current);
+        
+        // Apply to DOM
+        scrollRef.current.scrollLeft = exactPositionRef.current;
+        
+        // If user manually swipes/scrolls, re-sync our float tracker
+        if (Math.abs(scrollRef.current.scrollLeft - exactPositionRef.current) > 2) {
+          exactPositionRef.current = scrollRef.current.scrollLeft;
         }
       }
-    }, 1500); // 1.5 seconds interval for smooth movement
+      animationFrameId = requestAnimationFrame(renderLoop);
+    };
 
-    return () => clearInterval(interval);
-  }, [isPaused]);
+    animationFrameId = requestAnimationFrame(renderLoop);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isHovered]);
 
   return (
     <section 
       className="py-10 px-4 max-w-7xl mx-auto overflow-hidden group/section"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={() => setIsPaused(true)}
-      onTouchEnd={() => setIsPaused(false)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={() => setIsHovered(true)}
+      onTouchEnd={() => setIsHovered(false)}
     >
       {/* Small title matching screenshot */}
       <div className="text-center mb-6">
@@ -51,7 +82,7 @@ export default function CategoryScroller() {
       <StaggerContainer staggerDelay={0.05}>
         <div 
           ref={scrollRef}
-          className="flex items-start gap-4 sm:gap-6 overflow-x-auto pb-4 scrollbar-none justify-start snap-x snap-mandatory px-2"
+          className="flex items-start gap-4 sm:gap-6 overflow-x-auto pb-4 scrollbar-none justify-start px-2"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {MOCK_CATEGORIES.map((cat, index) => {
@@ -59,7 +90,7 @@ export default function CategoryScroller() {
             const imageUrl = `https://picsum.photos/seed/${cat.id}/200/200`;
 
             return (
-              <div key={cat.id} className="shrink-0 snap-start">
+              <div key={cat.id} className="shrink-0">
                 <StaggerItem distance={12}>
                   <Link
                     href={`/categories/${cat.slug}`}
