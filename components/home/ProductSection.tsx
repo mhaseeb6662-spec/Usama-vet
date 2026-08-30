@@ -61,7 +61,7 @@ export default function ProductSection({
           scrollRef.current.scrollBy({ left: 320, behavior: "smooth" });
         }
       }
-    }, 3500); // Scrolls every 3.5 seconds
+    }, 1000); // Scrolls every 1 second
 
     return () => clearInterval(interval);
   }, [isPaused, products]);
