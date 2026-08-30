@@ -77,7 +77,7 @@ export default function ProductSection({
 
   return (
     <section 
-      className={`py-16 px-4 border-t border-b border-slate-100 ${bgColorClass} overflow-hidden group/section`}
+      className={`py-8 px-4 border-t border-b border-slate-100 ${bgColorClass} overflow-hidden group/section`}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={() => setIsPaused(true)}
@@ -92,19 +92,19 @@ export default function ProductSection({
         {canScrollLeft && (
           <button
             onClick={() => scrollByAmount("left")}
-            className="absolute left-0 top-[55%] -translate-y-1/2 -ml-3 z-10 w-10 h-10 rounded-full bg-white shadow-lg border border-slate-100 text-slate-700 flex items-center justify-center opacity-0 group-hover/section:opacity-100 transition-opacity duration-300 hover:text-emerald-600 hover:scale-110 active:scale-95"
+            className="absolute left-0 top-[55%] -translate-y-1/2 -ml-3 z-10 w-9 h-9 rounded-full bg-white shadow-lg border border-slate-100 text-slate-700 flex items-center justify-center opacity-0 group-hover/section:opacity-100 transition-opacity duration-300 hover:text-emerald-600 hover:scale-110 active:scale-95"
             aria-label="Scroll Left"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-4 h-4" />
           </button>
         )}
         {canScrollRight && products.length > 4 && (
           <button
             onClick={() => scrollByAmount("right")}
-            className="absolute right-0 top-[55%] -translate-y-1/2 -mr-3 z-10 w-10 h-10 rounded-full bg-white shadow-lg border border-slate-100 text-slate-700 flex items-center justify-center opacity-0 group-hover/section:opacity-100 transition-opacity duration-300 hover:text-emerald-600 hover:scale-110 active:scale-95"
+            className="absolute right-0 top-[55%] -translate-y-1/2 -mr-3 z-10 w-9 h-9 rounded-full bg-white shadow-lg border border-slate-100 text-slate-700 flex items-center justify-center opacity-0 group-hover/section:opacity-100 transition-opacity duration-300 hover:text-emerald-600 hover:scale-110 active:scale-95"
             aria-label="Scroll Right"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-4 h-4" />
           </button>
         )}
 
@@ -113,11 +113,11 @@ export default function ProductSection({
           <div
             ref={scrollRef}
             onScroll={checkScrollState}
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-8 pt-2 px-1"
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-4 pt-2 px-1"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {products.map((product) => (
-              <div key={product.id} className="w-[85vw] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-start">
+              <div key={product.id} className="w-[85vw] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)] shrink-0 snap-start">
                 <StaggerItem distance={14} className="h-full">
                   <ProductCard product={product} />
                 </StaggerItem>

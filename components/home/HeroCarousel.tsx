@@ -65,8 +65,8 @@ export default function HeroCarousel() {
   const ActiveIcon = slide.badgeIcon;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 mt-6">
-      <div className="relative bg-gradient-to-br from-slate-900 via-slate-950 to-emerald-950 text-white rounded-xl overflow-hidden shadow-lg h-64 sm:h-80 md:h-[350px] flex items-center">
+    <div className="max-w-7xl mx-auto px-4 mt-3">
+      <div className="relative bg-gradient-to-br from-slate-900 via-slate-950 to-emerald-950 text-white rounded-xl overflow-hidden shadow-lg h-56 sm:h-72 md:h-[320px] flex items-center">
         {/* Decorative Grid Overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-15" />
         
@@ -97,7 +97,7 @@ export default function HeroCarousel() {
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-                className="text-[24px] sm:text-[30px] md:text-[38px] font-bold text-white leading-[1.2]"
+                className="text-[22px] sm:text-[26px] md:text-[34px] font-bold text-white leading-[1.2]"
               >
                 {slide.title}
               </motion.h2>
@@ -107,7 +107,7 @@ export default function HeroCarousel() {
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="text-slate-350 text-[13px] sm:text-[15px] font-normal leading-normal line-clamp-3"
+                className="text-slate-350 text-[12px] sm:text-[13px] font-normal leading-normal line-clamp-3"
               >
                 {slide.description}
               </motion.p>
@@ -121,7 +121,7 @@ export default function HeroCarousel() {
               >
                 <Link
                   href={slide.link}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs uppercase px-6 py-2.5 sm:py-3 rounded-lg shadow-md hover:shadow-emerald-600/10 transition-all focus:outline-none hover-scale-button inline-flex items-center"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-[11px] sm:text-[12px] uppercase px-5 py-2.5 rounded-md shadow-md hover:shadow-emerald-600/10 transition-all focus:outline-none hover-scale-button inline-flex items-center"
                 >
                   {slide.btnText}
                 </Link>

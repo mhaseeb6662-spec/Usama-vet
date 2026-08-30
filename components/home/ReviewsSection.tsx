@@ -6,7 +6,7 @@ import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/Anima
 
 export default function ReviewsSection() {
   return (
-    <section className="py-16 px-4 max-w-7xl mx-auto overflow-hidden">
+    <section className="py-8 px-4 max-w-7xl mx-auto overflow-hidden">
       {/* Testimonials section header with reveal */}
       <FadeUp distance={10}>
         <SectionHeader

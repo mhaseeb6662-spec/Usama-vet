@@ -60,7 +60,7 @@ export default function Header() {
         className={`sticky top-0 z-40 w-full transition-all duration-200 ${scrolled ? "shadow-md" : ""}`}
       >
         {/* 2. MAIN HEADER (Logo, Search Pill, Actions) */}
-        <header className="bg-white border-b border-slate-100 py-3.5 px-4">
+        <header className="bg-white border-b border-slate-100 py-2.5 px-4">
           <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
             
             {/* Logo Group (Subtle hover transition) */}

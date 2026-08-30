@@ -29,20 +29,20 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:-translate-y-[3px] transition-all duration-200 ease-out flex flex-col h-full group/reviewCard">
+    <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md hover:-translate-y-[3px] transition-all duration-200 ease-out flex flex-col h-full group/reviewCard">
       {/* Header section with User Info & Rating */}
-      <div className="flex justify-between items-start gap-4 mb-4">
-        <div className="flex items-center gap-3">
+      <div className="flex justify-between items-start gap-3 mb-3">
+        <div className="flex items-center gap-2.5">
           {/* Avatar Placeholder */}
-          <div className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-slate-700 text-xs shrink-0 group-hover/reviewCard:scale-[1.05] transition-transform duration-200 ease-out">
+          <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-slate-700 text-[10px] shrink-0 group-hover/reviewCard:scale-[1.05] transition-transform duration-200 ease-out">
             {getInitials(userName)}
           </div>
           <div>
-            <h4 className="font-semibold text-slate-900 text-[13px] leading-snug">
+            <h4 className="font-semibold text-slate-900 text-[12px] leading-snug">
               {userName}
             </h4>
             {userDesignation && (
-              <span className="text-[11px] text-slate-500 font-normal block mt-0.5">
+              <span className="text-[10px] text-slate-500 font-normal block mt-0.5">
                 {userDesignation}
               </span>
             )}

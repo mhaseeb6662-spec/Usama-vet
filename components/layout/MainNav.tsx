@@ -23,16 +23,16 @@ export default function MainNav() {
 
   return (
     <div className="bg-[#f0f8f5] border-b border-slate-200/60 relative z-30">
-      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center h-12">
-        {/* Left Side: Solid Green Categories Button (Aligns with screenshot shape and text) */}
+      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center h-11">
+        {/* Left Side: Solid Green Categories Button */}
         <div className="relative">
           <button
             onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-            className="bg-[#009473] hover:bg-[#028467] text-white px-5 py-2.5 rounded-lg text-[13px] font-semibold uppercase flex items-center gap-2 transition-colors focus:outline-none hover-scale-subtle"
+            className="bg-[#009473] hover:bg-[#028467] text-white px-4 py-2 rounded-md text-[12px] font-semibold uppercase flex items-center gap-2 transition-colors focus:outline-none hover-scale-subtle"
             aria-expanded={isCategoriesOpen}
             aria-haspopup="menu"
           >
-            <Menu className="w-4 h-4 shrink-0" />
+            <Menu className="w-3.5 h-3.5 shrink-0" />
             <span>CATEGORIES</span>
             <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 shrink-0 ${isCategoriesOpen ? "rotate-180" : ""}`} />
           </button>

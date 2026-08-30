@@ -59,7 +59,7 @@ export default function Footer() {
     >
       
       {/* 4-COLUMN SCREENSHOT-ALIGNED GRID */}
-      <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         
         {/* Column 1: Logo & Business Intro */}
         <motion.div variants={columnVariants} className="space-y-4 text-left">

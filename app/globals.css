@@ -8,13 +8,23 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: #009B72;
+  --color-primary-hover: #007A5A;
+  --color-primary-light: #EAF8F4;
+  --color-primary-ultra-light: #F4FBF8;
+  --color-text-main: #202020;
+  --color-text-secondary: #666666;
+  --color-text-muted: #8A8A8A;
+  --color-border: #E5E7E7;
   --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
 body {
-  background-color: #f8fafc; /* fallback */
-  color: #0f172a;
+  background-color: var(--background);
+  color: var(--color-text-main);
+  font-size: 13px; /* Dense e-commerce baseline */
+  line-height: 1.5;
 }
 
 
