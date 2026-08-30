@@ -68,22 +68,22 @@ export default function HeroCarousel() {
             >
               {/* Slide text details (Left-aligned) */}
               <div className="max-w-xl space-y-3 sm:space-y-4 text-left">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 uppercase tracking-wider">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[12px] font-semibold bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 uppercase">
                   <ActiveIcon className="w-3 h-3" /> {slide.tag}
                 </span>
                 
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white leading-tight">
+                <h2 className="text-[24px] sm:text-[30px] md:text-[38px] font-bold text-white leading-[1.2]">
                   {slide.title}
                 </h2>
                 
-                <p className="text-slate-350 text-xs sm:text-sm font-light leading-relaxed line-clamp-3">
+                <p className="text-slate-350 text-[13px] sm:text-[15px] font-normal leading-normal line-clamp-3">
                   {slide.description}
                 </p>
                 
                 <div className="pt-2">
                   <Link
                     href={slide.link}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider px-6 py-2.5 sm:py-3 rounded-lg shadow-md hover:shadow-emerald-600/10 transition-all focus:outline-none"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs uppercase px-6 py-2.5 sm:py-3 rounded-lg shadow-md hover:shadow-emerald-600/10 transition-all focus:outline-none"
                   >
                     {slide.btnText}
                   </Link>

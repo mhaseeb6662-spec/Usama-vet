@@ -27,7 +27,7 @@ export default function MainNav() {
         <div className="relative">
           <button
             onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-            className="bg-[#009473] hover:bg-[#028467] text-white px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-wider flex items-center gap-2.5 transition-colors focus:outline-none"
+            className="bg-[#009473] hover:bg-[#028467] text-white px-5 py-2.5 rounded-lg text-[13px] font-semibold uppercase flex items-center gap-2 transition-colors focus:outline-none"
             aria-expanded={isCategoriesOpen}
             aria-haspopup="menu"
           >
@@ -43,7 +43,7 @@ export default function MainNav() {
                 <Link
                   key={cat.id}
                   href={`/categories/${cat.slug}`}
-                  className="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-[#f0f8f5] hover:text-[#009473] transition-colors"
+                  className="block px-4 py-2 text-[12px] font-medium text-slate-700 hover:bg-[#f0f8f5] hover:text-[#009473] transition-colors"
                   role="menuitem"
                 >
                   {cat.name}
@@ -57,7 +57,7 @@ export default function MainNav() {
         <nav className="flex items-center gap-8 ml-6 mr-auto">
           <Link
             href="/"
-            className={`font-bold text-xs transition-colors relative py-3.5 ${
+            className={`font-semibold text-[13px] transition-colors relative py-3.5 ${
               pathname === "/" ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
             }`}
           >
@@ -65,7 +65,7 @@ export default function MainNav() {
           </Link>
           <Link
             href="/about"
-            className={`font-bold text-xs transition-colors relative py-3.5 ${
+            className={`font-semibold text-[13px] transition-colors relative py-3.5 ${
               isActive("/about") ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
             }`}
           >
@@ -73,7 +73,7 @@ export default function MainNav() {
           </Link>
           <Link
             href="/reviews"
-            className={`font-bold text-xs transition-colors relative py-3.5 ${
+            className={`font-semibold text-[13px] transition-colors relative py-3.5 ${
               isActive("/reviews") ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
             }`}
           >
@@ -81,7 +81,7 @@ export default function MainNav() {
           </Link>
           <Link
             href="/contact"
-            className={`font-bold text-xs transition-colors relative py-3.5 ${
+            className={`font-semibold text-[13px] transition-colors relative py-3.5 ${
               isActive("/contact") ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
             }`}
           >
@@ -90,7 +90,7 @@ export default function MainNav() {
         </nav>
 
         {/* Right Side: Hotline & Tracking with matching icons */}
-        <div className="flex items-center gap-6 text-xs font-bold text-slate-800 shrink-0">
+        <div className="flex items-center gap-6 text-[13px] font-semibold text-slate-800 shrink-0">
           
           {/* Hotline */}
           <a

@@ -45,14 +45,14 @@ export default function Header() {
             
             {/* Logo Group (Aligned with Qadri logo visuals) */}
             <Link href="/" className="flex items-center gap-2 group shrink-0 focus:outline-none">
-              <div className="w-10 h-10 bg-[#009473] rounded-full flex items-center justify-center text-white font-black text-xl shadow-sm group-hover:bg-[#028467] transition-colors shrink-0">
+              <div className="w-10 h-10 bg-[#009473] rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm group-hover:bg-[#028467] transition-colors shrink-0">
                 U
               </div>
               <div className="hidden sm:block leading-none text-left">
-                <span className="block font-black text-slate-800 text-lg tracking-tight group-hover:text-[#009473] transition-colors uppercase">
+                <span className="block font-bold text-slate-800 text-[17px] group-hover:text-[#009473] transition-colors uppercase">
                   {BUSINESS_CONFIG.shortName}
                 </span>
-                <span className="block text-[8px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+                <span className="block text-[9px] text-slate-450 font-medium uppercase mt-0.5">
                   Veterinary Pharmacy
                 </span>
               </div>
@@ -88,7 +88,7 @@ export default function Header() {
                 <div className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0">
                   <User className="w-4 h-4" />
                 </div>
-                <span className="hidden lg:inline text-xs font-bold text-slate-700">
+                <span className="hidden lg:inline text-[13px] font-semibold text-slate-705">
                   Login / Register
                 </span>
               </Link>
@@ -100,11 +100,11 @@ export default function Header() {
               >
                 <div className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 relative">
                   <ShoppingCart className="w-4 h-4" />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#009473] text-white text-[8px] font-black rounded-full flex items-center justify-center border border-white">
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#009473] text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white">
                     0
                   </span>
                 </div>
-                <span className="hidden lg:inline text-xs font-bold text-slate-700">
+                <span className="hidden lg:inline text-[13px] font-semibold text-slate-705">
                   Cart
                 </span>
               </Link>
@@ -161,35 +161,35 @@ export default function Header() {
         {isMobileMenuOpen && (
           <div className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-slate-200 shadow-xl py-4 px-4 space-y-4">
             <nav className="flex flex-col gap-2">
-              <Link href="/" className="px-3 py-2 rounded-md font-bold text-xs uppercase tracking-wider text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
+              <Link href="/" className="px-3 py-2 rounded-md font-semibold text-xs uppercase text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
                 Home
               </Link>
-              <Link href="/#products" className="px-3 py-2 rounded-md font-bold text-xs uppercase tracking-wider text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
+              <Link href="/#products" className="px-3 py-2 rounded-md font-semibold text-xs uppercase text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
                 Shop
               </Link>
-              <Link href="/about" className="px-3 py-2 rounded-md font-bold text-xs uppercase tracking-wider text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
+              <Link href="/about" className="px-3 py-2 rounded-md font-semibold text-xs uppercase text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
                 About Us
               </Link>
-              <Link href="/reviews" className="px-3 py-2 rounded-md font-bold text-xs uppercase tracking-wider text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
+              <Link href="/reviews" className="px-3 py-2 rounded-md font-semibold text-xs uppercase text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
                 Reviews
               </Link>
-              <Link href="/contact" className="px-3 py-2 rounded-md font-bold text-xs uppercase tracking-wider text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
+              <Link href="/contact" className="px-3 py-2 rounded-md font-semibold text-xs uppercase text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
                 Contact Us
               </Link>
             </nav>
 
             <div className="pt-4 border-t border-slate-100 space-y-3">
-              <div className="px-3 text-xs font-bold text-slate-700">
+              <div className="px-3 text-xs font-semibold text-slate-700">
                 Call Us: <a href="tel:03302760775" className="text-emerald-700 hover:underline">0330-2760775</a>
               </div>
-              <div className="px-3 text-xs font-bold text-slate-700">
+              <div className="px-3 text-xs font-semibold text-slate-700">
                 Track Your Order
               </div>
               <a
                 href={BUSINESS_CONFIG.contact.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mx-3 bg-[#009473] hover:bg-[#028467] text-white font-bold text-center py-2.5 rounded-md text-xs transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                className="mx-3 bg-[#009473] hover:bg-[#028467] text-white font-semibold text-center py-2.5 rounded-md text-xs transition-colors flex items-center justify-center gap-1.5 shadow-sm"
               >
                 <span>WhatsApp Support</span>
               </a>

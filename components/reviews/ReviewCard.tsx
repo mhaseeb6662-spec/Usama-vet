@@ -38,11 +38,11 @@ export default function ReviewCard({ review }: ReviewCardProps) {
             {getInitials(userName)}
           </div>
           <div>
-            <h4 className="font-bold text-slate-900 text-sm leading-snug">
+            <h4 className="font-semibold text-slate-900 text-[13px] leading-snug">
               {userName}
             </h4>
             {userDesignation && (
-              <span className="text-[11px] text-slate-500 font-medium block">
+              <span className="text-[11px] text-slate-500 font-normal block mt-0.5">
                 {userDesignation}
               </span>
             )}
@@ -63,16 +63,16 @@ export default function ReviewCard({ review }: ReviewCardProps) {
       </div>
 
       {/* Review Comment */}
-      <p className="text-slate-600 text-xs leading-relaxed flex-grow italic mb-4">
+      <p className="text-slate-655 text-[13px] leading-normal flex-grow italic mb-4 font-normal">
         &ldquo;{comment}&rdquo;
       </p>
 
       {/* Footer Info */}
-      <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
+      <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-normal">
         {formattedDate && <time dateTime={date}>{formattedDate}</time>}
         
         {verifiedPurchase && (
-          <span className="flex items-center gap-1 text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+          <span className="flex items-center gap-1 text-emerald-700 font-medium bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
             <CheckCircle className="w-3 h-3" /> Verified Purchase
           </span>
         )}

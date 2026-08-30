@@ -10,7 +10,7 @@ export default function CategoryScroller() {
     <section className="py-10 px-4 max-w-7xl mx-auto">
       {/* Small title matching screenshot */}
       <div className="text-center mb-6">
-        <h2 className="text-lg font-black text-slate-900 uppercase tracking-widest relative inline-block pb-1.5">
+        <h2 className="text-lg font-bold text-slate-900 uppercase relative inline-block pb-1.5">
           Shop By Categories
           <span className="absolute bottom-0 left-1/4 w-1/2 h-0.5 bg-emerald-600 rounded-full" />
         </h2>
@@ -34,7 +34,7 @@ export default function CategoryScroller() {
               </div>
               
               {/* Category Title */}
-              <span className="block mt-2.5 text-[10px] sm:text-xs font-bold text-slate-750 group-hover:text-emerald-600 transition-colors text-center max-w-[100px] leading-tight">
+              <span className="block mt-2.5 text-[12px] sm:text-[13px] font-semibold text-slate-750 group-hover:text-emerald-600 transition-colors text-center max-w-[100px] leading-tight">
                 {cat.name}
               </span>
             </Link>

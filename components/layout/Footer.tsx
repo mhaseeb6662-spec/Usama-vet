@@ -32,29 +32,29 @@ export default function Footer() {
         {/* Column 1: Logo & Business Intro */}
         <div className="space-y-4 text-left">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-[#009473] rounded-full flex items-center justify-center text-white font-black text-xl shadow-sm shrink-0">
+            <div className="w-10 h-10 bg-[#009473] rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm shrink-0">
               U
             </div>
             <div>
-              <span className="block font-black text-slate-900 leading-none text-base uppercase">
+              <span className="block font-bold text-slate-900 leading-none text-[15px] uppercase">
                 {BUSINESS_CONFIG.shortName}
               </span>
-              <span className="block text-[8px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+              <span className="block text-[9px] text-slate-450 font-medium uppercase mt-0.5">
                 Veterinary Pharmacy
               </span>
             </div>
           </div>
-          <p className="text-[11px] leading-relaxed text-slate-600">
+          <p className="text-[12px] leading-relaxed text-slate-500 font-normal">
             We specialize in providing high-quality veterinary medicines, livestock feeds, and pet care products at unbeatable prices. Our goal is to deliver animal health and wellness.
           </p>
         </div>
 
         {/* Column 2: QUICK LINKS */}
         <div className="space-y-3.5 text-left md:pl-8">
-          <h4 className="text-slate-950 font-black text-xs uppercase tracking-wider">
+          <h4 className="text-slate-950 font-semibold text-[13px] uppercase">
             QUICK LINKS
           </h4>
-          <ul className="space-y-2.5 text-[11px] font-bold text-slate-700">
+          <ul className="space-y-2.5 text-[12px] font-medium text-slate-600">
             <li>
               <Link href="/" className="hover:text-[#009473] transition-colors">
                 Home
@@ -80,10 +80,10 @@ export default function Footer() {
 
         {/* Column 3: OUR STORES */}
         <div className="space-y-3.5 text-left md:pl-8">
-          <h4 className="text-slate-950 font-black text-xs uppercase tracking-wider">
+          <h4 className="text-slate-950 font-semibold text-[13px] uppercase">
             OUR STORES
           </h4>
-          <ul className="space-y-2.5 text-[11px] font-bold text-slate-700">
+          <ul className="space-y-2.5 text-[12px] font-medium text-slate-600">
             <li>
               <span className="hover:text-[#009473] cursor-not-allowed transition-colors">
                 Terms & Conditions
@@ -104,12 +104,12 @@ export default function Footer() {
 
         {/* Column 4: SIGN UP TO NEWSLETTERS */}
         <div className="space-y-4 text-left">
-          <h4 className="text-slate-950 font-black text-xs uppercase tracking-wider">
+          <h4 className="text-slate-950 font-semibold text-[13px] uppercase">
             SIGN UP TO NEWSLETTERS
           </h4>
           
           {subscribed ? (
-            <div className="bg-emerald-50 border border-emerald-250 text-emerald-800 text-[10px] px-3 py-2.5 rounded-full text-center font-bold">
+            <div className="bg-emerald-50 border border-emerald-250 text-emerald-800 text-[11px] px-3 py-2.5 rounded-full text-center font-semibold">
               Subscribed successfully!
             </div>
           ) : (
@@ -120,12 +120,12 @@ export default function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-transparent text-xs text-slate-800 outline-none placeholder:text-slate-400 focus:outline-none"
+                className="w-full bg-transparent text-xs text-slate-850 outline-none placeholder:text-slate-400 focus:outline-none"
               />
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-[#009473] hover:bg-[#028467] text-white font-bold text-[10px] px-4 py-2 rounded-full transition-colors shrink-0 disabled:opacity-50"
+                className="bg-[#009473] hover:bg-[#028467] text-white font-semibold text-[11px] px-4 py-2 rounded-full transition-colors shrink-0 disabled:opacity-50"
               >
                 {loading ? "..." : "Subscribe"}
               </button>
@@ -134,7 +134,7 @@ export default function Footer() {
 
           {/* Social Icons row (Square buttons with white background and borders) */}
           <div className="space-y-2 pt-1">
-            <span className="block text-[11px] font-black text-slate-800">
+            <span className="block text-[12px] font-semibold text-slate-800">
               Follow Us:
             </span>
             <div className="flex gap-2">
@@ -183,14 +183,14 @@ export default function Footer() {
 
       {/* SOLID GREEN BOTTOM BAR */}
       <div className="bg-[#009473] py-4 px-4 border-t border-slate-200/20">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-white text-[11px] font-bold">
-          <div className="text-center sm:text-left select-none">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-white text-[11px] font-semibold">
+          <div className="text-center sm:text-left select-none font-medium">
             {currentYear} &copy; usamavet.com All Rights Reserved
           </div>
           
           {/* Powered by credentials */}
-          <div className="text-center sm:text-right select-none font-bold tracking-wide">
-            Powered By: <span className="font-black text-emerald-200 tracking-wider">mim-art</span>
+          <div className="text-center sm:text-right select-none font-semibold">
+            Powered By: <span className="font-bold text-emerald-100">mim-art</span>
           </div>
         </div>
       </div>

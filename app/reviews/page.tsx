@@ -84,15 +84,15 @@ export default function ReviewsPage() {
       {/* PAGE HERO */}
       <section className="bg-gradient-to-br from-slate-900 via-slate-950 to-emerald-950 text-white py-16 px-4 text-center">
         <div className="max-w-3xl mx-auto space-y-4">
-          <nav className="flex justify-center text-xs uppercase tracking-wider font-semibold text-emerald-400 gap-2 mb-2">
+          <nav className="flex justify-center text-[12px] uppercase font-semibold text-emerald-400 gap-2 mb-2">
             <Link href="/" className="hover:underline">Home</Link>
             <span>/</span>
             <span className="text-slate-300">Customer Reviews</span>
           </nav>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+          <h1 className="text-[24px] sm:text-[30px] font-bold leading-snug">
             Customer Testimonials
           </h1>
-          <p className="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed font-light">
+          <p className="text-slate-350 text-[13px] sm:text-[14px] max-w-xl mx-auto leading-normal font-normal">
             We value feedback from our veterinary clients, commercial farmers, and pet parents. Here is what they say about our service.
           </p>
         </div>
@@ -103,7 +103,7 @@ export default function ReviewsPage() {
         <div className="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-center mb-10">
           {/* Average Rating Score Block */}
           <div className="md:col-span-4 text-center border-b md:border-b-0 md:border-r border-slate-200 pb-6 md:pb-0 md:pr-6">
-            <span className="block text-5xl font-extrabold text-slate-900 leading-none">
+            <span className="block text-[42px] font-bold text-slate-900 leading-none">
               {averageRating}
             </span>
             <div className="flex items-center justify-center gap-1 my-3" aria-label={`Average rating: ${averageRating} stars`}>
@@ -116,43 +116,43 @@ export default function ReviewsPage() {
                 />
               ))}
             </div>
-            <span className="text-xs text-slate-500 font-medium">
+            <span className="text-[12px] text-slate-500 font-medium">
               Based on {totalReviews} Mock Testimonials
             </span>
           </div>
 
           {/* Progress Bars (Star Breakdown) */}
           <div className="md:col-span-8 space-y-2">
-            <h3 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2">
+            <h3 className="font-semibold text-slate-800 text-[13px] uppercase mb-2">
               Rating Distribution
             </h3>
             
             {/* 5 Stars */}
-            <div className="flex items-center gap-3 text-xs">
-              <span className="w-10 text-slate-600 font-medium">5 Star</span>
+            <div className="flex items-center gap-3 text-[12px] sm:text-[13px]">
+              <span className="w-10 text-slate-650 font-medium">5 Star</span>
               <div className="flex-grow bg-slate-100 h-2 rounded-full overflow-hidden">
                 <div className="bg-emerald-600 h-full rounded-full" style={{ width: "75%" }} />
               </div>
-              <span className="w-8 text-right text-slate-500">75%</span>
+              <span className="w-8 text-right text-slate-500 font-normal">75%</span>
             </div>
 
             {/* 4 Stars */}
-            <div className="flex items-center gap-3 text-xs">
-              <span className="w-10 text-slate-600 font-medium">4 Star</span>
+            <div className="flex items-center gap-3 text-[12px] sm:text-[13px]">
+              <span className="w-10 text-slate-655 font-medium">4 Star</span>
               <div className="flex-grow bg-slate-100 h-2 rounded-full overflow-hidden">
                 <div className="bg-emerald-600 h-full rounded-full" style={{ width: "25%" }} />
               </div>
-              <span className="w-8 text-right text-slate-500">25%</span>
+              <span className="w-8 text-right text-slate-500 font-normal">25%</span>
             </div>
 
             {/* 3, 2, 1 Stars */}
             {[3, 2, 1].map((stars) => (
-              <div key={stars} className="flex items-center gap-3 text-xs">
-                <span className="w-10 text-slate-400 font-medium">{stars} Star</span>
+              <div key={stars} className="flex items-center gap-3 text-[12px] sm:text-[13px]">
+                <span className="w-10 text-slate-450 font-medium">{stars} Star</span>
                 <div className="flex-grow bg-slate-150 h-2 rounded-full overflow-hidden">
                   <div className="bg-slate-300 h-full rounded-full" style={{ width: "0%" }} />
                 </div>
-                <span className="w-8 text-right text-slate-400">0%</span>
+                <span className="w-8 text-right text-slate-400 font-normal">0%</span>
               </div>
             ))}
           </div>
@@ -164,13 +164,13 @@ export default function ReviewsPage() {
             <div className="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4">
               <MessageSquare className="w-8 h-8" />
             </div>
-            <h3 className="font-bold text-slate-900 text-base mb-1">No Reviews Yet</h3>
-            <p className="text-xs text-slate-500 leading-relaxed mb-6">
+            <h3 className="font-semibold text-slate-900 text-[15px] mb-1">No Reviews Yet</h3>
+            <p className="text-[13px] text-slate-500 leading-normal mb-6 font-normal">
               There are currently no reviews published. Check back later as we verify customer feedback.
             </p>
             <Link
               href="/contact"
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-lg shadow"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-[13px] uppercase px-5 py-2.5 rounded-lg shadow"
             >
               Write First Review
             </Link>
@@ -184,20 +184,20 @@ export default function ReviewsPage() {
               ))}
             </div>
 
-            {/* PAGINATION / LOAD MORE ARCHITECTURE PLACEHOLDER */}
-            <div className="pt-6 border-t border-slate-200 flex justify-between items-center text-xs">
+            {/* PAGINATION */}
+            <div className="pt-6 border-t border-slate-200 flex justify-between items-center text-[12px] sm:text-[13px] font-normal">
               <button
                 disabled
-                className="px-4 py-2 border border-slate-350 text-slate-400 bg-white rounded-lg cursor-not-allowed font-semibold transition-all focus:outline-none"
+                className="px-4 py-2 border border-slate-300 text-slate-400 bg-white rounded-lg cursor-not-allowed font-medium transition-all focus:outline-none"
               >
                 Previous
               </button>
-              <span className="text-slate-500">
-                Page <strong className="text-slate-800">1</strong> of <strong>1</strong>
+              <span className="text-slate-550">
+                Page <strong className="text-slate-800 font-semibold">1</strong> of <strong className="font-semibold">1</strong>
               </span>
               <button
                 disabled
-                className="px-4 py-2 border border-slate-350 text-slate-400 bg-white rounded-lg cursor-not-allowed font-semibold transition-all focus:outline-none"
+                className="px-4 py-2 border border-slate-300 text-slate-400 bg-white rounded-lg cursor-not-allowed font-medium transition-all focus:outline-none"
               >
                 Next
               </button>
@@ -211,14 +211,14 @@ export default function ReviewsPage() {
         <div className="bg-slate-950 text-white rounded-2xl p-8 relative overflow-hidden shadow-lg flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,#047857_0%,transparent_30%)] opacity-30" />
           <div className="relative z-10 max-w-xl space-y-2">
-            <h3 className="text-xl font-bold">Are You a Registered Customer?</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="text-[18px] sm:text-[20px] font-bold leading-snug">Are You a Registered Customer?</h3>
+            <p className="text-[12px] sm:text-[13px] text-slate-400 leading-normal font-normal">
               Your feedback is crucial for our improvement. If you have purchased animal health products or utilized our advisory desk, share your experience.
             </p>
           </div>
           <Link
             href="/contact?ref=review"
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-lg shadow shrink-0 relative z-10 flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-[13px] uppercase px-6 py-3 rounded-lg shadow shrink-0 relative z-10 flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             Submit a Review <ArrowRight className="w-4 h-4" />
           </Link>

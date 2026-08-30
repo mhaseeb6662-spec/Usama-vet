@@ -11,10 +11,10 @@ export default function TrustStrip() {
             <Truck className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wide">
+            <h4 className="font-semibold text-slate-800 text-[13px] uppercase">
               Fast Nationwide Delivery
             </h4>
-            <p className="text-[10px] text-slate-500 leading-tight mt-0.5">
+            <p className="text-[11px] text-slate-500 leading-normal mt-0.5 font-normal">
               Secure cold-chain logistics for sensitive veterinary vaccines and medicines.
             </p>
           </div>
@@ -26,10 +26,10 @@ export default function TrustStrip() {
             <RotateCcw className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wide">
+            <h4 className="font-semibold text-slate-800 text-[13px] uppercase">
               Hassle-Free Returns
             </h4>
-            <p className="text-[10px] text-slate-500 leading-tight mt-0.5">
+            <p className="text-[11px] text-slate-500 leading-normal mt-0.5 font-normal">
               Return products within 7 days in original packing (subject to guidelines).
             </p>
           </div>
@@ -41,10 +41,10 @@ export default function TrustStrip() {
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wide">
+            <h4 className="font-semibold text-slate-800 text-[13px] uppercase">
               100% Secure Checkout
             </h4>
-            <p className="text-[10px] text-slate-500 leading-tight mt-0.5">
+            <p className="text-[11px] text-slate-500 leading-normal mt-0.5 font-normal">
               Cash on delivery, bank transfer, EasyPaisa, or JazzCash for safe checkout.
             </p>
           </div>

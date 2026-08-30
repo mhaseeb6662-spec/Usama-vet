@@ -27,11 +27,11 @@ export default function NewsletterSection() {
         
         {/* Left Side: Call to action */}
         <div className="text-center md:text-left space-y-1 max-w-md">
-          <h3 className="text-base sm:text-lg font-black text-slate-900 uppercase tracking-wide flex items-center justify-center md:justify-start gap-1.5">
+          <h3 className="text-[16px] sm:text-[18px] font-bold text-slate-900 uppercase flex items-center justify-center md:justify-start gap-1.5">
             <Mail className="w-5 h-5 text-emerald-600 shrink-0" />
             <span>Get the Latest Updates</span>
           </h3>
-          <p className="text-xs text-slate-500 leading-normal font-light">
+          <p className="text-[12px] sm:text-[13px] text-slate-500 leading-normal font-normal">
             Subscribe to our newsletter to receive availability updates on critical veterinary medicines and farm supplies.
           </p>
         </div>
@@ -39,7 +39,7 @@ export default function NewsletterSection() {
         {/* Right Side: Form and Socials */}
         <div className="w-full max-w-md space-y-4">
           {subscribed ? (
-            <div className="bg-emerald-50 border border-emerald-250 text-emerald-800 text-xs px-4 py-3 rounded-lg text-center font-bold">
+            <div className="bg-emerald-50 border border-emerald-250 text-emerald-800 text-[13px] px-4 py-3 rounded-lg text-center font-semibold">
               Subscribed successfully! Thank you for staying updated.
             </div>
           ) : (
@@ -50,12 +50,12 @@ export default function NewsletterSection() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-white border border-slate-300 rounded-l-lg py-2.5 px-4 text-xs text-slate-800 focus:outline-none focus:border-emerald-500 placeholder:text-slate-400"
+                className="w-full bg-white border border-slate-300 rounded-l-lg py-2.5 px-4 text-[13px] text-slate-850 focus:outline-none focus:border-emerald-500 placeholder:text-slate-400"
               />
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs uppercase px-5 py-2.5 rounded-r-lg transition-colors shrink-0 focus:outline-none"
+                className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-xs sm:text-[13px] uppercase px-5 py-2.5 rounded-r-lg transition-colors shrink-0 focus:outline-none"
               >
                 {loading ? "..." : "Subscribe"}
               </button>
@@ -64,7 +64,7 @@ export default function NewsletterSection() {
 
           {/* Social Links Row */}
           <div className="flex items-center justify-center md:justify-start gap-3">
-            <span className="text-[10px] text-slate-400 uppercase font-black tracking-widest">Connect:</span>
+            <span className="text-[11px] text-slate-400 uppercase font-semibold">Connect:</span>
             <a
               href={BUSINESS_CONFIG.socials.facebook}
               target="_blank"

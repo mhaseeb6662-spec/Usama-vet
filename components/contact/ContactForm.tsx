@@ -204,7 +204,7 @@ export default function ContactForm() {
 
         {/* Name input */}
         <div>
-          <label htmlFor="name" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+          <label htmlFor="name" className="block text-[12px] sm:text-[13px] font-semibold text-slate-700 uppercase mb-1.5">
             Full Name <span className="text-rose-500">*</span>
           </label>
           <input
@@ -232,7 +232,7 @@ export default function ContactForm() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {/* Email input */}
           <div>
-            <label htmlFor="email" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            <label htmlFor="email" className="block text-[12px] sm:text-[13px] font-semibold text-slate-700 uppercase mb-1.5">
               Email Address <span className="text-rose-500">*</span>
             </label>
             <input
@@ -258,7 +258,7 @@ export default function ContactForm() {
 
           {/* Phone input */}
           <div>
-            <label htmlFor="phone" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            <label htmlFor="phone" className="block text-[12px] sm:text-[13px] font-semibold text-slate-700 uppercase mb-1.5">
               Phone Number <span className="text-rose-500">*</span>
             </label>
             <input
@@ -286,7 +286,7 @@ export default function ContactForm() {
 
         {/* Subject input */}
         <div>
-          <label htmlFor="subject" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+          <label htmlFor="subject" className="block text-[12px] sm:text-[13px] font-semibold text-slate-700 uppercase mb-1.5">
             Subject <span className="text-rose-500">*</span>
           </label>
           <input
@@ -312,7 +312,7 @@ export default function ContactForm() {
 
         {/* Message input */}
         <div>
-          <label htmlFor="message" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+          <label htmlFor="message" className="block text-[12px] sm:text-[13px] font-semibold text-slate-700 uppercase mb-1.5">
             Message / Inquiry Details <span className="text-rose-500">*</span>
           </label>
           <textarea
@@ -342,7 +342,7 @@ export default function ContactForm() {
           variant="primary"
           size="md"
           isLoading={isSubmitting}
-          className="w-full text-sm font-semibold tracking-wide py-2.5"
+          className="w-full text-sm font-semibold py-2.5"
         >
           {isSubmitting ? "Sending message..." : "Submit Inquiry"}
         </Button>

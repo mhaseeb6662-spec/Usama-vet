@@ -11,10 +11,10 @@ export default function LowerTrustStrip() {
             <ShieldAlert className="w-4.5 h-4.5" />
           </div>
           <div>
-            <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wide">
+            <h4 className="font-semibold text-slate-800 text-[13px] uppercase">
               Genuine Products
             </h4>
-            <p className="text-[10px] text-slate-500 leading-normal mt-0.5 font-light">
+            <p className="text-[11px] text-slate-500 leading-normal mt-0.5 font-normal">
               Quality-focused product sourcing directly from licensed pharma manufacturers.
             </p>
           </div>
@@ -26,10 +26,10 @@ export default function LowerTrustStrip() {
             <Award className="w-4.5 h-4.5" />
           </div>
           <div>
-            <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wide">
+            <h4 className="font-semibold text-slate-800 text-[13px] uppercase">
               Competitive Prices
             </h4>
-            <p className="text-[10px] text-slate-500 leading-normal mt-0.5 font-light">
+            <p className="text-[11px] text-slate-500 leading-normal mt-0.5 font-normal">
               We offer wholesale-matched veterinary pricing to help farmers maximize margins.
             </p>
           </div>
@@ -41,10 +41,10 @@ export default function LowerTrustStrip() {
             <Truck className="w-4.5 h-4.5" />
           </div>
           <div>
-            <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wide">
+            <h4 className="font-semibold text-slate-800 text-[13px] uppercase">
               Cold-Chain Shipping
             </h4>
-            <p className="text-[10px] text-slate-500 leading-normal mt-0.5 font-light">
+            <p className="text-[11px] text-slate-500 leading-normal mt-0.5 font-normal">
               Vigilant temperature handling preserves medicine potency across long transits.
             </p>
           </div>
@@ -56,10 +56,10 @@ export default function LowerTrustStrip() {
             <BadgeCheck className="w-4.5 h-4.5" />
           </div>
           <div>
-            <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wide">
+            <h4 className="font-semibold text-slate-800 text-[13px] uppercase">
               Licensed Pharmacy
             </h4>
-            <p className="text-[10px] text-slate-500 leading-normal mt-0.5 font-light">
+            <p className="text-[11px] text-slate-500 leading-normal mt-0.5 font-normal">
               Regulated veterinary store compliance, ensuring drug safety standards.
             </p>
           </div>

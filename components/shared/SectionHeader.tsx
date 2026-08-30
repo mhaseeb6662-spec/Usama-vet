@@ -10,16 +10,16 @@ export default function SectionHeader({ preTitle, title, description }: SectionH
   return (
     <div className="text-center max-w-2xl mx-auto mb-8">
       {preTitle && (
-        <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">
+        <span className="text-[12px] font-semibold text-emerald-600 uppercase block mb-1">
           {preTitle}
         </span>
       )}
-      <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight">
+      <h2 className="text-[17px] sm:text-[20px] font-bold text-slate-900 leading-snug">
         {title}
       </h2>
       <div className="w-12 h-1 bg-emerald-600 mx-auto mt-2.5 rounded-full" />
       {description && (
-        <p className="text-slate-500 text-xs mt-2.5 leading-relaxed font-light">
+        <p className="text-slate-500 text-[12px] sm:text-[13px] mt-2.5 leading-normal font-normal">
           {description}
         </p>
       )}

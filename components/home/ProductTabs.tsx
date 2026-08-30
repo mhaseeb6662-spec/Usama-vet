@@ -36,10 +36,10 @@ export default function ProductTabs() {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 sm:px-6 py-2.5 text-xs font-bold uppercase tracking-wider transition-all focus:outline-none ${
+            className={`px-4 sm:px-6 py-2.5 text-xs sm:text-[13px] font-semibold uppercase transition-all focus:outline-none ${
               activeTab === tab
                 ? "border-b-2 border-emerald-600 text-emerald-600 bg-slate-50"
-                : "text-slate-505 hover:text-emerald-600 hover:bg-slate-50"
+                : "text-slate-500 hover:text-[#009473] hover:bg-slate-50"
             }`}
           >
             {tab}

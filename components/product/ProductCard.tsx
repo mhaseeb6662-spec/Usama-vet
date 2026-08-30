@@ -25,7 +25,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Stock Status Badge (Bottom Left) */}
         {!inStock && (
           <div className="absolute bottom-2 left-2">
-            <span className="bg-rose-50 text-rose-700 border border-rose-200/50 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">
+            <span className="bg-rose-50 text-rose-700 border border-rose-200/50 text-[10px] font-semibold px-1.5 py-0.5 rounded uppercase">
               Out of Stock
             </span>
           </div>
@@ -36,7 +36,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="p-3.5 flex-grow flex flex-col text-left">
         {/* Product Title */}
         <Link href={`/products/${slug}`} className="block focus:outline-none mb-1">
-          <h3 className="font-bold text-slate-800 text-xs sm:text-sm line-clamp-1 leading-snug hover:text-[#009473] transition-colors">
+          <h3 className="font-semibold text-slate-800 text-[13px] sm:text-[14px] line-clamp-2 leading-[1.35] hover:text-[#009473] transition-colors">
             {name}
           </h3>
         </Link>
@@ -45,13 +45,13 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="border-t border-slate-100/80 my-2" />
 
         {/* Price Row (Rs. format, old price crossed-out first, new price second) */}
-        <div className="flex items-center gap-2 mb-3.5 text-xs">
+        <div className="flex items-center gap-2 mb-3.5 text-[13px] sm:text-[14px]">
           {oldPrice && oldPrice > price && (
-            <span className="text-slate-400 line-through font-medium">
+            <span className="text-slate-400 line-through font-normal text-[11px] sm:text-[12px]">
               Rs. {oldPrice.toLocaleString()}
             </span>
           )}
-          <span className="font-bold text-slate-900">
+          <span className="font-semibold text-slate-900">
             Rs. {price.toLocaleString()}
           </span>
         </div>
@@ -81,7 +81,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           {/* Add to cart Button (Pill, solid green) */}
           <button
             disabled={!inStock}
-            className="flex-grow bg-[#009473] hover:bg-[#028467] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-[11px] py-2 px-3 rounded-full flex items-center justify-center gap-1.5 transition-colors focus:outline-none"
+            className="flex-grow bg-[#009473] hover:bg-[#028467] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-[11px] sm:text-[12px] py-2 px-3 rounded-full flex items-center justify-center gap-1.5 transition-colors focus:outline-none"
           >
             <ShoppingCart className="w-3.5 h-3.5" />
             <span>Add to cart</span>
