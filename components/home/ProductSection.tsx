@@ -30,6 +30,7 @@ export default function ProductSection({
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
 
   const checkScrollState = () => {
     if (scrollRef.current) {
@@ -45,6 +46,26 @@ export default function ProductSection({
     return () => window.removeEventListener("resize", checkScrollState);
   }, [products]);
 
+  // Auto-scroll logic
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      if (scrollRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        // If reached the end (with a 10px safety margin), scroll back to the start
+        if (Math.ceil(scrollLeft + clientWidth) >= scrollWidth - 10) {
+          scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
+        } else {
+          // Scroll right by approximately one card width
+          scrollRef.current.scrollBy({ left: 320, behavior: "smooth" });
+        }
+      }
+    }, 3500); // Scrolls every 3.5 seconds
+
+    return () => clearInterval(interval);
+  }, [isPaused, products]);
+
   const scrollByAmount = (direction: "left" | "right") => {
     if (scrollRef.current) {
       // Find the width of one card + gap (assuming 24px gap = 1.5rem, roughly 280px total)
@@ -55,7 +76,13 @@ export default function ProductSection({
   };
 
   return (
-    <section className={`py-16 px-4 border-t border-b border-slate-100 ${bgColorClass} overflow-hidden group/section`}>
+    <section 
+      className={`py-16 px-4 border-t border-b border-slate-100 ${bgColorClass} overflow-hidden group/section`}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={() => setIsPaused(true)}
+      onTouchEnd={() => setIsPaused(false)}
+    >
       <div className="max-w-7xl mx-auto relative">
         <FadeUp distance={10}>
           <SectionHeader preTitle={preTitle} title={title} description={description} />
