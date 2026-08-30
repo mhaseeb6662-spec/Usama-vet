@@ -1,30 +1,27 @@
 import React from "react";
-import Link from "next/link";
-import { Truck, Heart, RefreshCw, ClipboardList } from "lucide-react";
 
 export default function TopBar() {
-  return (
-    <div className="bg-emerald-800 text-white text-[11px] py-2.5 px-4 font-medium border-b border-emerald-700">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Left Side: Welcome Promo */}
-        <div className="flex items-center gap-1.5">
-          <Truck className="w-3.5 h-3.5 text-emerald-300" />
-          <span>Welcome to Usama Vet Care! Get free delivery on orders over PKR 5,000.</span>
-        </div>
+  const tickerText = "Join Our Community Group Today Send Your Name, City & Area to 0300-1234567      |      Join Our Community Group Today Send Your Name, City & Area to 0300-1234567      |      Join Our Community Group Today Send Your Name, City & Area to 0300-1234567";
 
-        {/* Right Side: Links */}
-        <div className="hidden sm:flex items-center gap-4 text-emerald-100">
-          <Link href="/order-tracking" className="hover:text-white flex items-center gap-1 transition-colors">
-            <ClipboardList className="w-3 h-3" /> Track Order
-          </Link>
-          <span className="text-emerald-700">|</span>
-          <Link href="/wishlist" className="hover:text-white flex items-center gap-1 transition-colors">
-            <Heart className="w-3 h-3" /> Wishlist
-          </Link>
-          <span className="text-emerald-700">|</span>
-          <Link href="/compare" className="hover:text-white flex items-center gap-1 transition-colors">
-            <RefreshCw className="w-3 h-3" /> Compare
-          </Link>
+  return (
+    <div className="bg-[#009473] text-white text-[11.5px] py-2 px-4 font-bold select-none overflow-hidden relative border-b border-emerald-700/30">
+      {/* Type-safe CSS keyframe animation for smooth scrolling ticker */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes ticker-scroll {
+          0% { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-33.33%, 0, 0); }
+        }
+        .ticker-wrap {
+          display: flex;
+          width: max-content;
+          animation: ticker-scroll 25s linear infinite;
+        }
+      `}} />
+      <div className="max-w-7xl mx-auto overflow-hidden relative w-full flex">
+        <div className="ticker-wrap whitespace-nowrap flex gap-12">
+          <span>{tickerText}</span>
+          <span>{tickerText}</span>
+          <span>{tickerText}</span>
         </div>
       </div>
     </div>

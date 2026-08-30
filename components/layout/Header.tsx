@@ -33,144 +33,131 @@ export default function Header() {
 
   return (
     <>
-      {/* 1. TOP ANNOUNCEMENT BAR (Static on top) */}
+      {/* 1. TOP ANNOUNCEMENT TICKER (Static on top) */}
       <TopBar />
 
       {/* STICKY CONTAINER FOR HEADER */}
       <div className={`sticky top-0 z-40 w-full transition-all duration-200 ${scrolled ? "shadow-md" : ""}`}>
         
-        {/* 2. MAIN HEADER (Logo, Search, Actions) */}
+        {/* 2. MAIN HEADER (Logo, Search Pill, Actions) */}
         <header className="bg-white border-b border-slate-100 py-3.5 px-4">
           <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
             
-            {/* Logo Group */}
+            {/* Logo Group (Aligned with Qadri logo visuals) */}
             <Link href="/" className="flex items-center gap-2 group shrink-0 focus:outline-none">
-              <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-black text-xl shadow-sm group-hover:bg-emerald-700 transition-colors">
+              <div className="w-10 h-10 bg-[#009473] rounded-full flex items-center justify-center text-white font-black text-xl shadow-sm group-hover:bg-[#028467] transition-colors shrink-0">
                 U
               </div>
-              <div className="hidden sm:block">
-                <span className="block font-black text-slate-900 leading-tight text-base group-hover:text-emerald-600 transition-colors">
-                  {BUSINESS_CONFIG.logo.text}
+              <div className="hidden sm:block leading-none text-left">
+                <span className="block font-black text-slate-800 text-lg tracking-tight group-hover:text-[#009473] transition-colors uppercase">
+                  {BUSINESS_CONFIG.shortName}
                 </span>
-                <span className="block text-[9px] text-slate-400 uppercase tracking-widest font-bold">
-                  {BUSINESS_CONFIG.logo.subtitle}
+                <span className="block text-[8px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+                  Veterinary Pharmacy
                 </span>
               </div>
             </Link>
 
-            {/* Central Large Search Bar (Identical layout to screenshot) */}
-            <div className="hidden md:flex flex-grow max-w-2xl relative">
-              <div className="w-full flex">
+            {/* Pill Search Bar (Exactly matching Qadri Gadgets search pill layout) */}
+            <div className="hidden md:flex flex-grow max-w-xl relative">
+              <div className="w-full flex items-center bg-slate-100/70 border border-slate-200 rounded-full pl-4 pr-1 py-1">
                 <input
                   type="text"
-                  placeholder="Search products here..."
-                  className="w-full bg-slate-50 border border-slate-200 border-r-0 rounded-l-md px-4 py-2 text-xs focus:outline-none focus:border-emerald-500 focus:bg-white transition-all placeholder:text-slate-400"
+                  placeholder="What Are You Looking For"
+                  className="w-full bg-transparent text-xs text-slate-850 outline-none placeholder:text-slate-400 focus:outline-none"
                   disabled
                 />
                 <button
                   type="button"
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase px-6 rounded-r-md transition-colors flex items-center gap-1.5 cursor-not-allowed opacity-90"
+                  className="w-8 h-8 rounded-full bg-[#009473] hover:bg-[#028467] text-white flex items-center justify-center shrink-0 transition-colors cursor-not-allowed"
                   disabled
                 >
                   <Search className="w-4 h-4" />
-                  <span>Search</span>
                 </button>
               </div>
             </div>
 
-            {/* Right Side Actions: Profile & Cart info */}
-            <div className="flex items-center gap-3 md:gap-5">
+            {/* Right Side Actions: Login & Cart */}
+            <div className="flex items-center gap-4 shrink-0">
               
-              {/* Compare / Wishlist placeholders for tablet */}
-              <Link href="/compare" className="hidden lg:flex p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-full transition-colors relative" aria-label="Compare">
-                <RefreshCw className="w-5 h-5" />
-              </Link>
-              <Link href="/wishlist" className="hidden lg:flex p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-full transition-colors relative" aria-label="Wishlist">
-                <Heart className="w-5 h-5" />
-              </Link>
-
-              {/* Login/Register area */}
+              {/* Login / Register Link with circle avatar outline */}
               <Link
                 href="/account"
-                className="flex items-center gap-2 text-left hover:text-emerald-600 transition-colors focus:outline-none"
+                className="flex items-center gap-2 hover:text-[#009473] transition-colors focus:outline-none text-left"
               >
-                <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 shrink-0">
-                  <User className="w-4.5 h-4.5" />
+                <div className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0">
+                  <User className="w-4 h-4" />
                 </div>
-                <div className="hidden sm:block leading-tight text-xs">
-                  <span className="block text-[10px] text-slate-400 font-semibold uppercase">Account</span>
-                  <span className="block font-bold text-slate-800">Login / Register</span>
-                </div>
+                <span className="hidden lg:inline text-xs font-bold text-slate-700">
+                  Login / Register
+                </span>
               </Link>
 
-              <span className="text-slate-200 hidden sm:inline">|</span>
-
-              {/* Cart Detail representation matching screenshot */}
+              {/* Cart link with circle bag outline */}
               <Link
                 href="/cart"
-                className="flex items-center gap-2 hover:text-emerald-600 transition-colors focus:outline-none"
+                className="flex items-center gap-2 hover:text-[#009473] transition-colors focus:outline-none text-left"
               >
-                <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center relative shrink-0">
-                  <ShoppingCart className="w-4.5 h-4.5" />
-                  <span className="absolute -top-1.5 -right-1.5 w-4.5 h-4.5 bg-emerald-600 text-white text-[9px] font-black rounded-full flex items-center justify-center border border-white">
+                <div className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 relative">
+                  <ShoppingCart className="w-4 h-4" />
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#009473] text-white text-[8px] font-black rounded-full flex items-center justify-center border border-white">
                     0
                   </span>
                 </div>
-                <div className="hidden sm:block leading-tight text-xs">
-                  <span className="block text-[10px] text-slate-400 font-semibold uppercase">My Cart</span>
-                  <span className="block font-bold text-slate-800">PKR 0.00</span>
-                </div>
+                <span className="hidden lg:inline text-xs font-bold text-slate-700">
+                  Cart
+                </span>
               </Link>
 
               {/* Mobile Search Toggle */}
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="md:hidden p-2 text-slate-600 hover:text-emerald-600 hover:bg-slate-50 rounded-full transition-colors focus:outline-none"
+                className="md:hidden p-2 text-slate-600 hover:text-[#009473] hover:bg-slate-50 rounded-full transition-colors focus:outline-none"
                 aria-label="Search"
               >
-                <Search className="w-5.5 h-5.5" />
+                <Search className="w-5 h-5" />
               </button>
 
-              {/* Mobile Hamburger menu */}
+              {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden p-2 text-slate-600 hover:text-emerald-600 hover:bg-slate-50 rounded-full transition-colors focus:outline-none"
+                className="lg:hidden p-2 text-slate-600 hover:text-[#009473] hover:bg-slate-50 rounded-full transition-colors focus:outline-none"
                 aria-expanded={isMobileMenuOpen}
                 aria-label="Menu"
               >
-                {isMobileMenuOpen ? <X className="w-5.5 h-5.5" /> : <Menu className="w-5.5 h-5.5" />}
+                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
             </div>
           </div>
 
-          {/* Mobile Search Input Toggled */}
+          {/* Mobile Search Input */}
           {isSearchOpen && (
             <div className="md:hidden pt-3 border-t border-slate-100 mt-2">
-              <div className="flex">
+              <div className="flex bg-slate-100/70 border border-slate-200 rounded-full pl-3 pr-1 py-1">
                 <input
                   type="text"
-                  placeholder="Search products..."
-                  className="w-full bg-slate-50 border border-slate-200 border-r-0 rounded-l-md px-3 py-1.5 text-xs focus:outline-none"
+                  placeholder="What Are You Looking For"
+                  className="w-full bg-transparent text-xs text-slate-800 outline-none"
                   disabled
                 />
                 <button
                   type="button"
-                  className="bg-emerald-600 text-white px-4 rounded-r-md text-xs font-bold cursor-not-allowed opacity-90"
+                  className="w-7 h-7 rounded-full bg-[#009473] text-white flex items-center justify-center shrink-0 cursor-not-allowed"
                   disabled
                 >
-                  Go
+                  <Search className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
           )}
         </header>
 
-        {/* 3. MAIN NAVIGATION ROW (All Categories, Links, Hotline) */}
+        {/* 3. MAIN NAVIGATION ROW (Categories dropdown, Links, Hotline, Track order) */}
         <div className="hidden lg:block">
           <MainNav />
         </div>
 
-        {/* 4. MOBILE SLIDE-OUT DRAWER NAVIGATION */}
+        {/* 4. MOBILE SLIDE-OUT MENU DRAWER */}
         {isMobileMenuOpen && (
           <div className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-slate-200 shadow-xl py-4 px-4 space-y-4">
             <nav className="flex flex-col gap-2">
@@ -193,15 +180,18 @@ export default function Header() {
 
             <div className="pt-4 border-t border-slate-100 space-y-3">
               <div className="px-3 text-xs font-bold text-slate-700">
-                Helpline: <a href={`tel:${BUSINESS_CONFIG.contact.phone}`} className="text-emerald-700 hover:underline">{BUSINESS_CONFIG.contact.phoneDisplay}</a>
+                Call Us: <a href="tel:03302760775" className="text-emerald-700 hover:underline">0330-2760775</a>
+              </div>
+              <div className="px-3 text-xs font-bold text-slate-700">
+                Track Your Order
               </div>
               <a
                 href={BUSINESS_CONFIG.contact.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mx-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-center py-2.5 rounded-md text-xs transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                className="mx-3 bg-[#009473] hover:bg-[#028467] text-white font-bold text-center py-2.5 rounded-md text-xs transition-colors flex items-center justify-center gap-1.5 shadow-sm"
               >
-                <span>WhatsApp Live Chat</span>
+                <span>WhatsApp Support</span>
               </a>
             </div>
           </div>
