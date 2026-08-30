@@ -4,6 +4,7 @@ export interface Product {
   name: string;
   brand: string;
   price: number;
+  oldPrice?: number;
   currency: string;
   description: string;
   longDescription?: string;
