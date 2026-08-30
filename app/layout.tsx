@@ -1,13 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Poppins } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { BUSINESS_CONFIG } from "@/lib/constants/config";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -77,7 +78,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${poppins.variable} h-full antialiased`}>
       <body className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans">
         {/* Sticky navigation header */}
         <Header />
