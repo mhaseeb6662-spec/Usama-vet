@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, ChevronDown, Phone, MapPin } from "lucide-react";
 import { MOCK_CATEGORIES } from "@/lib/data/mockData";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function MainNav() {
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
@@ -27,7 +28,7 @@ export default function MainNav() {
         <div className="relative">
           <button
             onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-            className="bg-[#009473] hover:bg-[#028467] text-white px-5 py-2.5 rounded-lg text-[13px] font-semibold uppercase flex items-center gap-2 transition-colors focus:outline-none"
+            className="bg-[#009473] hover:bg-[#028467] text-white px-5 py-2.5 rounded-lg text-[13px] font-semibold uppercase flex items-center gap-2 transition-colors focus:outline-none hover-scale-subtle"
             aria-expanded={isCategoriesOpen}
             aria-haspopup="menu"
           >
@@ -37,27 +38,35 @@ export default function MainNav() {
           </button>
 
           {/* Categories Dropdown Menu */}
-          {isCategoriesOpen && (
-            <div className="absolute top-full left-0 w-64 bg-white border border-slate-200 shadow-xl rounded-b-lg overflow-hidden py-1.5 focus:outline-none">
-              {MOCK_CATEGORIES.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/categories/${cat.slug}`}
-                  className="block px-4 py-2 text-[12px] font-medium text-slate-700 hover:bg-[#f0f8f5] hover:text-[#009473] transition-colors"
-                  role="menuitem"
-                >
-                  {cat.name}
-                </Link>
-              ))}
-            </div>
-          )}
+          <AnimatePresence>
+            {isCategoriesOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute top-full left-0 w-64 bg-white border border-slate-200 shadow-xl rounded-b-lg overflow-hidden py-1.5 focus:outline-none"
+              >
+                {MOCK_CATEGORIES.map((cat) => (
+                  <Link
+                    key={cat.id}
+                    href={`/categories/${cat.slug}`}
+                    className="block px-4 py-2 text-[12px] font-medium text-slate-700 hover:bg-[#f0f8f5] hover:text-[#009473] hover:translate-x-[2px] transition-all duration-200 ease-out"
+                    role="menuitem"
+                  >
+                    {cat.name}
+                  </Link>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Center-Left: Page Links with Exact Case Matching */}
         <nav className="flex items-center gap-8 ml-6 mr-auto">
           <Link
             href="/"
-            className={`font-semibold text-[13px] transition-colors relative py-3.5 ${
+            className={`font-semibold text-[13px] transition-colors relative py-3 nav-link-underline ${
               pathname === "/" ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
             }`}
           >
@@ -65,7 +74,7 @@ export default function MainNav() {
           </Link>
           <Link
             href="/about"
-            className={`font-semibold text-[13px] transition-colors relative py-3.5 ${
+            className={`font-semibold text-[13px] transition-colors relative py-3 nav-link-underline ${
               isActive("/about") ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
             }`}
           >
@@ -73,7 +82,7 @@ export default function MainNav() {
           </Link>
           <Link
             href="/reviews"
-            className={`font-semibold text-[13px] transition-colors relative py-3.5 ${
+            className={`font-semibold text-[13px] transition-colors relative py-3 nav-link-underline ${
               isActive("/reviews") ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
             }`}
           >
@@ -81,7 +90,7 @@ export default function MainNav() {
           </Link>
           <Link
             href="/contact"
-            className={`font-semibold text-[13px] transition-colors relative py-3.5 ${
+            className={`font-semibold text-[13px] transition-colors relative py-3 nav-link-underline ${
               isActive("/contact") ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
             }`}
           >

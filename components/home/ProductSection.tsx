@@ -3,6 +3,7 @@ import SectionHeader from "@/components/shared/SectionHeader";
 import ProductCard from "@/components/product/ProductCard";
 import ViewAllButton from "@/components/shared/ViewAllButton";
 import { Product } from "@/types";
+import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/AnimationComponents";
 
 interface ProductSectionProps {
   preTitle?: string;
@@ -24,17 +25,21 @@ export default function ProductSection({
   viewAllLabel,
 }: ProductSectionProps) {
   return (
-    <section className={`py-16 px-4 border-t border-b border-slate-100 ${bgColorClass}`}>
+    <section className={`py-16 px-4 border-t border-b border-slate-100 ${bgColorClass} overflow-hidden`}>
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <SectionHeader preTitle={preTitle} title={title} description={description} />
+        {/* Section Header with reveal */}
+        <FadeUp distance={10}>
+          <SectionHeader preTitle={preTitle} title={title} description={description} />
+        </FadeUp>
         
-        {/* 4-Column Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {/* 4-Column Product Grid with stagger reveals */}
+        <StaggerContainer staggerDelay={0.04} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.slice(0, 8).map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <StaggerItem key={product.id} distance={14}>
+              <ProductCard product={product} />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         {/* View All Button */}
         <ViewAllButton href={viewAllHref} label={viewAllLabel} />

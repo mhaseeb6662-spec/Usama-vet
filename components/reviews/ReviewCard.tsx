@@ -29,12 +29,12 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col h-full">
+    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:-translate-y-[3px] transition-all duration-200 ease-out flex flex-col h-full group/reviewCard">
       {/* Header section with User Info & Rating */}
       <div className="flex justify-between items-start gap-4 mb-4">
         <div className="flex items-center gap-3">
           {/* Avatar Placeholder */}
-          <div className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-slate-700 text-xs shrink-0">
+          <div className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-slate-700 text-xs shrink-0 group-hover/reviewCard:scale-[1.05] transition-transform duration-200 ease-out">
             {getInitials(userName)}
           </div>
           <div>
