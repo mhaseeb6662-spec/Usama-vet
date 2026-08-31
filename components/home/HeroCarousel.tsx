@@ -75,11 +75,10 @@ export default function HeroCarousel({ slides = [] }: { slides?: any[] }) {
   return (
     <div className="w-full relative bg-slate-900 rounded-3xl overflow-hidden shadow-2xl min-h-[500px] md:min-h-[550px] lg:min-h-[600px] flex items-center justify-center">
       
-      {/* Absolute Background Patterns (Static across slides to prevent janky transitions) */}
+      {/* Absolute Background Patterns */}
       <div className="absolute inset-0 z-0">
         <div className="absolute right-0 top-0 w-3/4 h-full bg-emerald-900/20 blur-[100px] rounded-full" />
         <div className="absolute -left-20 -bottom-20 w-[40vw] h-[40vw] bg-teal-800/20 blur-[120px] rounded-full" />
-        {/* Subtle grid mesh overlay */}
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay" />
       </div>
 
@@ -123,7 +122,7 @@ export default function HeroCarousel({ slides = [] }: { slides?: any[] }) {
               initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="text-slate-350 text-[15px] sm:text-[17px] font-normal leading-relaxed max-w-lg text-slate-300"
+              className="text-[15px] sm:text-[17px] font-normal leading-relaxed max-w-lg text-slate-300"
             >
               {slide.description}
             </motion.p>
@@ -161,41 +160,48 @@ export default function HeroCarousel({ slides = [] }: { slides?: any[] }) {
               </div>
             )}
           </motion.div>
-        </AnimatePresence>
+        </motion.div>
+      </AnimatePresence>
 
-        {/* Carousel Slide Arrows (Subtle scale/active animations) */}
-        <button
-          onClick={handlePrev}
-          className="absolute left-3.5 z-20 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white focus:outline-none transition-all hover:scale-[1.07] active:scale-[0.93] duration-150 cursor-pointer"
-          aria-label="Previous Slide"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        <button
-          onClick={handleNext}
-          className="absolute right-3.5 z-20 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white focus:outline-none transition-all hover:scale-[1.07] active:scale-[0.93] duration-150 cursor-pointer"
-          aria-label="Next Slide"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
-
-        {/* Pagination Indicator Dots (Slide Transition) */}
-        <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-20">
-          {HERO_SLIDES.map((_, index) => (
+      {/* Slide Indicators & Navigation */}
+      <div className="absolute bottom-8 left-8 right-8 flex items-center justify-between z-20">
+        {/* Progress Dots */}
+        <div className="flex gap-2.5">
+          {activeSlides.map((_, idx) => (
             <button
-              key={index}
+              key={idx}
               onClick={() => {
                 if (isTransitioning) return;
                 setIsTransitioning(true);
-                setCurrentSlide(index);
-                setTimeout(() => setIsTransitioning(false), 600);
+                setCurrentSlide(idx);
+                setTimeout(() => setIsTransitioning(false), 500);
               }}
-              className={`w-2 h-2 rounded-full transition-all duration-300 focus:outline-none cursor-pointer ${
-                index === currentSlide ? "bg-emerald-500 w-5" : "bg-white/30"
+              className={`h-2.5 rounded-full transition-all duration-300 focus:outline-none ${
+                currentSlide === idx 
+                  ? "w-8 bg-emerald-500 shadow-sm shadow-emerald-500/50" 
+                  : "w-2.5 bg-white/30 hover:bg-white/50"
               }`}
-              aria-label={`Go to slide ${index + 1}`}
+              aria-label={`Go to slide ${idx + 1}`}
             />
           ))}
+        </div>
+
+        {/* Next/Prev Controls */}
+        <div className="flex gap-3">
+          <button
+            onClick={handlePrev}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={handleNext}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
       </div>
     </div>
