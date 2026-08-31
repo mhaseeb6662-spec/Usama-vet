@@ -6,18 +6,18 @@ export const ABOUT_DATA = {
     subtitle: "Your reliable partner for veterinary medicines, livestock products, poultry supplements, and pet care essentials across Pakistan.",
   },
   story: {
-    title: "Our Story",
-    content: [
-      "Usama Vet Care & Agri Services was established to bridge the gap between quality animal healthcare products and the farmers, breeders, and pet owners who need them.",
+    title: "Our Journey to Excellence",
+    paragraphs: [
+      "Usama Vet & Surgical was established with a clear vision: to elevate the standard of animal healthcare and farming equipment across Pakistan. What started as a local initiative has grown into a trusted nationwide supplier.",
       "Our focus has always been on providing accessible, genuine, and reliable veterinary solutions. From commercial livestock farms to individual pet owners, we strive to ensure that every customer receives the best possible products and support.",
     ],
-    image: "https://picsum.photos/seed/story/800/600",
+    image: "/images/about/our-story.jpg",
   },
   founder: {
-    name: "[Founder Name / CLIENT_TO_PROVIDE]",
+    name: "M. Usama",
     designation: "Founder & CEO",
     message: "Our goal is to make quality animal-care and veterinary products easier for customers to find and order, while providing reliable support throughout the buying process.",
-    image: "https://picsum.photos/seed/founder/400/400", // Expected path: /public/images/about/founder.jpg
+    image: "/images/about/founder.jpg",
   },
   missionVision: {
     mission: {
