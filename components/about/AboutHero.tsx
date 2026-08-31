@@ -65,12 +65,12 @@ export default function AboutHero() {
           className="absolute inset-0 w-full h-full flex items-center justify-center"
         >
           {SLIDES[currentIndex].type === "image-post" ? (
-            <div className="relative w-full h-full bg-slate-100 flex items-center justify-center">
+            <div className="relative w-full h-full bg-emerald-50/50 flex items-center justify-center p-4 sm:p-8">
               <Image 
                 src={SLIDES[currentIndex].image} 
                 alt="Usama Vet Post"
                 fill
-                className="object-contain sm:object-cover"
+                className="object-contain p-2 sm:p-6 drop-shadow-xl"
                 unoptimized
                 priority
               />
