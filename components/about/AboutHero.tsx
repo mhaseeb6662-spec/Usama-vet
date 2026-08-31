@@ -16,12 +16,6 @@ const SLIDES = [
     id: 2,
     type: "image-post",
     image: "/images/slider/banner-2.png", 
-  },
-  {
-    id: 3,
-    type: "image-post",
-    image: "/images/slider/banner-1.png", 
-  }
 ];
 
 export default function AboutHero() {
