@@ -43,8 +43,8 @@ export default function AnimatedBackground() {
         </motion.div>
       </AnimatePresence>
       
-      {/* Professional Overlay: Makes text readable by blending white with a very slight blur */}
-      <div className="absolute inset-0 bg-white/50" />
+      {/* Professional Overlay: Makes text readable by blending white with a stronger opacity */}
+      <div className="absolute inset-0 bg-white/90" />
     </div>
   );
 }
