@@ -89,8 +89,7 @@ export default function CategoryScroller() {
         >
           {/* Categories Array (No duplication as per user request) */}
           {MOCK_CATEGORIES.map((cat, index) => {
-            // Using picsum.photos with a fixed seed based on category id to simulate real category images
-            const imageUrl = `https://picsum.photos/seed/${cat.id}/200/200`;
+            const imageUrl = cat.image || "https://placehold.co/200x200/10b981/ffffff?text=Cat";
 
             return (
               <div key={`${cat.id}-${index}`} className="shrink-0">
