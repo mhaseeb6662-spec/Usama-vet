@@ -3,7 +3,6 @@ import AboutHero from "@/components/about/AboutHero";
 import OurStory from "@/components/about/OurStory";
 import FounderSection from "@/components/about/FounderSection";
 import MissionVision from "@/components/about/MissionVision";
-import ReachSection from "@/components/about/ReachSection";
 import WhyChooseUs from "@/components/about/WhyChooseUs";
 import JourneyVideos from "@/components/about/JourneyVideos";
 import BusinessValues from "@/components/about/BusinessValues";
@@ -21,7 +20,6 @@ export default function AboutPage() {
       <OurStory />
       <FounderSection />
       <MissionVision />
-      <ReachSection />
       <WhyChooseUs />
       <JourneyVideos />
       <BusinessValues />
