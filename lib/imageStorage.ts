@@ -17,10 +17,17 @@ export async function uploadImage(file: File): Promise<string> {
   // Generate unique filename
   const extension = path.extname(file.name) || ".jpg";
   const uniqueName = crypto.randomBytes(16).toString("hex") + extension;
-  const filePath = path.join(process.cwd(), UPLOAD_DIR, uniqueName);
+  
+  const uploadPath = path.join(process.cwd(), UPLOAD_DIR);
+  const filePath = path.join(uploadPath, uniqueName);
 
-  // You should ideally check if UPLOAD_DIR exists and create it using `mkdir` here.
-  // For simplicity, we assume `public/uploads` exists or will be created by a setup script.
+  // Ensure directory exists
+  try {
+    await require("fs/promises").mkdir(uploadPath, { recursive: true });
+  } catch (err) {
+    // Ignore if exists
+  }
+
   await writeFile(filePath, buffer);
 
   // Return the public URL path
