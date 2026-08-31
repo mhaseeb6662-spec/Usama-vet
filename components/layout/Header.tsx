@@ -230,7 +230,7 @@ export default function Header() {
                 className="pt-4 border-t border-slate-100 space-y-3"
               >
                 <div className="px-3 text-xs font-semibold text-slate-700">
-                  Call Us: <a href="tel:03302760775" className="text-emerald-700 hover:underline">0330-2760775</a>
+                  Call Us: <a href={`tel:${BUSINESS_CONFIG.contact.phone.replace(/[^0-9+]/g, '')}`} className="text-emerald-700 hover:underline">{BUSINESS_CONFIG.contact.phoneDisplay}</a>
                 </div>
                 <div className="px-3 text-xs font-semibold text-slate-700">
                   Track Your Order

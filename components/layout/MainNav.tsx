@@ -136,14 +136,13 @@ export default function MainNav() {
 
         {/* Right Side: Hotline & Tracking with matching icons */}
         <div className="flex items-center gap-6 text-[14px] font-semibold text-slate-800 shrink-0">
-          
-          {/* Hotline */}
-          <a
-            href="tel:03302760775"
+          {/* Call Us */}
+          <a 
+            href={`tel:${BUSINESS_CONFIG.contact.phone.replace(/[^0-9+]/g, '')}`} 
             className="flex items-center gap-2 hover:text-[#009473] transition-colors"
           >
             <Phone className="w-4 h-4 text-[#009473]" />
-            <span>Call Us 0330-2760775</span>
+            <span>Call Us {BUSINESS_CONFIG.contact.phoneDisplay}</span>
           </a>
 
           {/* Track Order */}

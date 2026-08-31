@@ -3,17 +3,17 @@ export const BUSINESS_CONFIG = {
   shortName: "Usama Vet",
   tagline: "Trusted Animal Healthcare & Quality Veterinary Products",
   description: "Your premier partner in animal healthcare. Sourcing and delivering premium veterinary medicines, livestock products, poultry supplements, and pet care essentials nationwide.",
-  url: "https://usamavet.com", // Canonical Base URL
+  url: "https://www.usamavetsurgical.com", // Canonical Base URL
   logo: {
     text: "Usama Vet",
     subtitle: "Animal Health Care",
   },
   contact: {
-    phone: "+92 300 1234567",
-    phoneDisplay: "0300-1234567",
-    whatsapp: "https://wa.me/923001234567",
-    whatsappDisplay: "+92 300 1234567",
-    email: "info@usamavet.com",
+    phone: "+923048566233",
+    phoneDisplay: "0304-8566233 / 0333-8810539",
+    whatsapp: "https://wa.me/923048566233",
+    whatsappDisplay: "+92 304 8566233",
+    email: "info@usamavetsurgical.com",
     address: "Veterinary Complex, G.T. Road, Gujranwala, Punjab, Pakistan",
     mapEmbeddedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d108253.94723906473!2d74.12071661603507!3d32.16104273295982!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391f29ef194553df%3A0xc3f1738e404b901!2sGujranwala%2C%20Punjab%2C%20Pakistan!5e0!3m2!1sen!2s!4v1700000000000!5m2!1sen!2s", // Placeholder for embedded Google Map
   },
@@ -22,10 +22,11 @@ export const BUSINESS_CONFIG = {
     { days: "Sunday", time: "Closed / Emergency Only" },
   ],
   socials: {
-    facebook: "https://facebook.com/usamavet",
+    facebook: "https://web.facebook.com/profile.php?id=61553678602435",
     instagram: "https://instagram.com/usamavet",
-    twitter: "https://twitter.com/usamavet",
-    whatsappDirect: "https://wa.me/923001234567",
+    youtube: "https://youtube.com/@musama8",
+    tiktok: "https://www.tiktok.com/@vet.surgical.inst",
+    whatsappDirect: "https://wa.me/923048566233",
   },
   navItems: [
     { label: "Home", href: "/" },

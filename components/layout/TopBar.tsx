@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function TopBar() {
-  const tickerText = "Join Our Community Group Today Send Your Name, City & Area to 0300-1234567      |      Join Our Community Group Today Send Your Name, City & Area to 0300-1234567      |      Join Our Community Group Today Send Your Name, City & Area to 0300-1234567";
+  const tickerText = "Join Our Community Group Today Send Your Name, City & Area to 0304-8566233      |      Join Our Community Group Today Send Your Name, City & Area to 0304-8566233      |      Join Our Community Group Today Send Your Name, City & Area to 0304-8566233";
 
   return (
     <div className="bg-[#009473] text-white text-[11.5px] py-2 px-4 font-medium select-none overflow-hidden relative border-b border-emerald-700/30">
