@@ -14,12 +14,8 @@ const SLIDES = [
   },
   {
     id: 2,
-    type: "text",
-    title: "Premium Livestock Care",
-    subtitle: "Dedicated health solutions for Cattle, Buffalo, Goats, Sheep, and Horses. Authentic medicines delivered nationwide.",
-    image: "https://images.unsplash.com/photo-1574765383921-2e2193b216be?q=80&w=2070&auto=format&fit=crop", 
-    ctaText: "Explore Medicines",
-    ctaLink: "/categories/veterinary-medicines",
+    type: "image-post",
+    image: "/images/slider/banner-2.png", 
   },
   {
     id: 3,
