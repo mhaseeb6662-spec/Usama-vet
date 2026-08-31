@@ -3,13 +3,20 @@ import Link from "next/link";
 import ReviewForm from "@/components/reviews/ReviewForm";
 import ReviewsSummary from "@/components/reviews/ReviewsSummary";
 import ReviewList from "@/components/reviews/ReviewList";
+import { prisma } from "@/lib/db";
 
 export const metadata = {
   title: "Customer Reviews | Usama Vet",
   description: "Read genuine customer feedback and share your experience with Usama Vet's veterinary and animal-care products.",
 };
 
-export default function ReviewsPage() {
+export default async function ReviewsPage() {
+  // Fetch real APPROVED reviews from DB
+  const reviews = await prisma.review.findMany({
+    where: { status: "APPROVED" },
+    orderBy: { createdAt: "desc" },
+  });
+
   return (
     <main className="bg-slate-50 min-h-screen">
       {/* HEADER BREADCRUMB */}
@@ -25,8 +32,8 @@ export default function ReviewsPage() {
 
       <div className="max-w-5xl mx-auto px-4 py-12">
         <ReviewForm />
-        <ReviewsSummary />
-        <ReviewList />
+        <ReviewsSummary reviews={reviews} />
+        <ReviewList reviews={reviews} />
       </div>
     </main>
   );

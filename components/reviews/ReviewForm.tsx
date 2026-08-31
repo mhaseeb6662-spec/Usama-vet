@@ -6,12 +6,49 @@ import { Star, UploadCloud, CheckCircle2 } from "lucide-react";
 export default function ReviewForm() {
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [whatsappNumber, setWhatsappNumber] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    if (rating === 0) {
+      setError("Please select a star rating.");
+      return;
+    }
+    setError("");
+    setIsSubmitting(true);
+    
+    try {
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rating, title, content, displayName, whatsappNumber }),
+      });
+      
+      if (res.ok) {
+        setSubmitted(true);
+        setTimeout(() => {
+          setSubmitted(false);
+          setRating(0);
+          setTitle("");
+          setContent("");
+          setDisplayName("");
+          setWhatsappNumber("");
+        }, 5000);
+      } else {
+        const data = await res.json();
+        setError(data.message || "Failed to submit review");
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -31,6 +68,8 @@ export default function ReviewForm() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl mx-auto">
+            {error && <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm text-center">{error}</div>}
+            
             <div className="flex flex-col items-center justify-center space-y-2 mb-8">
               <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest">
                 Rating
@@ -59,12 +98,12 @@ export default function ReviewForm() {
 
             <div className="space-y-2">
               <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest ml-1">Review Title</label>
-              <input type="text" required placeholder="Give your review a title" className="w-full border border-slate-200 rounded-lg px-4 py-3.5 text-[14px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-slate-400" />
+              <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Give your review a title" className="w-full border border-slate-200 rounded-lg px-4 py-3.5 text-[14px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-slate-400" />
             </div>
 
             <div className="space-y-2">
               <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest ml-1">Review Content</label>
-              <textarea required placeholder="Start writing here..." rows={5} className="w-full border border-slate-200 rounded-lg px-4 py-3.5 text-[14px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all resize-y placeholder:text-slate-400" />
+              <textarea required value={content} onChange={(e) => setContent(e.target.value)} placeholder="Start writing here..." rows={5} className="w-full border border-slate-200 rounded-lg px-4 py-3.5 text-[14px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all resize-y placeholder:text-slate-400" />
             </div>
 
             <div className="space-y-2">
@@ -78,17 +117,17 @@ export default function ReviewForm() {
             <div className="grid md:grid-cols-2 gap-6 pt-2">
               <div className="space-y-2">
                 <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest ml-1">Display Name</label>
-                <input type="text" required placeholder="e.g. Ahmed" className="w-full border border-slate-200 rounded-lg px-4 py-3.5 text-[14px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-slate-400" />
+                <input type="text" required value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="e.g. Ahmed" className="w-full border border-slate-200 rounded-lg px-4 py-3.5 text-[14px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-slate-400" />
               </div>
               <div className="space-y-2">
                 <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest ml-1">WhatsApp Number</label>
-                <input type="tel" required placeholder="Enter number" className="w-full border border-slate-200 rounded-lg px-4 py-3.5 text-[14px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-slate-400" />
+                <input type="tel" required value={whatsappNumber} onChange={(e) => setWhatsappNumber(e.target.value)} placeholder="Enter number" className="w-full border border-slate-200 rounded-lg px-4 py-3.5 text-[14px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-slate-400" />
               </div>
             </div>
 
             <div className="pt-6 text-center">
-              <button type="submit" className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-[14px] px-10 py-3.5 rounded-full shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
-                Submit Review
+              <button disabled={isSubmitting} type="submit" className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-70 text-white font-semibold text-[14px] px-10 py-3.5 rounded-full shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
+                {isSubmitting ? "Submitting..." : "Submit Review"}
               </button>
             </div>
           </form>
