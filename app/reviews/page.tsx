@@ -4,10 +4,13 @@ import ReviewForm from "@/components/reviews/ReviewForm";
 import ReviewsSummary from "@/components/reviews/ReviewsSummary";
 import ReviewList from "@/components/reviews/ReviewList";
 import { prisma } from "@/lib/db";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Customer Reviews | Usama Vet",
-  description: "Read genuine customer feedback and share your experience with Usama Vet's veterinary and animal-care products.",
+export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: "Customer Reviews | Usama Vet & Poultry Store",
+  description: "Read trusted reviews from dairy farmers and pet owners across Pakistan.",
 };
 
 export default async function ReviewsPage() {

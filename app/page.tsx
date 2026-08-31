@@ -20,8 +20,8 @@ import ProductSection from "@/components/home/ProductSection";
 import LowerTrustStrip from "@/components/home/LowerTrustStrip";
 import NewsletterSection from "@/components/home/NewsletterSection";
 
-// Revalidate homepage every hour or on demand
-export const revalidate = 3600;
+// Force dynamic rendering so Next.js doesn't try to query the database during Hostinger's build step
+export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   // Try fetching dynamic data, fallback to mock data if database is empty/unseeded
