@@ -1,30 +1,41 @@
 import { MetadataRoute } from "next";
 import { BUSINESS_CONFIG } from "@/lib/constants/config";
-import { MOCK_CATEGORIES, MOCK_PRODUCTS } from "@/lib/data/mockData";
+import { prisma } from "@/lib/db";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = 'force-dynamic';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = BUSINESS_CONFIG.url;
 
   // 1. Static Pages
-  const staticRoutes = ["", "/about", "/reviews", "/contact"].map((route) => ({
+  const staticRoutes = ["", "/about", "/reviews", "/contact", "/products", "/categories"].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: route === "" ? 1.0 : 0.8,
   }));
 
-  // 2. Future Dynamic Category Pages
-  const categoryRoutes = MOCK_CATEGORIES.map((cat) => ({
+  // 2. Fetch Real Categories from Database
+  const dbCategories = await prisma.category.findMany({
+    select: { slug: true, updatedAt: true }
+  });
+  
+  const categoryRoutes = dbCategories.map((cat) => ({
     url: `${baseUrl}/categories/${cat.slug}`,
-    lastModified: new Date(),
+    lastModified: cat.updatedAt,
     changeFrequency: "weekly" as const,
     priority: 0.7,
   }));
 
-  // 3. Future Dynamic Product Pages
-  const productRoutes = MOCK_PRODUCTS.map((prod) => ({
+  // 3. Fetch Real Products from Database
+  const dbProducts = await prisma.product.findMany({
+    where: { isActive: true },
+    select: { slug: true, updatedAt: true }
+  });
+
+  const productRoutes = dbProducts.map((prod) => ({
     url: `${baseUrl}/products/${prod.slug}`,
-    lastModified: new Date(),
+    lastModified: prod.updatedAt,
     changeFrequency: "daily" as const,
     priority: 0.6,
   }));
