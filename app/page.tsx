@@ -1,7 +1,12 @@
 import React from "react";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
-import { MOCK_PRODUCTS } from "@/lib/data/mockData";
 import { OrganizationSchema, WebSiteSchema } from "@/lib/seo/schema";
+import { 
+  getProductsBySection, 
+  getHomepageCategories,
+  getActiveHeroSlides,
+  getActiveBanners
+} from "@/lib/data/homepage";
+import { MOCK_PRODUCTS } from "@/lib/data/mockData";
 
 // Modular Components
 import HeroCarousel from "@/components/home/HeroCarousel";
@@ -15,19 +20,53 @@ import ProductSection from "@/components/home/ProductSection";
 import LowerTrustStrip from "@/components/home/LowerTrustStrip";
 import NewsletterSection from "@/components/home/NewsletterSection";
 
-export default function HomePage() {
-  // Filter products for custom sections
-  const livestockEssentials = MOCK_PRODUCTS.filter(
+// Revalidate homepage every hour or on demand
+export const revalidate = 3600;
+
+export default async function HomePage() {
+  // Try fetching dynamic data, fallback to mock data if database is empty/unseeded
+  const [
+    dbNewArrivals,
+    dbBestSellers,
+    dbLivestock,
+    dbRecommended,
+    dbPetCare,
+    dbSupplements,
+    dbTrending,
+    dbHeroSlides,
+    dbBanners
+  ] = await Promise.all([
+    getProductsBySection('NEW_ARRIVALS'),
+    getProductsBySection('BEST_SELLERS'),
+    getProductsBySection('CATEGORY', 1), // Assuming ID 1 is livestock
+    getProductsBySection('RECOMMENDED'),
+    getProductsBySection('CATEGORY', 2), // Pet care
+    getProductsBySection('CATEGORY', 3), // Supplements
+    getProductsBySection('TRENDING'),
+    getActiveHeroSlides(),
+    getActiveBanners()
+  ]);
+
+  // Fallbacks to MOCK_PRODUCTS to preserve the design while the client populates their database.
+  const newArrivals = dbNewArrivals.length > 0 ? dbNewArrivals : MOCK_PRODUCTS.slice(0, 8);
+  const bestSellers = dbBestSellers.length > 0 ? dbBestSellers : MOCK_PRODUCTS.slice(8, 16);
+  const recommended = dbRecommended.length > 0 ? dbRecommended : MOCK_PRODUCTS.slice(12, 20);
+  const trending = dbTrending.length > 0 ? dbTrending : MOCK_PRODUCTS.slice(16, 24);
+
+  const livestockEssentials = dbLivestock.length > 0 ? dbLivestock : MOCK_PRODUCTS.filter(
     (p) => p.categorySlug === "livestock-care" || p.categorySlug === "veterinary-medicines"
   );
   
-  const petCareEssentials = MOCK_PRODUCTS.filter(
+  const petCareEssentials = dbPetCare.length > 0 ? dbPetCare : MOCK_PRODUCTS.filter(
     (p) => p.categorySlug === "pet-care"
   );
 
-  const supplementsEssentials = MOCK_PRODUCTS.filter(
+  const supplementsEssentials = dbSupplements.length > 0 ? dbSupplements : MOCK_PRODUCTS.filter(
     (p) => p.categorySlug === "animal-supplements" || p.categorySlug === "feed-supplements"
   );
+
+  const promo1 = dbBanners.find(b => b.position === "promo-1");
+  const promo2 = dbBanners.find(b => b.position === "promo-2");
 
   return (
     <div className="space-y-4">
@@ -36,7 +75,7 @@ export default function HomePage() {
       <WebSiteSchema />
 
       {/* 1. HERO CAROUSEL BANNER */}
-      <HeroCarousel />
+      <HeroCarousel slides={dbHeroSlides} />
 
       {/* 2. CIRCULAR CATEGORY SCROLLER */}
       <CategoryScroller />
@@ -46,12 +85,13 @@ export default function HomePage() {
 
       {/* 4. FIRST PROMOTIONAL BANNER */}
       <PromoBanner
-        badgeText="Special Campaign"
-        title="Amazing Offers Inside: Save up to 20% on Veterinary Medicines"
-        subTitle="Get premium antibiotics, dewormers and cattle calcium injections at direct farm rates. Temperature controlled shipping included."
-        bgClass="bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500"
+        badgeText={promo1 ? promo1.name : "Special Campaign"}
+        title={promo1?.title || "Amazing Offers Inside: Save up to 20% on Veterinary Medicines"}
+        subTitle={promo1?.subtitle || "Get premium antibiotics, dewormers and cattle calcium injections at direct farm rates. Temperature controlled shipping included."}
+        bgClass={promo1?.image ? "bg-cover bg-center" : "bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500"}
         textClass="text-slate-950 font-sans"
-        href="#products"
+        href={promo1?.ctaUrl || "#products"}
+        style={promo1?.image ? { backgroundImage: `url(${promo1.image})` } : undefined}
       />
 
       {/* 5. TAB CONTROLLED GRID (Featured, New, Best Selling) */}
@@ -68,7 +108,7 @@ export default function HomePage() {
         preTitle="Fresh Catalog"
         title="New Arrivals"
         description="Explore the latest additions to our animal pharmacy and feed reserves. Verified for safety."
-        products={MOCK_PRODUCTS.slice(0, 8)}
+        products={newArrivals}
         bgColorClass="bg-white/70 backdrop-blur-md"
         viewAllHref="/#products"
       />
@@ -78,7 +118,7 @@ export default function HomePage() {
         preTitle="Top Demand"
         title="Best Selling Products"
         description="Our most popular veterinary medicines and enhancers, trusted by commercial dairy farms nationwide."
-        products={MOCK_PRODUCTS.slice(8, 16)}
+        products={bestSellers}
         bgColorClass="bg-emerald-50/70 backdrop-blur-md"
         viewAllHref="/#products"
       />
@@ -98,19 +138,20 @@ export default function HomePage() {
         preTitle="Personalized Picks"
         title="Recommended For You"
         description="Specially configured combinations of trace minerals and farm hygiene products for active keepers."
-        products={MOCK_PRODUCTS.slice(12, 20)}
+        products={recommended}
         bgColorClass="bg-cyan-50/70 backdrop-blur-md"
         viewAllHref="/#products"
       />
 
       {/* 12. SECOND PROMOTIONAL BANNER */}
       <PromoBanner
-        badgeText="Seasonal Boost"
-        title="Best Offers of the Season: Nutritional Dairy Enhancers"
-        subTitle="Enhance daily milk fat percentage and protect cattle from ketosis. Secure dry-pack casing on bulk orders."
-        bgClass="bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-850"
+        badgeText={promo2 ? promo2.name : "Seasonal Boost"}
+        title={promo2?.title || "Best Offers of the Season: Nutritional Dairy Enhancers"}
+        subTitle={promo2?.subtitle || "Enhance daily milk fat percentage and protect cattle from ketosis. Secure dry-pack casing on bulk orders."}
+        bgClass={promo2?.image ? "bg-cover bg-center" : "bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-850"}
         textClass="text-white"
-        href="#products"
+        href={promo2?.ctaUrl || "#products"}
+        style={promo2?.image ? { backgroundImage: `url(${promo2.image})` } : undefined}
       />
 
       {/* 13. SECTION E: PET & ANIMAL CARE (bg-white) */}
@@ -138,7 +179,7 @@ export default function HomePage() {
         preTitle="Market Pulse"
         title="Trending Now"
         description="Rapidly moving vaccines, ear tag guns, and biosecurity spray disinfectants across major farms."
-        products={MOCK_PRODUCTS.slice(16, 24)}
+        products={trending}
         bgColorClass="bg-white/70 backdrop-blur-md"
         viewAllHref="/#products"
       />
@@ -151,3 +192,4 @@ export default function HomePage() {
     </div>
   );
 }
+

@@ -5,146 +5,161 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, Stethoscope, ShieldCheck, Heart } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
-const HERO_SLIDES = [
+const DEFAULT_SLIDES = [
   {
-    tag: "Direct Pharmacy & Supplies",
+    subtitle: "Direct Pharmacy & Supplies",
     title: "Trusted Veterinary & Animal Care Products",
     description: "Sourcing and delivering authentic medicines, vaccines, and supplements directly from GMP certified laboratories to your farm door.",
-    btnText: "Shop Medicines",
-    link: "#products",
+    ctaText: "Shop Medicines",
+    ctaUrl: "#products",
     badgeIcon: Stethoscope,
+    desktopImage: null
   },
   {
-    tag: "Livestock Yield Boosters",
+    subtitle: "Livestock Yield Boosters",
     title: "Premium Dairy Feed Supplements",
     description: "Improve rumen digestibilities, dry matter intakes, and milk fat percentages in dairy cattle using our specialized mineral premixes.",
-    btnText: "Shop Supplements",
-    link: "#products",
+    ctaText: "Shop Supplements",
+    ctaUrl: "#products",
     badgeIcon: ShieldCheck,
+    desktopImage: null
   },
   {
-    tag: "Pet Care & Hygiene Specials",
+    subtitle: "Pet Care & Hygiene Specials",
     title: "Genuine Pet Care & Parasiticides",
     description: "Keep companion pets free from ticks and fleas. Browse top-tier shampoos, tick sprays, and nutritional skin oils.",
-    btnText: "Shop Pet Care",
-    link: "#products",
+    ctaText: "Shop Pet Care",
+    ctaUrl: "#products",
     badgeIcon: Heart,
+    desktopImage: null
   },
 ];
 
-export default function HeroCarousel() {
+export default function HeroCarousel({ slides = [] }: { slides?: any[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const shouldReduceMotion = useReducedMotion();
+  
+  const activeSlides = slides && slides.length > 0 ? slides : DEFAULT_SLIDES;
 
   // Auto scroll slides (5-6 seconds delay)
   useEffect(() => {
     const timer = setInterval(() => {
       if (!isTransitioning) {
-        setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+        setCurrentSlide((prev) => (prev + 1) % activeSlides.length);
       }
-    }, 5500);
+    }, 6000);
     return () => clearInterval(timer);
-  }, [isTransitioning]);
-
-  const handlePrev = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
-    setTimeout(() => setIsTransitioning(false), 600);
-  };
+  }, [activeSlides.length, isTransitioning]);
 
   const handleNext = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
-    setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    setTimeout(() => setIsTransitioning(false), 600);
+    setCurrentSlide((prev) => (prev + 1) % activeSlides.length);
+    setTimeout(() => setIsTransitioning(false), 500); // Debounce matching transition time
   };
 
-  const slide = HERO_SLIDES[currentSlide];
-  const ActiveIcon = slide.badgeIcon;
+  const handlePrev = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrentSlide((prev) => (prev - 1 + activeSlides.length) % activeSlides.length);
+    setTimeout(() => setIsTransitioning(false), 500);
+  };
+
+  const slide = activeSlides[currentSlide];
+  
+  // Choose an icon based on index if it doesn't have one
+  const iconList = [Stethoscope, ShieldCheck, Heart];
+  const ActiveIcon = slide.badgeIcon || iconList[currentSlide % iconList.length];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 mt-6">
-      <div className="relative bg-gradient-to-br from-slate-900 via-slate-950 to-emerald-950 text-white rounded-xl overflow-hidden shadow-lg h-72 sm:h-96 md:h-[450px] flex items-center">
-        {/* Decorative Grid Overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-15" />
-        
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSlide}
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-0 flex flex-col md:flex-row items-center justify-between p-8 md:p-16"
-          >
-            {/* Left Content */}
-            <div className="w-full md:w-1/2 space-y-5 z-10 relative">
-              
-              {/* Badge */}
-              <motion.div 
-                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-1.5 shadow-sm"
-              >
-                <ActiveIcon className="w-4 h-4 text-emerald-400" />
-                <span className="text-[13px] font-semibold tracking-wider text-emerald-50 uppercase">
-                  {slide.tag}
-                </span>
-              </motion.div>
-              
-              {/* Heading */}
-              <motion.h2 
-                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-                className="text-[32px] sm:text-[40px] md:text-[46px] font-bold text-white leading-[1.15]"
-              >
-                {slide.title}
-              </motion.h2>
-              
-              {/* Description */}
-              <motion.p 
-                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="text-slate-350 text-[15px] sm:text-[17px] font-normal leading-relaxed max-w-lg"
-              >
-                {slide.description}
-              </motion.p>
-              
-              {/* CTA Button */}
-              <motion.div 
-                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
-                className="pt-3"
-              >
-                <Link
-                  href={slide.link}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-[14px] uppercase px-8 py-3.5 rounded-lg shadow-lg hover:shadow-emerald-600/20 transition-all focus:outline-none hover-scale-button inline-flex items-center tracking-wide"
-                >
-                  {slide.btnText}
-                </Link>
-              </motion.div>
-            </div>
+    <div className="w-full relative bg-slate-900 rounded-3xl overflow-hidden shadow-2xl min-h-[500px] md:min-h-[550px] lg:min-h-[600px] flex items-center justify-center">
+      
+      {/* Absolute Background Patterns (Static across slides to prevent janky transitions) */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute right-0 top-0 w-3/4 h-full bg-emerald-900/20 blur-[100px] rounded-full" />
+        <div className="absolute -left-20 -bottom-20 w-[40vw] h-[40vw] bg-teal-800/20 blur-[120px] rounded-full" />
+        {/* Subtle grid mesh overlay */}
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay" />
+      </div>
 
-            {/* Graphic Placeholder (Right-aligned with scale reveal) */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentSlide}
+          initial={{ opacity: 0, x: shouldReduceMotion ? 0 : 8 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: shouldReduceMotion ? 0 : -8 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+          className="absolute inset-0 flex flex-col md:flex-row items-center justify-between p-8 md:p-16"
+        >
+          {/* Left Content */}
+          <div className="w-full md:w-1/2 space-y-5 z-10 relative">
+            
+            {/* Badge */}
             <motion.div 
-              initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 1.025 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="hidden md:flex flex-grow justify-end max-w-sm ml-auto opacity-30 lg:opacity-75"
+              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-1.5 shadow-sm"
             >
-              <div className="w-48 h-48 rounded-full border border-emerald-500/10 flex items-center justify-center relative">
-                <div className="absolute inset-0 rounded-full border border-emerald-500/20 animate-pulse" />
-                <div className="w-36 h-36 rounded-full bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                  <ActiveIcon className="w-16 h-16" />
-                </div>
-              </div>
+              <ActiveIcon className="w-4 h-4 text-emerald-400" />
+              <span className="text-[13px] font-semibold tracking-wider text-emerald-50 uppercase">
+                {slide.subtitle || slide.tag || "Featured"}
+              </span>
             </motion.div>
+            
+            {/* Heading */}
+            <motion.h2 
+              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+              className="text-[32px] sm:text-[40px] md:text-[46px] font-bold text-white leading-[1.15]"
+            >
+              {slide.title}
+            </motion.h2>
+            
+            {/* Description */}
+            <motion.p 
+              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+              className="text-slate-350 text-[15px] sm:text-[17px] font-normal leading-relaxed max-w-lg text-slate-300"
+            >
+              {slide.description}
+            </motion.p>
+            
+            {/* CTA Button */}
+            <motion.div 
+              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
+              className="pt-3"
+            >
+              <Link
+                href={slide.ctaUrl || slide.link || "#products"}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-[14px] uppercase px-8 py-3.5 rounded-lg shadow-lg hover:shadow-emerald-600/20 transition-all focus:outline-none hover-scale-button inline-flex items-center tracking-wide"
+              >
+                {slide.ctaText || slide.btnText || "Shop Now"}
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Graphic Placeholder or Image */}
+          <motion.div 
+            initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 1.025 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className={`hidden md:flex flex-grow justify-end max-w-sm ml-auto ${!slide.desktopImage ? 'opacity-30 lg:opacity-75' : ''}`}
+          >
+            {slide.desktopImage ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={slide.desktopImage} alt={slide.title} className="w-full h-auto max-h-[400px] object-contain drop-shadow-2xl rounded-2xl" />
+            ) : (
+              <div className="w-72 h-72 lg:w-96 lg:h-96 border-2 border-dashed border-white/20 rounded-full flex items-center justify-center relative overflow-hidden backdrop-blur-sm">
+                <div className="absolute inset-0 bg-emerald-500/10 mix-blend-overlay"></div>
+                <ActiveIcon className="w-24 h-24 lg:w-32 lg:h-32 text-white/30" />
+              </div>
+            )}
           </motion.div>
         </AnimatePresence>
 

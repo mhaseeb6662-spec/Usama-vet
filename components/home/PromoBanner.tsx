@@ -7,10 +7,11 @@ interface PromoBannerProps {
   title: string;
   subTitle?: string;
   badgeText?: string;
-  bgClass?: string; // e.g. bg-gradient-to-r from-yellow-400 to-orange-500
-  textClass?: string; // e.g. text-slate-900, text-white
+  bgClass?: string;
+  textClass?: string;
   btnText?: string;
   href: string;
+  style?: React.CSSProperties;
 }
 
 export default function PromoBanner({
@@ -21,11 +22,15 @@ export default function PromoBanner({
   textClass = "text-white",
   btnText = "Shop Now",
   href,
+  style,
 }: PromoBannerProps) {
   return (
     <div className="max-w-7xl mx-auto px-4 py-4 overflow-hidden">
       <FadeUp distance={14} duration={0.45}>
-        <div className={`relative rounded-xl overflow-hidden shadow-sm p-5 sm:p-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left ${bgClass} ${textClass}`}>
+        <div 
+          className={`relative rounded-xl overflow-hidden shadow-sm p-5 sm:p-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left ${bgClass} ${textClass}`}
+          style={style}
+        >
           {/* Background mesh effects */}
           <div className="absolute inset-0 bg-white/5 backdrop-blur-sm pointer-events-none" />
           <div className="absolute -right-24 -top-24 w-48 h-48 rounded-full bg-white/10 blur-xl pointer-events-none" />
