@@ -28,10 +28,10 @@ export async function GET(request: Request) {
       await prisma.user.create({
         data: {
           email,
-          password: hashedPassword,
+          passwordHash: hashedPassword,
           name: "Super Admin",
           role: "SUPER_ADMIN",
-          isActive: true
+          status: "ACTIVE"
         }
       });
     }
