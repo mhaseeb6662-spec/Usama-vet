@@ -7,7 +7,7 @@ export const ABOUT_DATA = {
   },
   story: {
     title: "Our Journey to Excellence",
-    paragraphs: [
+    content: [
       "Usama Vet & Surgical was established with a clear vision: to elevate the standard of animal healthcare and farming equipment across Pakistan. What started as a local initiative has grown into a trusted nationwide supplier.",
       "Our focus has always been on providing accessible, genuine, and reliable veterinary solutions. From commercial livestock farms to individual pet owners, we strive to ensure that every customer receives the best possible products and support.",
     ],
