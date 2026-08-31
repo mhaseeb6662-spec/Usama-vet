@@ -39,14 +39,16 @@ export default function CategoryScroller() {
           directionRef.current = 1; // Turn right
         }
 
-        // Speed mapping: 0.08 px/ms (normal), 0.015 px/ms (slow on hover)
-        const targetSpeed = isHovered ? 0.015 : 0.08;
+        // Speed mapping: 0.08 px/ms (normal), 0 px/ms (completely STOP on hover)
+        const targetSpeed = isHovered ? 0 : 0.08;
         
-        // Increment exact float position
-        exactPositionRef.current += (targetSpeed * deltaTime * directionRef.current);
-        
-        // Apply to DOM
-        scrollRef.current.scrollLeft = exactPositionRef.current;
+        // Increment exact float position (only if not stopped)
+        if (targetSpeed > 0) {
+          exactPositionRef.current += (targetSpeed * deltaTime * directionRef.current);
+          
+          // Apply to DOM
+          scrollRef.current.scrollLeft = exactPositionRef.current;
+        }
         
         // If user manually swipes/scrolls, re-sync our float tracker
         if (Math.abs(scrollRef.current.scrollLeft - exactPositionRef.current) > 2) {

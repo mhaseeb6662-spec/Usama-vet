@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Search, ShoppingCart, User, Menu, X } from "lucide-react";
 import { BUSINESS_CONFIG } from "@/lib/constants/config";
@@ -64,9 +65,9 @@ export default function Header() {
           <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
             
             {/* Logo Group (Subtle hover transition) */}
-            <Link href="/" className="flex items-center gap-2 group shrink-0 focus:outline-none">
-              <div className="w-10 h-10 bg-[#009473] rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm group-hover:bg-[#028467] transition-colors shrink-0 hover-scale-subtle">
-                U
+            <Link href="/" className="flex items-center gap-2.5 group shrink-0 focus:outline-none">
+              <div className="w-11 h-11 rounded-full shadow-sm shrink-0 hover-scale-subtle overflow-hidden bg-slate-50 border border-slate-200">
+                <Image src="/logo.jpg" alt="Veterinary Logo" width={44} height={44} className="w-full h-full object-cover" unoptimized />
               </div>
               <div className="hidden sm:block leading-none text-left">
                 <span className="block font-bold text-slate-800 text-[17px] group-hover:text-[#009473] transition-colors uppercase">
