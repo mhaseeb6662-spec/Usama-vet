@@ -118,7 +118,7 @@ export default function AboutHero() {
                   </motion.div>
                 </div>
               </div>
-            </</>
+            </>
           )}
         </motion.div>
       </AnimatePresence>
