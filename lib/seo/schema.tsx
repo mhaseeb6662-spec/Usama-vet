@@ -41,8 +41,9 @@ export function OrganizationSchema() {
     "sameAs": [
       BUSINESS_CONFIG.socials.facebook,
       BUSINESS_CONFIG.socials.instagram,
-      BUSINESS_CONFIG.socials.twitter,
-    ],
+      BUSINESS_CONFIG.socials.youtube,
+      BUSINESS_CONFIG.socials.tiktok,
+    ].filter(Boolean),
   };
 
   return (

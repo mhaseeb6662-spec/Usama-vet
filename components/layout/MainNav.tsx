@@ -8,6 +8,7 @@ import {
   Pill, Milk, Activity, Feather, Heart, Grid, Sparkles, Shield 
 } from "lucide-react";
 import { MOCK_CATEGORIES } from "@/lib/data/mockData";
+import { BUSINESS_CONFIG } from "@/lib/constants/config";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ICON_MAP: Record<string, React.ElementType> = {
