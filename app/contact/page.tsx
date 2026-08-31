@@ -24,20 +24,14 @@ export default function ContactPage() {
       {/* Breadcrumb Schema */}
       <BreadcrumbsSchema items={breadcrumbs} />
 
-      {/* PAGE HERO */}
-      <section className="bg-gradient-to-br from-slate-900 via-slate-950 to-emerald-950 text-white py-16 px-4 text-center">
-        <div className="max-w-3xl mx-auto space-y-4">
-          <nav className="flex justify-center text-[12px] uppercase font-semibold text-emerald-400 gap-2 mb-2">
-            <Link href="/" className="hover:underline">Home</Link>
-            <span>/</span>
-            <span className="text-slate-300">Contact Us</span>
-          </nav>
-          <h1 className="text-[24px] sm:text-[30px] font-bold leading-snug">
-            Contact Usama Vet Care
-          </h1>
-          <p className="text-slate-300 text-[13px] sm:text-[14px] max-w-xl mx-auto leading-normal font-normal">
-            Have questions regarding veterinary products, prescription verification, or delivery times? Send us a message or call directly.
-          </p>
+      {/* PAGE HERO BANNER */}
+      <section className="w-full bg-slate-100">
+        <div className="w-full max-w-[1600px] mx-auto">
+          <img 
+            src="/images/contact/hero-banner.jpg" 
+            alt="Contact Usama Vet Clinic" 
+            className="w-full h-auto object-contain sm:object-cover sm:max-h-[600px] md:max-h-[700px]"
+          />
         </div>
       </section>
 
