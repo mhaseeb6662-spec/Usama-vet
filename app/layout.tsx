@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import AnimatedBackground from "@/components/layout/AnimatedBackground";
 import { BUSINESS_CONFIG } from "@/lib/constants/config";
 import "./globals.css";
 
@@ -79,7 +80,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${poppins.variable} h-full antialiased`}>
-      <body className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans">
+      <body className="flex flex-col min-h-screen bg-transparent text-slate-900 font-sans relative">
+        <AnimatedBackground />
+
         {/* Sticky navigation header */}
         <Header />
         

@@ -22,7 +22,7 @@ export default function MainNav() {
   };
 
   return (
-    <div className="bg-[#f0f8f5] border-b border-slate-200/60 relative z-30">
+    <div className="bg-[#f0f8f5]/80 backdrop-blur-xl border-b border-slate-200/60 relative z-30">
       <div className="max-w-7xl mx-auto px-4 flex justify-between items-center h-14">
         {/* Left Side: Solid Green Categories Button */}
         <div className="relative">

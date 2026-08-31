@@ -69,7 +69,7 @@ export default function HomePage() {
         title="New Arrivals"
         description="Explore the latest additions to our animal pharmacy and feed reserves. Verified for safety."
         products={MOCK_PRODUCTS.slice(0, 8)}
-        bgColorClass="bg-white"
+        bgColorClass="bg-white/70 backdrop-blur-md"
         viewAllHref="/#products"
       />
 
@@ -79,7 +79,7 @@ export default function HomePage() {
         title="Best Selling Products"
         description="Our most popular veterinary medicines and enhancers, trusted by commercial dairy farms nationwide."
         products={MOCK_PRODUCTS.slice(8, 16)}
-        bgColorClass="bg-emerald-50/15"
+        bgColorClass="bg-emerald-50/70 backdrop-blur-md"
         viewAllHref="/#products"
       />
 
@@ -89,7 +89,7 @@ export default function HomePage() {
         title="Livestock Essentials"
         description="Heavy-duty healthcare, deworming drenches, and milk production boosts for dairy herds."
         products={livestockEssentials}
-        bgColorClass="bg-white"
+        bgColorClass="bg-white/70 backdrop-blur-md"
         viewAllHref="/categories/livestock-care"
       />
 
@@ -99,7 +99,7 @@ export default function HomePage() {
         title="Recommended For You"
         description="Specially configured combinations of trace minerals and farm hygiene products for active keepers."
         products={MOCK_PRODUCTS.slice(12, 20)}
-        bgColorClass="bg-cyan-50/15"
+        bgColorClass="bg-cyan-50/70 backdrop-blur-md"
         viewAllHref="/#products"
       />
 
@@ -119,7 +119,7 @@ export default function HomePage() {
         title="Pet & Animal Care"
         description="Premium skin oils, hair fall control supplements, and flea/tick sprays for companion animals."
         products={petCareEssentials}
-        bgColorClass="bg-white"
+        bgColorClass="bg-white/70 backdrop-blur-md"
         viewAllHref="/categories/pet-care"
       />
 
@@ -129,7 +129,7 @@ export default function HomePage() {
         title="Veterinary Supplements"
         description="High concentration vitamin AD3E injections, mycotoxin binders, and digestive rumen yeast premixes."
         products={supplementsEssentials}
-        bgColorClass="bg-teal-50/15"
+        bgColorClass="bg-teal-50/70 backdrop-blur-md"
         viewAllHref="/categories/animal-supplements"
       />
 
@@ -139,7 +139,7 @@ export default function HomePage() {
         title="Trending Now"
         description="Rapidly moving vaccines, ear tag guns, and biosecurity spray disinfectants across major farms."
         products={MOCK_PRODUCTS.slice(16, 24)}
-        bgColorClass="bg-white"
+        bgColorClass="bg-white/70 backdrop-blur-md"
         viewAllHref="/#products"
       />
 

@@ -55,7 +55,7 @@ export default function Footer() {
           }
         }
       }}
-      className="bg-[#eef8f4] text-slate-800 border-t border-slate-200/80 text-[14px]"
+      className="bg-[#eef8f4]/80 backdrop-blur-xl text-slate-800 border-t border-slate-200/80 text-[14px]"
     >
       
       {/* 4-COLUMN SCREENSHOT-ALIGNED GRID */}
