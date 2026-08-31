@@ -6,7 +6,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const SLIDES = [
+const SLIDES: Array<{ id: number; type: string; image: string; title?: string; subtitle?: string; ctaText?: string; ctaLink?: string }> = [
   {
     id: 1,
     type: "image-post",
@@ -16,6 +16,7 @@ const SLIDES = [
     id: 2,
     type: "image-post",
     image: "/images/slider/banner-2.png", 
+  }
 ];
 
 export default function AboutHero() {
