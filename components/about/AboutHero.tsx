@@ -19,12 +19,8 @@ const SLIDES = [
   },
   {
     id: 3,
-    type: "text",
-    title: "Surgical Instruments",
-    subtitle: "High-grade surgical tools, syringes, and modern farm handling equipment sourced directly from trusted manufacturers.",
-    image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=2068&auto=format&fit=crop", 
-    ctaText: "View Instruments",
-    ctaLink: "/categories/surgical-instruments",
+    type: "image-post",
+    image: "/images/slider/banner-1.png", 
   }
 ];
 
