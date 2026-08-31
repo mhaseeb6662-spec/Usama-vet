@@ -164,6 +164,16 @@ export default function Footer() {
             </form>
           )}
 
+          <p className="text-[13px] text-slate-500 leading-normal">
+            Get updates on special promotions, new medicines, and farm care tips.
+          </p>
+
+          {/* Social Icons row */}
+          <div className="space-y-2 pt-1">
+            <span className="block text-[13px] font-semibold text-slate-800">
+              Follow Us:
+            </span>
+            <div className="flex gap-2">
               <a
                 href={BUSINESS_CONFIG.socials.facebook}
                 target="_blank"
