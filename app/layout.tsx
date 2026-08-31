@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AnimatedBackground from "@/components/layout/AnimatedBackground";
+import FloatingWhatsApp from "@/components/shared/FloatingWhatsApp";
 import { BUSINESS_CONFIG } from "@/lib/constants/config";
 import "./globals.css";
 
@@ -93,6 +94,9 @@ export default function RootLayout({
         
         {/* Footer */}
         <Footer />
+        
+        {/* Sticky WhatsApp Floating Button */}
+        <FloatingWhatsApp />
       </body>
     </html>
   );
