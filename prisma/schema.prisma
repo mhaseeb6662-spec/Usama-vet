@@ -11,15 +11,15 @@ generator client {
 
 // ---------- USER ----------
 model User {
-  id           Int       @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   name         String?
-  email        String    @unique
+  email        String     @unique
   passwordHash String
   phone        String?
-  role         Role      @default(CUSTOMER)
+  role         Role       @default(CUSTOMER)
   status       UserStatus @default(ACTIVE)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
   orders       Order[]
 }
 
@@ -41,8 +41,8 @@ model Product {
   sku              String         @unique
   shortDescription String?
   description      String?
-  price            Decimal(10,2)  @default(0.0)
-  salePrice        Decimal(10,2)?
+  price            Decimal        @default(0.0) @db.Decimal(10, 2)
+  salePrice        Decimal?       @db.Decimal(10, 2)
   stockQuantity    Int            @default(0)
   isActive         Boolean        @default(true)
   isFeatured       Boolean        @default(false)
@@ -60,9 +60,9 @@ model Product {
   categoryId       Int?
   category         Category?      @relation(fields: [categoryId], references: [id])
   subcategoryId    Int?
-  subcategory      Subcategory?  @relation(fields: [subcategoryId], references: [id])
+  subcategory      Subcategory?   @relation(fields: [subcategoryId], references: [id])
   brandId          Int?
-  brand            Brand?        @relation(fields: [brandId], references: [id])
+  brand            Brand?         @relation(fields: [brandId], references: [id])
   images           ProductImage[]
   reviews          Review[]
   orderItems       OrderItem[]
@@ -81,48 +81,49 @@ model ProductImage {
 
 // ---------- CATEGORY ----------
 model Category {
-  id            Int          @id @default(autoincrement())
-  name          String
-  slug          String       @unique
-  description   String?
-  image         String?
-  icon          String?
-  sortOrder     Int          @default(0)
-  isActive      Boolean      @default(true)
-  showOnHomepage Boolean     @default(false)
-  seoTitle      String?
+  id              Int               @id @default(autoincrement())
+  name            String
+  slug            String            @unique
+  description     String?
+  image           String?
+  icon            String?
+  sortOrder       Int               @default(0)
+  isActive        Boolean           @default(true)
+  showOnHomepage  Boolean           @default(false)
+  seoTitle        String?
   metaDescription String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  subcategories Subcategory[]
-  products      Product[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  subcategories   Subcategory[]
+  products        Product[]
+  HomepageSection HomepageSection[]
 }
 
 model Subcategory {
-  id            Int        @id @default(autoincrement())
-  categoryId    Int
-  name          String
-  slug          String     @unique
-  description   String?
-  image         String?
-  sortOrder     Int        @default(0)
-  isActive      Boolean    @default(true)
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  category      Category   @relation(fields: [categoryId], references: [id])
-  products      Product[]
+  id          Int       @id @default(autoincrement())
+  categoryId  Int
+  name        String
+  slug        String    @unique
+  description String?
+  image       String?
+  sortOrder   Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  category    Category  @relation(fields: [categoryId], references: [id])
+  products    Product[]
 }
 
 // ---------- BRAND ----------
 model Brand {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
-  slug        String   @unique
+  slug        String    @unique
   logo        String?
   description String?
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   products    Product[]
 }
 
@@ -144,7 +145,7 @@ model HeroSlide {
 
 // ---------- BANNER ----------
 model Banner {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
   title       String?
   subtitle    String?
@@ -152,29 +153,29 @@ model Banner {
   mobileImage String?
   ctaText     String?
   ctaUrl      String?
-  position    String   // e.g., "homepage-top"
-  sortOrder   Int      @default(0)
-  isActive    Boolean  @default(true)
+  position    String // e.g., "homepage-top"
+  sortOrder   Int       @default(0)
+  isActive    Boolean   @default(true)
   startAt     DateTime?
   endAt       DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 // ---------- HOMEPAGE SECTION ----------
 model HomepageSection {
-  id          Int        @id @default(autoincrement())
-  key         String     @unique
+  id          Int         @id @default(autoincrement())
+  key         String      @unique
   title       String?
   subtitle    String?
   type        SectionType
   categoryId  Int?
-  maxProducts Int        @default(8)
-  sortOrder   Int        @default(0)
-  isActive    Boolean    @default(true)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  category    Category?  @relation(fields: [categoryId], references: [id])
+  maxProducts Int         @default(8)
+  sortOrder   Int         @default(0)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  category    Category?   @relation(fields: [categoryId], references: [id])
 }
 
 enum SectionType {
@@ -188,19 +189,19 @@ enum SectionType {
 
 // ---------- REVIEW ----------
 model Review {
-  id              Int          @id @default(autoincrement())
-  rating          Int          @default(0)
-  title           String?
-  content         String?
-  displayName     String?
-  whatsappNumber  String?      // private, never exposed publicly
-  status          ReviewStatus @default(PENDING)
-  isVerified      Boolean      @default(false)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  productId       Int?
-  product         Product?     @relation(fields: [productId], references: [id])
-  images          ReviewImage[]
+  id             Int           @id @default(autoincrement())
+  rating         Int           @default(0)
+  title          String?
+  content        String?
+  displayName    String?
+  whatsappNumber String? // private, never exposed publicly
+  status         ReviewStatus  @default(PENDING)
+  isVerified     Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  productId      Int?
+  product        Product?      @relation(fields: [productId], references: [id])
+  images         ReviewImage[]
 }
 
 enum ReviewStatus {
@@ -220,26 +221,26 @@ model ReviewImage {
 
 // ---------- ORDER ----------
 model Order {
-  id           Int          @id @default(autoincrement())
-  orderNumber  String       @unique
-  customerId   Int?
-  customerName String
-  phone        String
-  email        String?
-  address      String
-  city         String
-  notes        String?
-  subtotal     Decimal(10,2) @default(0.0)
-  shippingFee  Decimal(10,2) @default(0.0)
-  discount     Decimal(10,2) @default(0.0)
-  total        Decimal(10,2) @default(0.0)
-  status       OrderStatus   @default(PENDING)
+  id            Int         @id @default(autoincrement())
+  orderNumber   String      @unique
+  customerId    Int?
+  customerName  String
+  phone         String
+  email         String?
+  address       String
+  city          String
+  notes         String?
+  subtotal      Decimal     @default(0.0) @db.Decimal(10, 2)
+  shippingFee   Decimal     @default(0.0) @db.Decimal(10, 2)
+  discount      Decimal     @default(0.0) @db.Decimal(10, 2)
+  total         Decimal     @default(0.0) @db.Decimal(10, 2)
+  status        OrderStatus @default(PENDING)
   paymentMethod String?
   paymentStatus String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  items        OrderItem[]
-  customer     User?         @relation(fields: [customerId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  items         OrderItem[]
+  customer      User?       @relation(fields: [customerId], references: [id])
 }
 
 enum OrderStatus {
@@ -252,28 +253,28 @@ enum OrderStatus {
 }
 
 model OrderItem {
-  id               Int      @id @default(autoincrement())
-  orderId          Int
-  productId        Int
+  id                  Int     @id @default(autoincrement())
+  orderId             Int
+  productId           Int
   productNameSnapshot String
-  skuSnapshot      String
-  quantity         Int
-  unitPrice        Decimal(10,2)
-  totalPrice       Decimal(10,2)
-  order            Order    @relation(fields: [orderId], references: [id])
-  product          Product  @relation(fields: [productId], references: [id])
+  skuSnapshot         String
+  quantity            Int
+  unitPrice           Decimal @db.Decimal(10, 2)
+  totalPrice          Decimal @db.Decimal(10, 2)
+  order               Order   @relation(fields: [orderId], references: [id])
+  product             Product @relation(fields: [productId], references: [id])
 }
 
 // ---------- CONTACT MESSAGE ----------
 model ContactMessage {
-  id        Int      @id @default(autoincrement())
+  id        Int           @id @default(autoincrement())
   name      String
   email     String?
   phone     String?
   subject   String?
   message   String
   status    MessageStatus @default(UNREAD)
-  createdAt DateTime @default(now())
+  createdAt DateTime      @default(now())
 }
 
 enum MessageStatus {
@@ -284,23 +285,9 @@ enum MessageStatus {
 
 // ---------- SITE SETTINGS ----------
 model SiteSetting {
-  id    Int    @id @default(autoincrement())
-  key   String @unique
+  id    Int     @id @default(autoincrement())
+  key   String  @unique
   value String?
 }
 
 // ---------- INDEXES ----------
-@@index([slug], name: "idx_product_slug")
-@@index([sku], name: "idx_product_sku")
-@@index([categoryId], name: "idx_product_category")
-@@index([isActive], name: "idx_product_active")
-@@index([isFeatured], name: "idx_product_featured")
-@@index([isNewArrival], name: "idx_product_new_arrival")
-@@index([isBestSeller], name: "idx_product_best_seller")
-@@index([slug], name: "idx_category_slug")
-@@index([slug], name: "idx_subcategory_slug")
-@@index([slug], name: "idx_brand_slug")
-@@index([email], name: "idx_user_email")
-@@index([orderNumber], name: "idx_order_number")
-@@index([status], name: "idx_review_status")
-
