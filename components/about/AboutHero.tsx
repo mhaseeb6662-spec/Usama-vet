@@ -10,7 +10,7 @@ const SLIDES = [
   {
     id: 1,
     type: "image-post",
-    image: "/images/slider/post-1.jpg", 
+    image: "/images/slider/banner-1.png", 
   },
   {
     id: 2,
@@ -65,12 +65,12 @@ export default function AboutHero() {
           className="absolute inset-0 w-full h-full flex items-center justify-center"
         >
           {SLIDES[currentIndex].type === "image-post" ? (
-            <div className="relative w-full h-full bg-emerald-50/50 flex items-center justify-center p-4 sm:p-8">
+            <div className="relative w-full h-full bg-white">
               <Image 
                 src={SLIDES[currentIndex].image} 
-                alt="Usama Vet Post"
+                alt="Usama Vet Banner"
                 fill
-                className="object-contain p-2 sm:p-6 drop-shadow-xl"
+                className="object-cover sm:object-contain md:object-fill"
                 unoptimized
                 priority
               />
