@@ -20,6 +20,9 @@ export const metadata: Metadata = {
     template: `%s | ${BUSINESS_CONFIG.shortName}`,
   },
   description: BUSINESS_CONFIG.description,
+  verification: {
+    google: "bYVdPGtemuAUdGU0wMLXcJEikaK6XrgXmBxEXFv4Ebw",
+  },
   keywords: [
     "veterinary medicine Pakistan",
     "livestock supplements Gujranwala",
