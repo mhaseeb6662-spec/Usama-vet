@@ -83,11 +83,9 @@ export default function ReviewsSection() {
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {DEMO_REVIEWS.map((review) => (
-            <div key={review.id} className="shrink-0 w-[300px] sm:w-[350px]">
-              <StaggerItem distance={12}>
-                <div className="h-full">
-                  <ReviewCard review={review} />
-                </div>
+            <div key={review.id} className="shrink-0 w-[300px] sm:w-[350px] h-auto flex">
+              <StaggerItem distance={12} className="w-full flex">
+                <ReviewCard review={review} />
               </StaggerItem>
             </div>
           ))}

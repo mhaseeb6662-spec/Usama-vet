@@ -29,7 +29,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md hover:-translate-y-[3px] transition-all duration-200 ease-out flex flex-col h-full group/reviewCard">
+    <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md hover:-translate-y-[3px] transition-all duration-200 ease-out flex flex-col h-full w-full group/reviewCard">
       {/* Header section with User Info & Rating */}
       <div className="flex justify-between items-start gap-3 mb-3">
         <div className="flex items-center gap-2.5">
