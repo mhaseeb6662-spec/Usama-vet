@@ -96,40 +96,8 @@ export default async function CategoryDetailPage({ params }: CategoryPageProps) 
       {/* FILTER & PRODUCTS CONTENT */}
       <section className="max-w-6xl mx-auto px-4 mt-10">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left Panel: Navigation links / Filters placeholder */}
-          <div className="lg:w-1/4 space-y-6 shrink-0">
-            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-              <h3 className="font-bold text-slate-800 text-xs uppercase tracking-wider border-b border-slate-100 pb-2 mb-3">
-                All Product Categories
-              </h3>
-              <ul className="space-y-2 text-xs">
-                {MOCK_CATEGORIES.map((cat) => (
-                  <li key={cat.id}>
-                    <Link
-                      href={`/categories/${cat.slug}`}
-                      className={`block px-3 py-2 rounded-md font-medium transition-all ${
-                        cat.slug === category.slug
-                          ? "bg-emerald-50 text-emerald-700"
-                          : "text-slate-650 hover:bg-slate-50 hover:text-emerald-600"
-                      }`}
-                    >
-                      {cat.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <Link
-              href="/"
-              className="inline-flex items-center gap-1.5 font-bold text-xs uppercase tracking-wider text-slate-500 hover:text-emerald-650"
-            >
-              <ArrowLeft className="w-4 h-4" /> Back to Homepage
-            </Link>
-          </div>
-
-          {/* Right Panel: Products Grid */}
-          <div className="lg:w-3/4 flex-grow">
+          {/* Main Panel: Products Grid (Full Width) */}
+          <div className="w-full">
             <div className="flex justify-between items-center border-b border-slate-200 pb-3 mb-6 text-xs text-slate-500">
               <span>
                 Showing <strong className="text-slate-800">{filteredProducts.length}</strong> products in {category.name}
