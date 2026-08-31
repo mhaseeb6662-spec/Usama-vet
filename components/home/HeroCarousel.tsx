@@ -65,39 +65,42 @@ export default function HeroCarousel() {
   const ActiveIcon = slide.badgeIcon;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 mt-3">
-      <div className="relative bg-gradient-to-br from-slate-900 via-slate-950 to-emerald-950 text-white rounded-xl overflow-hidden shadow-lg h-56 sm:h-72 md:h-[320px] flex items-center">
+    <div className="max-w-7xl mx-auto px-4 mt-6">
+      <div className="relative bg-gradient-to-br from-slate-900 via-slate-950 to-emerald-950 text-white rounded-xl overflow-hidden shadow-lg h-72 sm:h-96 md:h-[450px] flex items-center">
         {/* Decorative Grid Overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-15" />
         
-        {/* Slides rendering with AnimatePresence */}
-        <AnimatePresence initial={false}>
+        <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
-            initial={{ opacity: 0, x: shouldReduceMotion ? 0 : 12 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: shouldReduceMotion ? 0 : -12 }}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.02 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-0 px-8 sm:px-14 flex items-center z-10 w-full"
+            className="absolute inset-0 flex flex-col md:flex-row items-center justify-between p-8 md:p-16"
           >
-            {/* Slide text details (Left-aligned) */}
-            <div className="max-w-xl space-y-3 sm:space-y-4 text-left">
-              {/* Eyebrow */}
-              <motion.span 
-                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 4 }}
+            {/* Left Content */}
+            <div className="w-full md:w-1/2 space-y-5 z-10 relative">
+              
+              {/* Badge */}
+              <motion.div 
+                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[12px] font-semibold bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 uppercase"
+                transition={{ duration: 0.4, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-1.5 shadow-sm"
               >
-                <ActiveIcon className="w-3 h-3" /> {slide.tag}
-              </motion.span>
+                <ActiveIcon className="w-4 h-4 text-emerald-400" />
+                <span className="text-[13px] font-semibold tracking-wider text-emerald-50 uppercase">
+                  {slide.tag}
+                </span>
+              </motion.div>
               
               {/* Heading */}
               <motion.h2 
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-                className="text-[22px] sm:text-[26px] md:text-[34px] font-bold text-white leading-[1.2]"
+                className="text-[32px] sm:text-[40px] md:text-[46px] font-bold text-white leading-[1.15]"
               >
                 {slide.title}
               </motion.h2>
@@ -107,7 +110,7 @@ export default function HeroCarousel() {
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="text-slate-350 text-[12px] sm:text-[13px] font-normal leading-normal line-clamp-3"
+                className="text-slate-350 text-[15px] sm:text-[17px] font-normal leading-relaxed max-w-lg"
               >
                 {slide.description}
               </motion.p>
@@ -117,11 +120,11 @@ export default function HeroCarousel() {
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
-                className="pt-2"
+                className="pt-3"
               >
                 <Link
                   href={slide.link}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-[11px] sm:text-[12px] uppercase px-5 py-2.5 rounded-md shadow-md hover:shadow-emerald-600/10 transition-all focus:outline-none hover-scale-button inline-flex items-center"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-[14px] uppercase px-8 py-3.5 rounded-lg shadow-lg hover:shadow-emerald-600/20 transition-all focus:outline-none hover-scale-button inline-flex items-center tracking-wide"
                 >
                   {slide.btnText}
                 </Link>

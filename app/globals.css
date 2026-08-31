@@ -23,8 +23,8 @@
 body {
   background-color: var(--background);
   color: var(--color-text-main);
-  font-size: 13px; /* Dense e-commerce baseline */
-  line-height: 1.5;
+  font-size: 16px; /* Increased for traditional retail feel */
+  line-height: 1.6;
 }
 
 

@@ -64,16 +64,16 @@ export default function CategoryScroller() {
 
   return (
     <section 
-      className="py-5 px-4 max-w-7xl mx-auto overflow-hidden group/section"
+      className="py-10 px-4 max-w-7xl mx-auto overflow-hidden group/section"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={() => setIsHovered(true)}
       onTouchEnd={() => setIsHovered(false)}
     >
       {/* Small title matching screenshot */}
-      <div className="text-center mb-4">
+      <div className="text-center mb-6">
         <FadeUp distance={10}>
-          <h2 className="text-[17px] font-bold text-slate-900 uppercase relative inline-block pb-1.5">
+          <h2 className="text-[22px] font-bold text-slate-900 uppercase relative inline-block pb-1.5">
             Shop By Categories
             <span className="absolute bottom-0 left-1/4 w-1/2 h-0.5 bg-emerald-600 rounded-full" />
           </h2>
@@ -84,7 +84,7 @@ export default function CategoryScroller() {
       <StaggerContainer staggerDelay={0.05}>
         <div 
           ref={scrollRef}
-          className="flex items-start gap-3 sm:gap-4 overflow-x-auto pb-4 scrollbar-none justify-start px-2"
+          className="flex items-start gap-4 sm:gap-6 overflow-x-auto pb-6 scrollbar-none justify-start px-2"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {/* Duplicating the categories array to ensure it overflows the screen for the marquee effect */}
@@ -97,22 +97,22 @@ export default function CategoryScroller() {
                 <StaggerItem distance={12}>
                   <Link
                     href={`/categories/${cat.slug}`}
-                    className="flex flex-col items-center group focus:outline-none w-[64px] sm:w-[76px]"
+                    className="flex flex-col items-center group focus:outline-none w-[84px] sm:w-[110px]"
                   >
                     {/* Circular Image Container */}
-                    <div className="w-14 h-14 sm:w-[72px] sm:h-[72px] rounded-full bg-slate-50 border-2 border-slate-200 group-hover:border-emerald-500 overflow-hidden transition-all duration-200 ease-out flex items-center justify-center shadow-sm group-hover:scale-105 group-hover:shadow-md">
+                    <div className="w-20 h-20 sm:w-[96px] sm:h-[96px] rounded-full bg-slate-50 border-2 border-slate-200 group-hover:border-emerald-500 overflow-hidden transition-all duration-200 ease-out flex items-center justify-center shadow-sm group-hover:scale-105 group-hover:shadow-md">
                       <Image 
                         src={imageUrl} 
                         alt={cat.name} 
-                        width={80} 
-                        height={80} 
+                        width={120} 
+                        height={120} 
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         unoptimized // Allows external images without Next.js config domains
                       />
                     </div>
                     
                     {/* Category Title */}
-                    <span className="block mt-2 text-[10px] sm:text-[11px] font-semibold text-slate-750 group-hover:text-emerald-600 transition-colors duration-200 text-center leading-tight line-clamp-2">
+                    <span className="block mt-3 text-[13px] sm:text-[14px] font-semibold text-slate-750 group-hover:text-emerald-600 transition-colors duration-200 text-center leading-tight line-clamp-2">
                       {cat.name}
                     </span>
                   </Link>

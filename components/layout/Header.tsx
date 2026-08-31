@@ -61,70 +61,70 @@ export default function Header() {
         className={`sticky top-0 z-40 w-full transition-all duration-200 ${scrolled ? "shadow-md" : ""}`}
       >
         {/* 2. MAIN HEADER (Logo, Search Pill, Actions) */}
-        <header className="bg-white border-b border-slate-100 py-2.5 px-4">
-          <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
+        <header className="bg-white border-b border-slate-100 py-5 px-4">
+          <div className="max-w-7xl mx-auto flex justify-between items-center gap-6">
             
-            {/* Logo Group (Subtle hover transition) */}
-            <Link href="/" className="flex items-center gap-2.5 group shrink-0 focus:outline-none">
-              <div className="w-11 h-11 rounded-full shadow-sm shrink-0 hover-scale-subtle overflow-hidden bg-slate-50 border border-slate-200">
-                <Image src="/logo.jpg" alt="Veterinary Logo" width={44} height={44} className="w-full h-full object-cover" unoptimized />
+            {/* Logo Group */}
+            <Link href="/" className="flex items-center gap-3 group shrink-0 focus:outline-none">
+              <div className="w-16 h-16 rounded-full shadow-sm shrink-0 overflow-hidden bg-slate-50 border border-slate-200">
+                <Image src="/logo.jpg" alt="Veterinary Logo" width={64} height={64} className="w-full h-full object-cover" unoptimized />
               </div>
               <div className="hidden sm:block leading-none text-left">
-                <span className="block font-bold text-slate-800 text-[17px] group-hover:text-[#009473] transition-colors uppercase">
+                <span className="block font-bold text-slate-800 text-[22px] group-hover:text-[#009473] transition-colors uppercase">
                   {BUSINESS_CONFIG.shortName}
                 </span>
-                <span className="block text-[9px] text-slate-450 font-medium uppercase mt-0.5">
+                <span className="block text-[11px] text-slate-450 font-medium uppercase mt-1">
                   Veterinary Pharmacy
                 </span>
               </div>
             </Link>
 
-            {/* Pill Search Bar (Smooth focus border/ring transition) */}
-            <div className="hidden md:flex flex-grow max-w-xl relative">
-              <div className="w-full flex items-center bg-slate-100/70 border border-slate-200 rounded-full pl-4 pr-1 py-1 focus-within:bg-white focus-within:border-emerald-600 focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:shadow-sm transition-all duration-200 group/search">
+            {/* Pill Search Bar */}
+            <div className="hidden md:flex flex-grow max-w-2xl relative">
+              <div className="w-full flex items-center bg-slate-100/70 border border-slate-200 rounded-full pl-5 pr-2 py-1.5 focus-within:bg-white focus-within:border-emerald-600 focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:shadow-sm transition-all duration-200 group/search">
                 <input
                   type="text"
-                  placeholder="What Are You Looking For"
-                  className="w-full bg-transparent text-xs text-slate-850 outline-none placeholder:text-slate-400 focus:outline-none"
+                  placeholder="What Are You Looking For..."
+                  className="w-full bg-transparent text-[14px] text-slate-850 outline-none placeholder:text-slate-400 focus:outline-none"
                 />
                 <button
                   type="button"
-                  className="w-8 h-8 rounded-full bg-[#009473] hover:bg-[#028467] text-white flex items-center justify-center shrink-0 hover:scale-[1.02] active:scale-[0.97] transition-all duration-150 group-focus-within/search:bg-emerald-700"
+                  className="w-10 h-10 rounded-full bg-[#009473] hover:bg-[#028467] text-white flex items-center justify-center shrink-0 hover:scale-[1.02] active:scale-[0.97] transition-all duration-150 group-focus-within/search:bg-emerald-700"
                   aria-label="Search"
                 >
-                  <Search className="w-4 h-4" />
+                  <Search className="w-5 h-5" />
                 </button>
               </div>
             </div>
 
             {/* Right Side Actions: Login & Cart */}
-            <div className="flex items-center gap-4 shrink-0">
+            <div className="flex items-center gap-6 shrink-0">
               
-              {/* Login / Register Link with hover scale */}
+              {/* Login / Register Link */}
               <Link
                 href="/account"
-                className="flex items-center gap-2 hover:text-[#009473] transition-colors focus:outline-none text-left group"
+                className="flex items-center gap-2.5 hover:text-[#009473] transition-colors focus:outline-none text-left group"
               >
-                <div className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 hover-scale-subtle">
-                  <User className="w-4 h-4" />
+                <div className="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 hover-scale-subtle">
+                  <User className="w-5 h-5" />
                 </div>
-                <span className="hidden lg:inline text-[13px] font-semibold text-slate-700 group-hover:text-[#009473] transition-colors">
+                <span className="hidden lg:inline text-[15px] font-semibold text-slate-700 group-hover:text-[#009473] transition-colors">
                   Login / Register
                 </span>
               </Link>
 
-              {/* Cart link with hover scale */}
+              {/* Cart link */}
               <Link
                 href="/cart"
-                className="flex items-center gap-2 hover:text-[#009473] transition-colors focus:outline-none text-left group"
+                className="flex items-center gap-2.5 hover:text-[#009473] transition-colors focus:outline-none text-left group"
               >
-                <div className="w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 relative hover-scale-subtle">
-                  <ShoppingCart className="w-4 h-4" />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#009473] text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white">
+                <div className="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 relative hover-scale-subtle">
+                  <ShoppingCart className="w-5 h-5" />
+                  <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-[#009473] text-white text-[11px] font-bold rounded-full flex items-center justify-center border-2 border-white">
                     0
                   </span>
                 </div>
-                <span className="hidden lg:inline text-[13px] font-semibold text-slate-700 group-hover:text-[#009473] transition-colors">
+                <span className="hidden lg:inline text-[15px] font-semibold text-slate-700 group-hover:text-[#009473] transition-colors">
                   Cart
                 </span>
               </Link>

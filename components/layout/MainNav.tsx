@@ -23,18 +23,18 @@ export default function MainNav() {
 
   return (
     <div className="bg-[#f0f8f5] border-b border-slate-200/60 relative z-30">
-      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center h-11">
+      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center h-14">
         {/* Left Side: Solid Green Categories Button */}
         <div className="relative">
           <button
             onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-            className="bg-[#009473] hover:bg-[#028467] text-white px-4 py-2 rounded-md text-[12px] font-semibold uppercase flex items-center gap-2 transition-colors focus:outline-none hover-scale-subtle"
+            className="bg-[#009473] hover:bg-[#028467] text-white px-6 py-3 rounded-md text-[14px] font-semibold uppercase flex items-center gap-2.5 transition-colors focus:outline-none hover-scale-subtle"
             aria-expanded={isCategoriesOpen}
             aria-haspopup="menu"
           >
-            <Menu className="w-3.5 h-3.5 shrink-0" />
+            <Menu className="w-5 h-5 shrink-0" />
             <span>CATEGORIES</span>
-            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 shrink-0 ${isCategoriesOpen ? "rotate-180" : ""}`} />
+            <ChevronDown className={`w-4 h-4 transition-transform duration-200 shrink-0 ${isCategoriesOpen ? "rotate-180" : ""}`} />
           </button>
 
           {/* Categories Dropdown Menu */}
@@ -51,7 +51,7 @@ export default function MainNav() {
                   <Link
                     key={cat.id}
                     href={`/categories/${cat.slug}`}
-                    className="block px-4 py-2 text-[12px] font-medium text-slate-700 hover:bg-[#f0f8f5] hover:text-[#009473] hover:translate-x-[2px] transition-all duration-200 ease-out"
+                    className="block px-4 py-2.5 text-[14px] font-medium text-slate-700 hover:bg-[#f0f8f5] hover:text-[#009473] hover:translate-x-[2px] transition-all duration-200 ease-out"
                     role="menuitem"
                   >
                     {cat.name}
@@ -63,10 +63,10 @@ export default function MainNav() {
         </div>
 
         {/* Center-Left: Page Links with Exact Case Matching */}
-        <nav className="flex items-center gap-8 ml-6 mr-auto">
+        <nav className="flex items-center gap-8 ml-8 mr-auto">
           <Link
             href="/"
-            className={`font-semibold text-[13px] transition-colors relative py-3 nav-link-underline ${
+            className={`font-semibold text-[15px] transition-colors relative py-4 nav-link-underline ${
               pathname === "/" ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
             }`}
           >
@@ -74,7 +74,7 @@ export default function MainNav() {
           </Link>
           <Link
             href="/about"
-            className={`font-semibold text-[13px] transition-colors relative py-3 nav-link-underline ${
+            className={`font-semibold text-[15px] transition-colors relative py-4 nav-link-underline ${
               isActive("/about") ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
             }`}
           >
@@ -82,7 +82,7 @@ export default function MainNav() {
           </Link>
           <Link
             href="/reviews"
-            className={`font-semibold text-[13px] transition-colors relative py-3 nav-link-underline ${
+            className={`font-semibold text-[15px] transition-colors relative py-4 nav-link-underline ${
               isActive("/reviews") ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
             }`}
           >
@@ -90,7 +90,7 @@ export default function MainNav() {
           </Link>
           <Link
             href="/contact"
-            className={`font-semibold text-[13px] transition-colors relative py-3 nav-link-underline ${
+            className={`font-semibold text-[15px] transition-colors relative py-4 nav-link-underline ${
               isActive("/contact") ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
             }`}
           >
@@ -99,7 +99,7 @@ export default function MainNav() {
         </nav>
 
         {/* Right Side: Hotline & Tracking with matching icons */}
-        <div className="flex items-center gap-6 text-[13px] font-semibold text-slate-800 shrink-0">
+        <div className="flex items-center gap-6 text-[14px] font-semibold text-slate-800 shrink-0">
           
           {/* Hotline */}
           <a

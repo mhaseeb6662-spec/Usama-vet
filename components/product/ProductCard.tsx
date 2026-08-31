@@ -52,21 +52,21 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* 2. PRODUCT INFO AREA */}
-      <div className="p-2.5 flex-grow flex flex-col text-left">
+      <div className="p-4 flex-grow flex flex-col text-left">
         {/* Product Title (Subtle color transition) */}
-        <Link href={`/products/${slug}`} className="block focus:outline-none mb-1 group/title">
-          <h3 className="font-semibold text-slate-800 text-[12px] sm:text-[13px] line-clamp-2 leading-[1.3] group-hover/title:text-[#009473] transition-colors duration-150">
+        <Link href={`/products/${slug}`} className="block focus:outline-none mb-2 group/title">
+          <h3 className="font-semibold text-slate-800 text-[15px] sm:text-[16px] line-clamp-2 leading-snug group-hover/title:text-[#009473] transition-colors duration-150">
             {name}
           </h3>
         </Link>
 
         {/* Thin Divider Line (Separates Title from Price & Actions) */}
-        <div className="border-t border-slate-100/80 my-1.5" />
+        <div className="border-t border-slate-100/80 my-2.5" />
 
         {/* Price Row (Rs. format, old price crossed-out first, new price second) */}
-        <div className="flex items-center gap-1.5 mb-2.5 text-[12px] sm:text-[13px]">
+        <div className="flex items-center gap-2 mb-4 text-[15px] sm:text-[16px]">
           {oldPrice && oldPrice > price && (
-            <span className="text-slate-400 line-through font-normal text-[10px] sm:text-[11px]">
+            <span className="text-slate-400 line-through font-normal text-[12px] sm:text-[13px]">
               Rs. {oldPrice.toLocaleString()}
             </span>
           )}
@@ -76,33 +76,33 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* 3. ACTIONS ROW (Eye, Heart, Add to cart Button aligned horizontally) */}
-        <div className="mt-auto flex items-center gap-1.5">
-          {/* Compare/View Button (Circular, hover:scale 1.07, tap:scale 0.9) */}
+        <div className="mt-auto flex items-center gap-2">
+          {/* Compare/View Button */}
           <Link
             href={`/products/${slug}`}
-            className="w-7 h-7 rounded-full border border-slate-200 bg-white hover:bg-[#f0f8f5] text-[#009473] flex items-center justify-center shrink-0 transition-all hover:scale-[1.07] active:scale-[0.9] duration-150 focus:outline-none cursor-pointer"
+            className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-[#f0f8f5] text-[#009473] flex items-center justify-center shrink-0 transition-all hover:scale-[1.07] active:scale-[0.9] duration-150 focus:outline-none cursor-pointer shadow-sm"
             aria-label="View Product Details"
           >
-            <Eye className="w-3.5 h-3.5" />
+            <Eye className="w-5 h-5" />
           </Link>
 
-          {/* Wishlist Button (Circular, hover:scale 1.07, tap:scale 0.9) */}
+          {/* Wishlist Button */}
           <button
             onClick={() => setIsWished(!isWished)}
-            className={`w-7 h-7 rounded-full border border-slate-200 bg-white hover:bg-[#f0f8f5] flex items-center justify-center shrink-0 transition-all hover:scale-[1.07] active:scale-[0.9] duration-150 focus:outline-none cursor-pointer ${
+            className={`w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-[#f0f8f5] flex items-center justify-center shrink-0 transition-all hover:scale-[1.07] active:scale-[0.9] duration-150 focus:outline-none cursor-pointer shadow-sm ${
               isWished ? "text-red-500 border-red-200 bg-red-50" : "text-[#009473]"
             }`}
             aria-label="Add to Wishlist"
           >
-            <Heart className={`w-3.5 h-3.5 ${isWished ? "fill-current" : ""}`} />
+            <Heart className={`w-5 h-5 ${isWished ? "fill-current" : ""}`} />
           </button>
 
-          {/* Add to cart Button (Pill, hover scale 1.015 + translate-y, tap scale 0.96) */}
+          {/* Add to cart Button */}
           <button
             disabled={!inStock}
-            className="flex-grow bg-[#009473] hover:bg-[#028467] hover:scale-[1.015] hover:-translate-y-[1px] active:scale-[0.96] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:transition-none text-white font-semibold text-[11px] py-1.5 px-2.5 rounded-full flex items-center justify-center gap-1 transition-all duration-150 focus:outline-none cursor-pointer"
+            className="flex-grow bg-[#009473] hover:bg-[#028467] hover:scale-[1.02] hover:-translate-y-[1px] active:scale-[0.96] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:transition-none text-white font-semibold text-[13px] py-2.5 px-4 rounded-full flex items-center justify-center gap-2 transition-all duration-150 focus:outline-none cursor-pointer shadow-sm"
           >
-            <ShoppingCart className="w-3 h-3" />
+            <ShoppingCart className="w-4 h-4" />
             <span>Add to cart</span>
           </button>
         </div>
