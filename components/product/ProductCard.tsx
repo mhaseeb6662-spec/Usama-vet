@@ -23,11 +23,18 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="bg-white border border-slate-100 rounded-xl overflow-hidden hover:shadow-md hover:border-slate-200/80 hover:-translate-y-1 transition-all duration-200 ease-out flex flex-col group h-full">
       {/* 1. IMAGE CONTAINER (Clean square container, no overlays) */}
-      <div className="aspect-square bg-[#fbfdfc] relative flex items-center justify-center border-b border-slate-100 overflow-hidden shrink-0">
-        {/* Placeholder Graphic (Scales subtlely on group hover) */}
-        <div className="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-[1.035] transition-transform duration-300 ease-out">
-          <ShieldCheck className="w-7 h-7" />
-        </div>
+      <div className="aspect-square bg-[#fbfdfc] relative flex items-center justify-center border-b border-slate-100 overflow-hidden shrink-0 p-4">
+        {product.images && product.images.length > 0 ? (
+          <img 
+            src={product.images[0]} 
+            alt={product.name} 
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 ease-out"
+          />
+        ) : (
+          <div className="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-[1.035] transition-transform duration-300 ease-out">
+            <ShieldCheck className="w-7 h-7" />
+          </div>
+        )}
 
         {/* Discount Badge (Top Right) */}
         {hasDiscount && discountPercent > 0 && (
