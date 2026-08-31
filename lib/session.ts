@@ -43,25 +43,6 @@ export async function getSession() {
   return await decrypt(session);
 }
 
-export async function updateSession(request: NextRequest) {
-  const session = request.cookies.get("admin_session")?.value;
-  if (!session) return;
-
-  // Refresh the session so it doesn't expire
-  const parsed = await decrypt(session);
-  if (parsed) {
-    const res = await encrypt({ ...parsed, expires: new Date(Date.now() + 24 * 60 * 60 * 1000) });
-    request.cookies.set({
-      name: "admin_session",
-      value: res,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-    });
-  }
-}
-
 export async function logout() {
   (await cookies()).set("admin_session", "", {
     expires: new Date(0),

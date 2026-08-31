@@ -37,7 +37,7 @@ export const getHomepageSections = cache(async () => {
 
 export const getProductsBySection = cache(async (type: string, categoryId?: number | null, max: number = 8) => {
   const include = { category: true, images: true, brand: true };
-  let products = [];
+  let products: any[] = [];
   
   switch (type) {
     case 'FEATURED':

@@ -7,7 +7,7 @@ export async function GET(request: Request) {
     const status = searchParams.get("status") || "APPROVED";
     
     const reviews = await prisma.review.findMany({
-      where: { status },
+      where: { status: status as any },
       orderBy: { createdAt: "desc" },
       include: { images: true },
     });
