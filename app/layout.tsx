@@ -80,6 +80,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full antialiased">
+      <head>
+        <style
+          dangerouslySetInnerHTML={{
+            __html:
+              "html,body{background:#f8fafc;color:#0f172a;margin:0}body{min-height:100vh}",
+          }}
+        />
+      </head>
       <body className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans relative overflow-x-hidden">
         <AnimatedBackground />
         <AppProviders>

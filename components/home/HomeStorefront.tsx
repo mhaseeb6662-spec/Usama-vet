@@ -37,9 +37,11 @@ export default function HomeStorefront() {
   const [loading, setLoading] = useState(true);
 
   const loadHome = () => {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 12000);
     setLoading(true);
     setError("");
-    fetch("/api/home")
+    fetch("/api/home", { signal: controller.signal })
       .then(async (res) => {
         const payload = await res.json();
         if (!res.ok || !payload.success) {
@@ -50,9 +52,14 @@ export default function HomeStorefront() {
       .catch((err) => {
         console.error(err);
         setData(null);
+        if (err instanceof DOMException && err.name === "AbortError") {
+          setError("The store took too long to load. Please try again.");
+          return;
+        }
         setError(err instanceof Error ? err.message : "Could not load the store homepage.");
       })
       .finally(() => {
+        window.clearTimeout(timer);
         setLoading(false);
       });
   };
@@ -63,8 +70,12 @@ export default function HomeStorefront() {
 
   if (loading && !data) {
     return (
-      <div className="min-h-[50vh] flex items-center justify-center px-4">
-        <p className="text-slate-600 font-medium">Loading Usama Vet...</p>
+      <div className="space-y-4">
+        <div className="w-full min-h-[220px] sm:min-h-[320px] bg-slate-200" />
+        <div className="px-4 py-8 text-center">
+          <p className="text-slate-800 font-semibold text-lg">Loading Usama Vet...</p>
+          <p className="text-slate-500 text-sm mt-2">Products and offers are loading.</p>
+        </div>
       </div>
     );
   }
