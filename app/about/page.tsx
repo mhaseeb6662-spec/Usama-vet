@@ -7,13 +7,18 @@ import WhyChooseUs from "@/components/about/WhyChooseUs";
 import JourneyVideos from "@/components/about/JourneyVideos";
 import BusinessValues from "@/components/about/BusinessValues";
 import AboutFinalCTA from "@/components/about/AboutFinalCTA";
+import { getAboutVideos } from "@/lib/data/aboutVideos";
 
 export const metadata: Metadata = {
   title: "About Us | Veterinary & Animal Care Products in Pakistan | Usama Vet",
   description: "Learn about Usama Vet Care, your trusted destination for veterinary medicines, livestock products, poultry supplements, and pet care essentials in Pakistan.",
 };
 
-export default function AboutPage() {
+export const dynamic = "force-dynamic";
+
+export default async function AboutPage() {
+  const videos = await getAboutVideos();
+
   return (
     <main className="flex min-h-screen flex-col bg-white">
       <AboutHero />
@@ -21,7 +26,7 @@ export default function AboutPage() {
       <FounderSection />
       <MissionVision />
       <WhyChooseUs />
-      <JourneyVideos />
+      <JourneyVideos videos={videos} />
       <BusinessValues />
       <AboutFinalCTA />
     </main>

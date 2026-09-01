@@ -10,7 +10,8 @@ import {
   ShoppingCart,
   Users,
   MonitorPlay,
-  LayoutTemplate
+  LayoutTemplate,
+  Video
 } from "lucide-react";
 import { logout } from "@/lib/session";
 import { redirect } from "next/navigation";
@@ -55,6 +56,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Link>
           <Link href="/admin/banners" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
             <LayoutTemplate className="w-5 h-5 text-slate-400" /> Promotional Banners
+          </Link>
+          <Link href="/admin/videos" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
+            <Video className="w-5 h-5 text-slate-400" /> About Videos
           </Link>
 
           <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6 px-3">Sales & Customers</div>
