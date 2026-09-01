@@ -83,9 +83,9 @@ export default function HeroCarousel({ slides = [] }: { slides?: any[] }) {
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          exit={{ opacity: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="absolute inset-0 w-full h-full"
         >

@@ -10,7 +10,7 @@ import "./globals.css";
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -91,7 +91,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={`${poppins.variable} h-full antialiased`}>
-      <body className="flex flex-col min-h-screen bg-transparent text-slate-900 font-sans relative">
+      <body className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans relative">
         <AnimatedBackground />
 
         {/* Sticky navigation header */}

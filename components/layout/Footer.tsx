@@ -39,23 +39,8 @@ export default function Footer() {
   };
 
   return (
-    <motion.footer 
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "0px 0px -8% 0px" }}
-      variants={{
-        hidden: { opacity: 0, y: revealDistance },
-        show: {
-          opacity: 1,
-          y: 0,
-          transition: {
-            duration: 0.5,
-            ease: [0.22, 1, 0.36, 1] as any,
-            staggerChildren: shouldReduceMotion ? 0 : 0.05
-          }
-        }
-      }}
-      className="bg-[#eef8f4]/80 backdrop-blur-xl text-slate-800 border-t border-slate-200/80 text-[14px]"
+    <footer 
+      className="bg-[#eef8f4] text-slate-800 border-t border-slate-200/80 text-[14px]"
     >
       
       {/* 4-COLUMN SCREENSHOT-ALIGNED GRID */}
@@ -242,6 +227,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-    </motion.footer>
+    </footer>
   );
 }

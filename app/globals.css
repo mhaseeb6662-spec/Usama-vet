@@ -20,9 +20,13 @@
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
+html,
 body {
   background-color: var(--background);
   color: var(--color-text-main);
+}
+
+body {
   font-size: 16px; /* Increased for traditional retail feel */
   line-height: 1.6;
 }

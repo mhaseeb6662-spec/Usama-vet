@@ -23,7 +23,7 @@ export function FadeIn({ children, delay = 0, duration = TIMINGS.NORMAL, classNa
   
   return (
     <motion.div
-      initial={{ opacity: 0 }}
+      initial={false}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "0px 0px -8% 0px" }}
       transition={{
@@ -44,7 +44,7 @@ export function FadeUp({ children, delay = 0, duration = TIMINGS.NORMAL, classNa
   
   return (
     <motion.div
-      initial={{ opacity: 0, y: revealDistance }}
+      initial={false}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "0px 0px -8% 0px" }}
       transition={{
@@ -65,7 +65,7 @@ export function ScaleIn({ children, delay = 0, duration = TIMINGS.NORMAL, classN
   
   return (
     <motion.div
-      initial={{ opacity: 0, scale: startScale }}
+      initial={false}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "0px 0px -8% 0px" }}
       transition={{
@@ -124,7 +124,7 @@ export function StaggerItem({ children, className = "", distance = 12 }: Stagger
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0, y: revealDistance },
+        hidden: { opacity: 1, y: 0 },
         show: { opacity: 1, y: 0 },
       }}
       transition={{

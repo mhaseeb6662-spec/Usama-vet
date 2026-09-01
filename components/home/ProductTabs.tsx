@@ -69,7 +69,7 @@ export default function ProductTabs({
       <AnimatePresence mode="wait">
         <motion.div
           key={activeTab}
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
+          initial={{ opacity: 1, y: 0 }}
           animate={{ 
             opacity: 1, 
             y: 0,
