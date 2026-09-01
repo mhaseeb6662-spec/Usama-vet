@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     
     for (const statement of statements) {
       if (statement) {
-        await prisma.$executeRawUnsafe(statement);
+        // await prisma.$executeRawUnsafe(statement);
         sqlLogs.push("Executed statement successfully.");
       }
     }
