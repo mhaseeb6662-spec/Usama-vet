@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: ProductPageProps) {
     };
   }
 
-  const primaryImage = product.images.find(img => img.isPrimary)?.imageUrl 
+  const primaryImage = product.images.find((img: any) => img.isPrimary)?.imageUrl 
     || product.images[0]?.imageUrl 
     || "/images/og-default.jpg";
 

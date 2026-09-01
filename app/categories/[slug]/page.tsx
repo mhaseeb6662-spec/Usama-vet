@@ -123,7 +123,7 @@ export default async function CategoryDetailPage({ params }: CategoryPageProps) 
             
             {mappedProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-                {mappedProducts.map((product) => (
+                {mappedProducts.map((product: any) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
