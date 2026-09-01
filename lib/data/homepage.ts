@@ -119,9 +119,9 @@ export const getHomepageCatalog = cache(async () => {
       bestSellers: products.filter((item) => item.isBestSeller).slice(0, 8).map(mapProductToUI),
       recommended: products.filter((item) => item.isRecommended).slice(0, 8).map(mapProductToUI),
       trending: products.filter((item) => item.isTrending).slice(0, 8).map(mapProductToUI),
-      livestock: products.filter((item) => item.categoryId === 1).slice(0, 8).map(mapProductToUI),
-      petCare: products.filter((item) => item.categoryId === 2).slice(0, 8).map(mapProductToUI),
-      supplements: products.filter((item) => item.categoryId === 3).slice(0, 8).map(mapProductToUI),
+      livestock: products.filter((item) => item.category?.slug === "livestock-care").slice(0, 8).map(mapProductToUI),
+      petCare: products.filter((item) => item.category?.slug === "pet-care").slice(0, 8).map(mapProductToUI),
+      supplements: products.filter((item) => item.category?.slug === "animal-supplements").slice(0, 8).map(mapProductToUI),
     };
   } catch (error) {
     console.error("[DB] getHomepageCatalog failed:", error);

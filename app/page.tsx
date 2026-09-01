@@ -3,6 +3,7 @@ import { OrganizationSchema, WebSiteSchema } from "@/lib/seo/schema";
 import { 
   getHomepageCatalog,
   getHomepageCategories,
+  getActiveHeroSlides,
   getActiveBanners
 } from "@/lib/data/homepage";
 
@@ -18,14 +19,15 @@ import ProductSection from "@/components/home/ProductSection";
 import LowerTrustStrip from "@/components/home/LowerTrustStrip";
 import NewsletterSection from "@/components/home/NewsletterSection";
 
-// Force dynamic rendering so Next.js doesn't try to query the database during Hostinger's build step
-export const revalidate = 60;
+// Same pattern as /categories and /products: never let Hostinger CDN pin a year-old homepage.
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   // Try fetching dynamic data, fallback to mock data if database is empty/unseeded
   // All query functions have built-in try/catch and return [] on DB failure
-  const [catalog, dbBanners, homepageCategories] = await Promise.all([
+  const [catalog, dbHeroSlides, dbBanners, homepageCategories] = await Promise.all([
     getHomepageCatalog(),
+    getActiveHeroSlides(),
     getActiveBanners(),
     getHomepageCategories(),
   ]);
@@ -49,7 +51,7 @@ export default async function HomePage() {
       <WebSiteSchema />
 
       {/* 1. HERO CAROUSEL BANNER */}
-      <HeroCarousel slides={[]} />
+      <HeroCarousel slides={dbHeroSlides} />
 
       {/* 2. CIRCULAR CATEGORY SCROLLER */}
       {homepageCategories && homepageCategories.length > 0 && (

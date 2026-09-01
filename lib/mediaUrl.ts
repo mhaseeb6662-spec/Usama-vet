@@ -8,6 +8,10 @@ export function toServedImageUrl(url: string | null | undefined): string {
 
 export function isPersistentPublicImage(url: string | null | undefined): boolean {
   if (!url) return false;
-  if (url.startsWith("/uploads/") || url.includes("/api/images/")) return false;
-  return url.startsWith("/images/") || url.startsWith("https://");
+  if (url.startsWith("/uploads/")) return false;
+  return (
+    url.startsWith("/images/") ||
+    url.startsWith("/api/images/") ||
+    url.startsWith("https://")
+  );
 }

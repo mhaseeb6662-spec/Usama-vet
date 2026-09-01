@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { readFile } from "fs/promises";
 import path from "path";
 import fs from "fs";
-
-const UPLOAD_DIR = process.env.UPLOAD_DIR || "./public/uploads";
+import { getLegacyUploadDir, getUploadDir } from "@/lib/uploadPath";
 
 export async function GET(
   request: NextRequest,
@@ -14,9 +13,13 @@ export async function GET(
     
     // Normalize path to prevent directory traversal
     const safeFilename = path.basename(filename);
-    const filePath = path.join(process.cwd(), UPLOAD_DIR, safeFilename);
+    const candidates = [
+      path.join(getUploadDir(), safeFilename),
+      path.join(getLegacyUploadDir(), safeFilename),
+    ];
+    const filePath = candidates.find((candidate) => fs.existsSync(candidate));
 
-    if (!fs.existsSync(filePath)) {
+    if (!filePath) {
       return new NextResponse("Image not found", { status: 404 });
     }
 
@@ -37,6 +40,7 @@ export async function GET(
       },
     });
   } catch (error) {
+    console.error("[images] Failed to read upload:", error);
     return new NextResponse("Error reading image", { status: 500 });
   }
 }

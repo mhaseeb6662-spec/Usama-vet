@@ -10,14 +10,17 @@ async function addCategory(formData: FormData) {
   
   if (!name) return;
   const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const showOnHomepage = formData.get("showOnHomepage") === "on";
 
   try {
     await prisma.category.create({
-      data: { name, slug, description, isActive: true },
+      data: { name, slug, description, isActive: true, showOnHomepage },
     });
+    revalidatePath("/");
     revalidatePath("/admin/categories");
   } catch (error) {
     console.error("Error creating category:", error);
+    throw error;
   }
 }
 
@@ -27,6 +30,23 @@ async function deleteCategory(formData: FormData) {
   const id = parseInt(idStr, 10);
   if (isNaN(id)) return;
   await prisma.category.delete({ where: { id } });
+  revalidatePath("/");
+  revalidatePath("/admin/categories");
+}
+
+async function toggleHomepageCategory(formData: FormData) {
+  "use server";
+  const idStr = formData.get("id") as string;
+  const id = parseInt(idStr, 10);
+  if (isNaN(id)) {
+    throw new Error("Category id is required to update homepage visibility.");
+  }
+  const showOnHomepage = formData.get("showOnHomepage") === "true";
+  await prisma.category.update({
+    where: { id },
+    data: { showOnHomepage: !showOnHomepage },
+  });
+  revalidatePath("/");
   revalidatePath("/admin/categories");
 }
 
@@ -55,6 +75,10 @@ export default async function CategoriesAdmin() {
               <label className="block text-sm font-medium text-slate-700 mb-1">Description (Optional)</label>
               <textarea name="description" rows={3} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Category details..." />
             </div>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="showOnHomepage" className="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500" />
+              <span className="text-sm font-medium text-slate-700">Show on homepage</span>
+            </label>
             <button type="submit" className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-lg transition-colors">
               <Plus className="w-4 h-4" /> Save Category
             </button>
@@ -69,19 +93,36 @@ export default async function CategoriesAdmin() {
                 <th className="px-6 py-4 font-semibold">Category Name</th>
                 <th className="px-6 py-4 font-semibold">Slug</th>
                 <th className="px-6 py-4 font-semibold">Products</th>
+                <th className="px-6 py-4 font-semibold">Homepage</th>
                 <th className="px-6 py-4 font-semibold text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {categories.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-slate-500">No categories found.</td>
+                  <td colSpan={5} className="px-6 py-8 text-center text-slate-500">No categories found.</td>
                 </tr>
               ) : categories.map((cat) => (
                 <tr key={cat.id} className="hover:bg-slate-50">
                   <td className="px-6 py-4 font-medium text-slate-900">{cat.name}</td>
                   <td className="px-6 py-4 text-slate-500">{cat.slug}</td>
                   <td className="px-6 py-4 text-slate-500">{cat._count.products}</td>
+                  <td className="px-6 py-4">
+                    <form action={toggleHomepageCategory}>
+                      <input type="hidden" name="id" value={String(cat.id)} />
+                      <input type="hidden" name="showOnHomepage" value={String(cat.showOnHomepage)} />
+                      <button
+                        type="submit"
+                        className={`text-xs font-semibold px-2 py-1 rounded ${
+                          cat.showOnHomepage
+                            ? "bg-emerald-50 text-emerald-700"
+                            : "bg-slate-100 text-slate-500"
+                        }`}
+                      >
+                        {cat.showOnHomepage ? "Visible" : "Hidden"}
+                      </button>
+                    </form>
+                  </td>
                   <td className="px-6 py-4 text-right flex justify-end gap-2">
                     <form action={deleteCategory}>
                       <input type="hidden" name="id" value={String(cat.id)} />

@@ -1,6 +1,7 @@
 import React from "react";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import crypto from "crypto";
@@ -56,6 +57,8 @@ async function createProduct(formData: FormData) {
     });
   }
 
+  revalidatePath("/");
+  revalidatePath("/admin/products");
   redirect("/admin/products");
 }
 

@@ -10,6 +10,7 @@ async function deleteProduct(formData: FormData) {
   const id = parseInt(idStr, 10);
   if (isNaN(id)) return;
   await prisma.product.delete({ where: { id } });
+  revalidatePath("/");
   revalidatePath("/admin/products");
 }
 

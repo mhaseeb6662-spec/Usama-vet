@@ -73,7 +73,9 @@ export default function HeroCarousel({ slides = [] }: { slides?: any[] }) {
   const slide = activeSlides[currentSlide];
   const imageSrc =
     typeof slide.desktopImage === "string" &&
-    (slide.desktopImage.startsWith("/images/") || slide.desktopImage.startsWith("https://"))
+    (slide.desktopImage.startsWith("/images/") ||
+      slide.desktopImage.startsWith("/api/images/") ||
+      slide.desktopImage.startsWith("https://"))
       ? slide.desktopImage
       : "";
   const showImage = Boolean(imageSrc) && !imageFailed;

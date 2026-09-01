@@ -1,9 +1,7 @@
-import { writeFile, unlink } from "fs/promises";
+import { writeFile, unlink, mkdir } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
-
-// Ensure this matches the relative path to your public uploads folder
-const UPLOAD_DIR = process.env.UPLOAD_DIR || "./public/uploads";
+import { getUploadDir } from "@/lib/uploadPath";
 
 export async function uploadImage(file: File): Promise<string> {
   const bytes = await file.arrayBuffer();
@@ -18,15 +16,10 @@ export async function uploadImage(file: File): Promise<string> {
   const extension = path.extname(file.name) || ".jpg";
   const uniqueName = crypto.randomBytes(16).toString("hex") + extension;
   
-  const uploadPath = path.join(process.cwd(), UPLOAD_DIR);
+  const uploadPath = getUploadDir();
   const filePath = path.join(uploadPath, uniqueName);
 
-  // Ensure directory exists
-  try {
-    await require("fs/promises").mkdir(uploadPath, { recursive: true });
-  } catch (err) {
-    // Ignore if exists
-  }
+  await mkdir(uploadPath, { recursive: true });
 
   await writeFile(filePath, buffer);
 
@@ -45,7 +38,7 @@ export async function deleteImage(imageUrl: string): Promise<void> {
     return;
   }
 
-  const filePath = path.join(process.cwd(), UPLOAD_DIR, filename);
+  const filePath = path.join(getUploadDir(), filename);
 
   try {
     await unlink(filePath);
