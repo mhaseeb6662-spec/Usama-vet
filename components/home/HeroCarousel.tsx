@@ -73,93 +73,38 @@ export default function HeroCarousel({ slides = [] }: { slides?: any[] }) {
   const ActiveIcon = slide.badgeIcon || iconList[currentSlide % iconList.length];
 
   return (
-    <div className="w-full relative bg-slate-900 rounded-3xl overflow-hidden shadow-2xl min-h-[500px] md:min-h-[550px] lg:min-h-[600px] flex items-center justify-center">
+    <div className="w-full relative bg-slate-900 overflow-hidden shadow-2xl aspect-[16/9] sm:aspect-[2/1] lg:aspect-[2.5/1] xl:aspect-[3/1] flex items-center justify-center group">
       
       {/* Absolute Background Patterns */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute right-0 top-0 w-3/4 h-full bg-emerald-900/20 blur-[100px] rounded-full" />
-        <div className="absolute -left-20 -bottom-20 w-[40vw] h-[40vw] bg-teal-800/20 blur-[120px] rounded-full" />
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay" />
+        <div className="absolute inset-0 bg-slate-900" />
       </div>
 
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}
-          initial={{ opacity: 0, x: shouldReduceMotion ? 0 : 8 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: shouldReduceMotion ? 0 : -8 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="absolute inset-0 flex flex-col md:flex-row items-center justify-between p-8 md:p-16"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="absolute inset-0 w-full h-full"
         >
-          {/* Left Content */}
-          <div className="w-full md:w-1/2 space-y-5 z-10 relative">
-            
-            {/* Badge */}
-            <motion.div 
-              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-1.5 shadow-sm"
-            >
-              <ActiveIcon className="w-4 h-4 text-emerald-400" />
-              <span className="text-[13px] font-semibold tracking-wider text-emerald-50 uppercase">
-                {slide.subtitle || slide.tag || "Featured"}
-              </span>
-            </motion.div>
-            
-            {/* Heading */}
-            <motion.h2 
-              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-              className="text-[32px] sm:text-[40px] md:text-[46px] font-bold text-white leading-[1.15]"
-            >
-              {slide.title}
-            </motion.h2>
-            
-            {/* Description */}
-            <motion.p 
-              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="text-[15px] sm:text-[17px] font-normal leading-relaxed max-w-lg text-slate-300"
-            >
-              {slide.description}
-            </motion.p>
-            
-            {/* CTA Button */}
-            <motion.div 
-              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
-              className="pt-3"
-            >
-              <Link
-                href={slide.ctaUrl || slide.link || "#products"}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-[14px] uppercase px-8 py-3.5 rounded-lg shadow-lg hover:shadow-emerald-600/20 transition-all focus:outline-none hover-scale-button inline-flex items-center tracking-wide"
-              >
-                {slide.ctaText || slide.btnText || "Shop Now"}
-              </Link>
-            </motion.div>
-          </div>
-
-          {/* Graphic Placeholder or Image */}
-          <motion.div 
-            initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 1.025 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className={`hidden md:flex flex-grow justify-end max-w-sm ml-auto ${!slide.desktopImage ? 'opacity-30 lg:opacity-75' : ''}`}
-          >
-            {slide.desktopImage ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={slide.desktopImage} alt={slide.title} className="w-full h-auto max-h-[400px] object-contain drop-shadow-2xl rounded-2xl" />
-            ) : (
-              <div className="w-72 h-72 lg:w-96 lg:h-96 border-2 border-dashed border-white/20 rounded-full flex items-center justify-center relative overflow-hidden backdrop-blur-sm">
-                <div className="absolute inset-0 bg-emerald-500/10 mix-blend-overlay"></div>
-                <ActiveIcon className="w-24 h-24 lg:w-32 lg:h-32 text-white/30" />
-              </div>
-            )}
-          </motion.div>
+          {slide.desktopImage ? (
+            <Link href={slide.ctaUrl || slide.link || "#"} className="block w-full h-full">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img 
+                src={slide.desktopImage} 
+                alt={slide.title || "Banner"} 
+                className="w-full h-full object-cover" 
+              />
+            </Link>
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center backdrop-blur-sm relative z-10">
+              <ActiveIcon className="w-16 h-16 text-emerald-400 mb-4 opacity-50" />
+              <h2 className="text-2xl md:text-4xl font-bold text-white mb-2">{slide.title}</h2>
+              <p className="text-slate-300 max-w-lg">{slide.description}</p>
+            </div>
+          )}
         </motion.div>
       </AnimatePresence>
 
