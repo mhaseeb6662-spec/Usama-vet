@@ -6,6 +6,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
 import { createProductAlert } from "@/lib/services/productAlerts";
+import { toServedImageUrl } from "@/lib/mediaUrl";
 
 function parseRequiredId(raw: FormDataEntryValue | null): number {
   const id = Number.parseInt(String(raw || ""), 10);
@@ -166,7 +167,7 @@ export default async function EditProductAdmin({
             <div className="grid md:grid-cols-2 gap-6">
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-slate-700 mb-2">Primary Image</label>
-                <ImageUploader name="primaryImage" defaultImage={primaryImage?.imageUrl || ""} />
+                <ImageUploader name="primaryImage" defaultImage={toServedImageUrl(primaryImage?.imageUrl || "")} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Product Name</label>

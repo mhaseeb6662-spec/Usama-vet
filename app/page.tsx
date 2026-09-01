@@ -29,44 +29,13 @@ export const metadata = {
   },
 };
 
-const EMPTY_CATALOG = {
-  featured: [],
-  newArrivals: [],
-  bestSellers: [],
-  recommended: [],
-  trending: [],
-  livestock: [],
-  petCare: [],
-  supplements: [],
-};
-
-function withHomeTimeout<T>(label: string, task: Promise<T>, fallback: T, ms = 6000): Promise<T> {
-  return new Promise((resolve) => {
-    const timer = setTimeout(() => {
-      console.error(`[home] ${label} timed out after ${ms}ms`);
-      resolve(fallback);
-    }, ms);
-    task.then(
-      (value) => {
-        clearTimeout(timer);
-        resolve(value);
-      },
-      (error) => {
-        clearTimeout(timer);
-        console.error(`[home] ${label} failed:`, error);
-        resolve(fallback);
-      }
-    );
-  });
-}
-
 export default async function HomePage() {
   const [catalog, dbHeroSlides, dbBanners, homepageCategories, approvedReviews] = await Promise.all([
-    withHomeTimeout("catalog", getHomepageCatalog(), EMPTY_CATALOG),
-    withHomeTimeout("hero", getActiveHeroSlides(), []),
-    withHomeTimeout("banners", getActiveBanners(), []),
-    withHomeTimeout("categories", getHomepageCategories(), []),
-    withHomeTimeout("reviews", getApprovedHomeReviews(), []),
+    getHomepageCatalog(),
+    getActiveHeroSlides(),
+    getActiveBanners(),
+    getHomepageCategories(),
+    getApprovedHomeReviews(),
   ]);
 
   const dbFeatured = catalog.featured;
@@ -101,7 +70,7 @@ export default async function HomePage() {
         badgeText={promo1 ? promo1.name : "Special Campaign"}
         title={promo1?.title || "Amazing Offers Inside: Save up to 20% on Veterinary Medicines"}
         subTitle={promo1?.subtitle || "Get premium antibiotics, dewormers and cattle calcium injections at direct farm rates. Temperature controlled shipping included."}
-        bgClass={promo1?.image ? "bg-cover bg-center" : "bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500"}
+        bgClass={promo1?.image ? "bg-contain bg-center bg-no-repeat bg-slate-100" : "bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500"}
         textClass="text-slate-950 font-sans"
         href={promo1?.ctaUrl || "#products"}
         style={promo1?.image ? { backgroundImage: `url(${promo1.image})` } : undefined}
@@ -167,7 +136,7 @@ export default async function HomePage() {
         badgeText={promo2 ? promo2.name : "Seasonal Boost"}
         title={promo2?.title || "Best Offers of the Season: Nutritional Dairy Enhancers"}
         subTitle={promo2?.subtitle || "Enhance daily milk fat percentage and protect cattle from ketosis. Secure dry-pack casing on bulk orders."}
-        bgClass={promo2?.image ? "bg-cover bg-center" : "bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-850"}
+        bgClass={promo2?.image ? "bg-contain bg-center bg-no-repeat bg-emerald-900" : "bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-850"}
         textClass="text-white"
         href={promo2?.ctaUrl || "#products"}
         style={promo2?.image ? { backgroundImage: `url(${promo2.image})` } : undefined}

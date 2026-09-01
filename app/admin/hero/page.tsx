@@ -145,7 +145,7 @@ export default async function HeroAdmin({
                 <tr key={slide.id} className="hover:bg-slate-50">
                   <td className="px-6 py-4">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={toServedImageUrl(slide.desktopImage)} alt="" className="w-32 h-16 object-cover rounded shadow-sm border border-slate-200" />
+                    <img src={toServedImageUrl(slide.desktopImage)} alt="" className="w-32 h-16 object-contain bg-slate-50 rounded shadow-sm border border-slate-200" />
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex justify-end gap-2">

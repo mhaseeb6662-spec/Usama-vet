@@ -157,14 +157,14 @@ export default async function CategoriesAdmin({
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Category Picture</label>
-              <ImageUploader key={editing ? `category-${editing.id}` : "category-new"} name="image" defaultImage={editing?.image || ""} />
+              <ImageUploader key={editing ? `category-${editing.id}` : "category-new"} name="image" defaultImage={toServedImageUrl(editing?.image || "")} />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Description (Optional)</label>
               <textarea name="description" rows={3} defaultValue={editing?.description || ""} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Category details..." />
             </div>
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" name="showOnHomepage" defaultChecked={Boolean(editing?.showOnHomepage)} className="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500" />
+              <input type="checkbox" name="showOnHomepage" defaultChecked={editing ? Boolean(editing.showOnHomepage) : true} className="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500" />
               <span className="text-sm font-medium text-slate-700">Show in Shop by Categories</span>
             </label>
             <button type="submit" className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-lg transition-colors">
@@ -201,7 +201,7 @@ export default async function CategoriesAdmin({
                   <td className="px-6 py-4">
                     {cat.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={toServedImageUrl(cat.image)} alt={cat.name} className="w-12 h-12 rounded-full object-cover border border-slate-200" />
+                      <img src={toServedImageUrl(cat.image)} alt={cat.name} className="w-12 h-12 rounded-full object-contain bg-slate-50 border border-slate-200" />
                     ) : (
                       <span className="w-12 h-12 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-500">
                         {cat.name.slice(0, 2).toUpperCase()}

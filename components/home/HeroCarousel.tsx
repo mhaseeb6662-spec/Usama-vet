@@ -53,11 +53,11 @@ export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[
   };
 
   if (activeSlides.length === 0) {
-    return <div className="w-full h-[220px] sm:h-[280px] md:h-[340px] bg-emerald-950" />;
+    return <div className="w-full min-h-[140px] bg-emerald-950" />;
   }
 
   return (
-    <div className="w-full relative bg-emerald-950 overflow-hidden shadow-md h-[220px] sm:h-[280px] md:h-[340px] flex items-center justify-center group">
+    <div className="w-full relative bg-slate-100 overflow-hidden shadow-md group">
       <AnimatePresence mode="wait">
         <motion.div
           key={safeIndex}
@@ -65,26 +65,26 @@ export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[
           animate={{ opacity: 1 }}
           exit={{ opacity: 1 }}
           transition={{ duration: shouldReduceMotion ? 0 : 0.5, ease: "easeOut" }}
-          className="absolute inset-0 w-full h-full"
+          className="w-full"
         >
           {showImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={imageSrc}
               alt="Usama Vet homepage banner"
-              className="w-full h-full object-cover"
+              className="block w-full h-auto max-h-[70vh] object-contain object-center mx-auto"
               fetchPriority="high"
               decoding="async"
               onError={() => setImageFailed(true)}
             />
           ) : (
-            <div className="w-full h-full bg-emerald-950" />
+            <div className="w-full min-h-[140px] bg-emerald-950" />
           )}
         </motion.div>
       </AnimatePresence>
 
       {activeSlides.length > 1 ? (
-        <div className="absolute bottom-8 left-8 right-8 flex items-center justify-between z-20">
+        <div className="absolute bottom-4 sm:bottom-6 left-4 right-4 sm:left-8 sm:right-8 flex items-center justify-between z-20">
           <div className="flex gap-2.5">
             {activeSlides.map((_, idx) => (
               <button
@@ -93,7 +93,7 @@ export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[
                 className={`h-2.5 rounded-full transition-all duration-300 focus:outline-none ${
                   safeIndex === idx
                     ? "w-8 bg-emerald-500 shadow-sm shadow-emerald-500/50"
-                    : "w-2.5 bg-white/30 hover:bg-white/50"
+                    : "w-2.5 bg-white/70 hover:bg-white"
                 }`}
                 aria-label={`Go to slide ${idx + 1}`}
               />
@@ -102,14 +102,14 @@ export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[
           <div className="flex gap-3">
             <button
               onClick={() => goTo(safeIndex - 1)}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-black/35 hover:bg-black/50 backdrop-blur-sm border border-white/20 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
               aria-label="Previous slide"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={() => goTo(safeIndex + 1)}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-black/35 hover:bg-black/50 backdrop-blur-sm border border-white/20 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
               aria-label="Next slide"
             >
               <ChevronRight className="w-5 h-5" />

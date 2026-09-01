@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { UploadCloud, X, Loader2 } from "lucide-react";
-import Image from "next/image";
 
 interface ImageUploaderProps {
   name: string; // The name of the hidden input
@@ -48,9 +47,9 @@ export default function ImageUploader({ name, defaultImage }: ImageUploaderProps
       <input type="hidden" name={name} value={imageUrl} />
       
       {imageUrl ? (
-        <div className="relative w-full max-w-xs aspect-video rounded-xl overflow-hidden border border-slate-200">
+        <div className="relative w-full max-w-xs aspect-video rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={imageUrl} alt="Uploaded" className="object-cover w-full h-full" />
+          <img src={imageUrl} alt="Uploaded" className="object-contain w-full h-full" />
           <button 
             type="button" 
             onClick={() => setImageUrl("")}

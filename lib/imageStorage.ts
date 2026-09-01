@@ -1,7 +1,7 @@
 import { writeFile, unlink, mkdir } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
-import { getUploadDir } from "@/lib/uploadPath";
+import { getUploadDir, getUploadLookupDirs } from "@/lib/uploadPath";
 
 export async function uploadImage(file: File): Promise<string> {
   const bytes = await file.arrayBuffer();
@@ -37,13 +37,16 @@ export async function deleteImage(imageUrl: string): Promise<void> {
   if (!filename) {
     return;
   }
+  filename = path.basename(filename);
 
-  const filePath = path.join(getUploadDir(), filename);
-
-  try {
-    await unlink(filePath);
-  } catch (error) {
-    console.error("Error deleting image:", error);
-    // Ignore error if file doesn't exist
+  for (const dir of getUploadLookupDirs()) {
+    try {
+      await unlink(path.join(dir, filename));
+    } catch (error) {
+      const code = error && typeof error === "object" && "code" in error ? String(error.code) : "";
+      if (code !== "ENOENT") {
+        console.error("Error deleting image:", error);
+      }
+    }
   }
 }

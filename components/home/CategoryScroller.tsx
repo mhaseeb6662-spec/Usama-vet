@@ -7,6 +7,7 @@ import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/Anima
 export default function CategoryScroller({ categories = [] }: { categories?: any[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
   
   const exactPositionRef = useRef(0);
   const directionRef = useRef<1 | -1>(1); // 1 = right, -1 = left
@@ -92,6 +93,7 @@ export default function CategoryScroller({ categories = [] }: { categories?: any
             </p>
           ) : categories.map((cat, index) => {
             const imageUrl = typeof cat.image === "string" ? cat.image.trim() : "";
+            const showImage = Boolean(imageUrl) && !failedImages[String(cat.id)];
             const initials = String(cat.name || "C")
               .split(" ")
               .map((part: string) => part[0])
@@ -107,13 +109,14 @@ export default function CategoryScroller({ categories = [] }: { categories?: any
                     className="flex flex-col items-center group focus:outline-none w-[84px] sm:w-[110px]"
                   >
                     {/* Circular Image Container */}
-                    <div className="w-20 h-20 sm:w-[96px] sm:h-[96px] rounded-full bg-slate-50 border-2 border-slate-200 group-hover:border-emerald-500 overflow-hidden transition-all duration-200 ease-out flex items-center justify-center shadow-sm group-hover:scale-105 group-hover:shadow-md">
-                      {imageUrl ? (
+                    <div className="w-20 h-20 sm:w-[96px] sm:h-[96px] rounded-full bg-slate-50 border-2 border-slate-200 group-hover:border-emerald-500 overflow-hidden transition-all duration-200 ease-out flex items-center justify-center shadow-sm group-hover:scale-105 group-hover:shadow-md p-1.5">
+                      {showImage ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={imageUrl}
                           alt={cat.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          className="max-w-full max-h-full w-full h-full object-contain"
+                          onError={() => setFailedImages((current) => ({ ...current, [String(cat.id)]: true }))}
                         />
                       ) : (
                         <span className="text-emerald-700 font-bold text-lg">{initials}</span>

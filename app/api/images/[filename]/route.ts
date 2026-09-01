@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readFile } from "fs/promises";
 import path from "path";
-import fs from "fs";
-import { getLegacyUploadDir, getUploadDir } from "@/lib/uploadPath";
+import { resolveUploadedFile } from "@/lib/uploadPath";
 
 export async function GET(
   request: NextRequest,
@@ -13,11 +12,7 @@ export async function GET(
     
     // Normalize path to prevent directory traversal
     const safeFilename = path.basename(filename);
-    const candidates = [
-      path.join(getUploadDir(), safeFilename),
-      path.join(getLegacyUploadDir(), safeFilename),
-    ];
-    const filePath = candidates.find((candidate) => fs.existsSync(candidate));
+    const filePath = resolveUploadedFile(safeFilename);
 
     if (!filePath) {
       return new NextResponse("Image not found", { status: 404 });

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { Plus, Trash2, Edit } from "lucide-react";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
+import { toServedImageUrl } from "@/lib/mediaUrl";
 
 function readBannerFields(formData: FormData) {
   const name = String(formData.get("name") || "").trim();
@@ -129,7 +130,7 @@ export default async function BannersAdmin({
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Banner Background Image *</label>
-              <ImageUploader key={editing ? `banner-${editing.id}` : "banner-new"} name="image" defaultImage={editing?.image || ""} />
+              <ImageUploader key={editing ? `banner-${editing.id}` : "banner-new"} name="image" defaultImage={toServedImageUrl(editing?.image || "")} />
             </div>
             <button type="submit" className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-lg transition-colors mt-4">
               <Plus className="w-4 h-4" /> {editing ? "Update Banner" : "Save Banner"}
@@ -159,7 +160,7 @@ export default async function BannersAdmin({
                 <tr key={banner.id} className="hover:bg-slate-50">
                   <td className="px-6 py-4">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={banner.image} alt={banner.name} className="w-20 h-12 object-cover rounded shadow-sm border border-slate-200" />
+                    <img src={toServedImageUrl(banner.image)} alt={banner.name} className="w-20 h-12 object-contain bg-slate-50 rounded shadow-sm border border-slate-200" />
                   </td>
                   <td className="px-6 py-4">
                     <p className="font-bold text-slate-900">{banner.name}</p>

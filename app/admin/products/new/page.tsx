@@ -147,7 +147,7 @@ export default async function NewProductAdmin() {
                 <span className="text-sm font-medium text-slate-700">Featured</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="isNewArrival" className="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500" />
+                <input type="checkbox" name="isNewArrival" defaultChecked className="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500" />
                 <span className="text-sm font-medium text-slate-700">New Arrival</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">

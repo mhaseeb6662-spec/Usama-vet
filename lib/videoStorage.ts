@@ -1,7 +1,7 @@
 import { writeFile, unlink, mkdir } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
-import { getUploadDir } from "@/lib/uploadPath";
+import { getUploadDir, getUploadLookupDirs } from "@/lib/uploadPath";
 
 const MAX_VIDEO_BYTES = 40 * 1024 * 1024;
 const ALLOWED_VIDEO_TYPES = new Set(["video/mp4", "video/webm", "video/quicktime"]);
@@ -34,10 +34,16 @@ export async function deleteVideo(videoUrl: string): Promise<void> {
   if (!filename) {
     return;
   }
+  filename = path.basename(filename);
 
-  try {
-    await unlink(path.join(getUploadDir(), filename));
-  } catch (error) {
-    console.error("Error deleting video:", error);
+  for (const dir of getUploadLookupDirs()) {
+    try {
+      await unlink(path.join(dir, filename));
+    } catch (error) {
+      const code = error && typeof error === "object" && "code" in error ? String(error.code) : "";
+      if (code !== "ENOENT") {
+        console.error("Error deleting video:", error);
+      }
+    }
   }
 }

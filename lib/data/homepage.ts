@@ -110,14 +110,24 @@ export const getHomepageCatalog = cache(async () => {
 
   try {
     const products = await prisma.product.findMany({
-      where: { isActive: true },
-      take: 24,
+      where: {
+        isActive: true,
+        OR: [
+          { isFeatured: true },
+          { isNewArrival: true },
+          { isBestSeller: true },
+          { isRecommended: true },
+          { isTrending: true },
+          { category: { slug: { in: ["livestock-care", "pet-care", "animal-supplements"] } } },
+        ],
+      },
       include: {
         images: { orderBy: { sortOrder: "asc" }, take: 2 },
         category: true,
         brand: true,
       },
       orderBy: { createdAt: "desc" },
+      take: 120,
     });
 
     return {

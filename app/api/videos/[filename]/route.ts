@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createReadStream, existsSync, statSync } from "fs";
+import { createReadStream, statSync } from "fs";
 import { Readable } from "stream";
 import path from "path";
-import { getLegacyUploadDir, getUploadDir } from "@/lib/uploadPath";
+import { resolveUploadedFile } from "@/lib/uploadPath";
 
 function videoContentType(filename: string): string {
   const ext = path.extname(filename).toLowerCase();
@@ -12,12 +12,7 @@ function videoContentType(filename: string): string {
 }
 
 function resolveVideoPath(filename: string): string | null {
-  const safeFilename = path.basename(filename);
-  const candidates = [
-    path.join(getUploadDir(), safeFilename),
-    path.join(getLegacyUploadDir(), safeFilename),
-  ];
-  return candidates.find((candidate) => existsSync(candidate)) ?? null;
+  return resolveUploadedFile(path.basename(filename));
 }
 
 export async function GET(
