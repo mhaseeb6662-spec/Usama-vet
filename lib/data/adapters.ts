@@ -1,5 +1,6 @@
 import { Product as PrismaProduct, ProductImage, Category as PrismaCategory, Brand } from "@prisma/client";
 import { Product as UIProduct, Category as UICategory } from "@/types";
+import { toServedImageUrl } from "@/lib/mediaUrl";
 
 type FullPrismaProduct = PrismaProduct & {
   images?: ProductImage[];
@@ -15,10 +16,9 @@ export function mapProductToUI(p: FullPrismaProduct): UIProduct {
     return a.sortOrder - b.sortOrder;
   }) : [];
   
-  const imageUrls = sortedImages.map(img => img.imageUrl);
-  if (imageUrls.length === 0) {
-    imageUrls.push("/placeholder.png"); // fallback
-  }
+  const imageUrls = sortedImages
+    .map(img => toServedImageUrl(img.imageUrl))
+    .filter((url) => url.length > 0 && url !== "/placeholder.png");
 
   return {
     id: String(p.id),
@@ -47,7 +47,7 @@ export function mapCategoryToUI(c: PrismaCategory): UICategory {
     slug: c.slug,
     name: c.name,
     description: c.description || "",
-    image: c.image || "/placeholder.png",
+    image: toServedImageUrl(c.image),
     iconName: c.icon || "Package",
   };
 }

@@ -38,11 +38,15 @@ const DEFAULT_SLIDES = [
 export default function HeroCarousel({ slides = [] }: { slides?: any[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
   const shouldReduceMotion = useReducedMotion();
   
   const activeSlides = slides && slides.length > 0 ? slides : DEFAULT_SLIDES;
 
-  // Auto scroll slides (5-6 seconds delay)
+  useEffect(() => {
+    setImageFailed(false);
+  }, [currentSlide]);
+
   useEffect(() => {
     const timer = setInterval(() => {
       if (!isTransitioning) {
@@ -67,13 +71,14 @@ export default function HeroCarousel({ slides = [] }: { slides?: any[] }) {
   };
 
   const slide = activeSlides[currentSlide];
+  const imageSrc = slide.desktopImage || "";
+  const showImage = Boolean(imageSrc) && !imageFailed;
   
-  // Choose an icon based on index if it doesn't have one
   const iconList = [Stethoscope, ShieldCheck, Heart];
   const ActiveIcon = slide.badgeIcon || iconList[currentSlide % iconList.length];
 
   return (
-    <div className="w-full relative bg-slate-900 overflow-hidden shadow-2xl aspect-[16/9] sm:aspect-[2/1] lg:aspect-[2.5/1] xl:aspect-[3/1] flex items-center justify-center group">
+    <div className="w-full relative bg-emerald-950 overflow-hidden shadow-md h-[220px] sm:h-[280px] md:h-[340px] flex items-center justify-center group">
       
       {/* Absolute Background Patterns */}
       <div className="absolute inset-0 z-0">
@@ -89,13 +94,14 @@ export default function HeroCarousel({ slides = [] }: { slides?: any[] }) {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="absolute inset-0 w-full h-full"
         >
-          {slide.desktopImage ? (
-            <Link href={slide.ctaUrl || slide.link || "#"} className="block w-full h-full">
+          {showImage ? (
+            <Link href={slide.ctaUrl || slide.link || "#products"} className="block w-full h-full">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
-                src={slide.desktopImage} 
+                src={imageSrc} 
                 alt={slide.title || "Banner"} 
                 className="w-full h-full object-cover" 
+                onError={() => setImageFailed(true)}
               />
             </Link>
           ) : (

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { cache } from "react";
 import { mapProductToUI, mapCategoryToUI } from "./adapters";
+import { toServedImageUrl } from "@/lib/mediaUrl";
 
 // Helper to strip non-serializable Prisma types (Date, Decimal, BigInt)
 // This prevents Next.js hydration crashes when passing data to Client Components
@@ -18,7 +19,11 @@ export const getActiveHeroSlides = cache(async () => {
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
     });
-    return serialize(slides);
+    return serialize(slides).map((slide: any) => ({
+      ...slide,
+      desktopImage: toServedImageUrl(slide.desktopImage),
+      mobileImage: toServedImageUrl(slide.mobileImage),
+    }));
   } catch (error) {
     console.error("[DB] getActiveHeroSlides failed:", error);
     return [];
@@ -57,7 +62,11 @@ export const getActiveBanners = cache(async () => {
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
     });
-    return serialize(banners);
+    return serialize(banners).map((banner: any) => ({
+      ...banner,
+      image: toServedImageUrl(banner.image),
+      mobileImage: toServedImageUrl(banner.mobileImage),
+    }));
   } catch (error) {
     console.error("[DB] getActiveBanners failed:", error);
     return [];
