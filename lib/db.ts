@@ -4,23 +4,6 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-function withMysqlPoolLimits(url: string): string {
-  if (
-    url.includes("connection_limit=") &&
-    url.includes("connect_timeout=") &&
-    url.includes("pool_timeout=")
-  ) {
-    return url;
-  }
-
-  const separator = url.includes("?") ? "&" : "?";
-  const extras: string[] = [];
-  if (!url.includes("connection_limit=")) extras.push("connection_limit=5");
-  if (!url.includes("connect_timeout=")) extras.push("connect_timeout=5");
-  if (!url.includes("pool_timeout=")) extras.push("pool_timeout=8");
-  return extras.length === 0 ? url : `${url}${separator}${extras.join("&")}`;
-}
-
 function createPrismaClient(): PrismaClient {
   const url = process.env.DATABASE_URL;
   return new PrismaClient({
@@ -29,7 +12,7 @@ function createPrismaClient(): PrismaClient {
       ? {
           datasources: {
             db: {
-              url: withMysqlPoolLimits(url),
+              url
             },
           },
         }

@@ -4,7 +4,8 @@ import {
   getProductsBySection, 
   getHomepageCategories,
   getActiveHeroSlides,
-  getActiveBanners
+  getActiveBanners,
+  getHomepageProducts
 } from "@/lib/data/homepage";
 
 // Modular Components
@@ -20,45 +21,25 @@ import LowerTrustStrip from "@/components/home/LowerTrustStrip";
 import NewsletterSection from "@/components/home/NewsletterSection";
 
 // Force dynamic rendering so Next.js doesn't try to query the database during Hostinger's build step
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export default async function HomePage() {
   // Try fetching dynamic data, fallback to mock data if database is empty/unseeded
   // All query functions have built-in try/catch and return [] on DB failure
-  const [
-    dbFeatured,
-    dbNewArrivals,
-    dbBestSellers,
-    dbLivestock,
-    dbRecommended,
-    dbPetCare,
-    dbSupplements,
-    dbTrending,
-    dbHeroSlides,
-    dbBanners,
-    homepageCategories
-  ] = await Promise.all([
-    getProductsBySection('FEATURED'),
-    getProductsBySection('NEW_ARRIVALS'),
-    getProductsBySection('BEST_SELLERS'),
-    getProductsBySection('CATEGORY', null),
-    getProductsBySection('RECOMMENDED'),
-    getProductsBySection('CATEGORY', null),
-    getProductsBySection('CATEGORY', null),
-    getProductsBySection('TRENDING'),
-    getActiveHeroSlides(),
-    getActiveBanners(),
-    getHomepageCategories()
-  ]);
+  const productData = await getHomepageProducts();
+  const dbHeroSlides = await getActiveHeroSlides();
+  const dbBanners = await getActiveBanners();
+  const homepageCategories = await getHomepageCategories();
 
-  const newArrivals = dbNewArrivals;
-  const bestSellers = dbBestSellers;
-  const recommended = dbRecommended;
-  const trending = dbTrending;
+  const dbFeatured = productData.featured;
+  const newArrivals = productData.newArrivals;
+  const bestSellers = productData.bestSellers;
+  const recommended = productData.recommended;
+  const trending = productData.trending;
 
-  const livestockEssentials = dbLivestock;
-  const petCareEssentials = dbPetCare;
-  const supplementsEssentials = dbSupplements;
+  const livestockEssentials: any[] = [];
+  const petCareEssentials: any[] = [];
+  const supplementsEssentials: any[] = [];
 
   const promo1 = dbBanners.find(b => b.position === "promo-1");
   const promo2 = dbBanners.find(b => b.position === "promo-2");

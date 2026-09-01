@@ -14,8 +14,7 @@ function serialize<T>(data: T): T {
 // Cache these queries for the current request
 // Each function has its own try/catch so a DB timeout never crashes the page
 export const getActiveHeroSlides = cache(async () => {
-  try {
-    const slides = await prisma.heroSlide.findMany({
+  const slides = await prisma.heroSlide.findMany({
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
     });
@@ -24,41 +23,29 @@ export const getActiveHeroSlides = cache(async () => {
       desktopImage: toServedImageUrl(slide.desktopImage),
       mobileImage: toServedImageUrl(slide.mobileImage),
     }));
-  } catch (error) {
-    console.error("[DB] getActiveHeroSlides failed:", error);
-    return [];
-  }
+  
 });
 
 export const getHomepageCategories = cache(async () => {
-  try {
-    const cats = await prisma.category.findMany({
+  const cats = await prisma.category.findMany({
       where: { isActive: true, showOnHomepage: true },
       orderBy: { sortOrder: "asc" },
     });
     return cats.map(mapCategoryToUI);
-  } catch (error) {
-    console.error("[DB] getHomepageCategories failed:", error);
-    return [];
-  }
+  
 });
 
 export const getAllActiveCategories = cache(async () => {
-  try {
-    const cats = await prisma.category.findMany({
+  const cats = await prisma.category.findMany({
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
     });
     return cats.map(mapCategoryToUI);
-  } catch (error) {
-    console.error("[DB] getAllActiveCategories failed:", error);
-    return [];
-  }
+  
 });
 
 export const getActiveBanners = cache(async () => {
-  try {
-    const banners = await prisma.banner.findMany({
+  const banners = await prisma.banner.findMany({
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
     });
@@ -67,15 +54,11 @@ export const getActiveBanners = cache(async () => {
       image: toServedImageUrl(banner.image),
       mobileImage: toServedImageUrl(banner.mobileImage),
     }));
-  } catch (error) {
-    console.error("[DB] getActiveBanners failed:", error);
-    return [];
-  }
+  
 });
 
 export const getHomepageSections = cache(async () => {
-  try {
-    const sections = await prisma.homepageSection.findMany({
+  const sections = await prisma.homepageSection.findMany({
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
       include: {
@@ -83,15 +66,11 @@ export const getHomepageSections = cache(async () => {
       }
     });
     return serialize(sections);
-  } catch (error) {
-    console.error("[DB] getHomepageSections failed:", error);
-    return [];
-  }
+  
 });
 
 export const getProductsBySection = cache(async (type: string, categoryId?: string | null, max: number = 8) => {
-  try {
-    const include = { category: true, images: true, brand: true };
+  const include = { category: true, images: true, brand: true };
     let products: any[] = [];
     
     switch (type) {
@@ -118,8 +97,26 @@ export const getProductsBySection = cache(async (type: string, categoryId?: stri
     }
     
     return products.map(mapProductToUI);
-  } catch (error) {
-    console.error("[DB] getProductsBySection failed:", error);
-    return [];
-  }
+  
+});
+
+export const getHomepageProducts = cache(async () => {
+  const include = { category: true, images: true, brand: true };
+  const products = await prisma.product.findMany({ 
+    where: { isActive: true }, 
+    take: 100,
+    include,
+    orderBy: { createdAt: 'desc' }
+  });
+  
+  const mapped = products.map(mapProductToUI);
+  
+  return {
+    featured: mapped.filter(p => products.find(op => String(op.id) === p.id)?.isFeatured).slice(0, 8),
+    newArrivals: mapped.filter(p => products.find(op => String(op.id) === p.id)?.isNewArrival).slice(0, 8),
+    bestSellers: mapped.filter(p => products.find(op => String(op.id) === p.id)?.isBestSeller).slice(0, 8),
+    recommended: mapped.filter(p => products.find(op => String(op.id) === p.id)?.isRecommended).slice(0, 8),
+    trending: mapped.filter(p => products.find(op => String(op.id) === p.id)?.isTrending).slice(0, 8),
+    all: mapped
+  };
 });
