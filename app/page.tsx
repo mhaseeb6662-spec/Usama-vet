@@ -1,7 +1,7 @@
 import React from "react";
 import { OrganizationSchema, WebSiteSchema } from "@/lib/seo/schema";
 import { 
-  getProductsBySection, 
+  getHomepageCatalog,
   getHomepageCategories,
   getActiveHeroSlides,
   getActiveBanners
@@ -25,40 +25,21 @@ export const dynamic = 'force-dynamic';
 export default async function HomePage() {
   // Try fetching dynamic data, fallback to mock data if database is empty/unseeded
   // All query functions have built-in try/catch and return [] on DB failure
-  const [
-    dbFeatured,
-    dbNewArrivals,
-    dbBestSellers,
-    dbLivestock,
-    dbRecommended,
-    dbPetCare,
-    dbSupplements,
-    dbTrending,
-    dbHeroSlides,
-    dbBanners,
-    homepageCategories
-  ] = await Promise.all([
-    getProductsBySection('FEATURED'),
-    getProductsBySection('NEW_ARRIVALS'),
-    getProductsBySection('BEST_SELLERS'),
-    getProductsBySection('CATEGORY', 1),
-    getProductsBySection('RECOMMENDED'),
-    getProductsBySection('CATEGORY', 2),
-    getProductsBySection('CATEGORY', 3),
-    getProductsBySection('TRENDING'),
+  const [catalog, dbHeroSlides, dbBanners, homepageCategories] = await Promise.all([
+    getHomepageCatalog(),
     getActiveHeroSlides(),
     getActiveBanners(),
-    getHomepageCategories()
+    getHomepageCategories(),
   ]);
 
-  const newArrivals = dbNewArrivals;
-  const bestSellers = dbBestSellers;
-  const recommended = dbRecommended;
-  const trending = dbTrending;
-
-  const livestockEssentials = dbLivestock;
-  const petCareEssentials = dbPetCare;
-  const supplementsEssentials = dbSupplements;
+  const dbFeatured = catalog.featured;
+  const newArrivals = catalog.newArrivals;
+  const bestSellers = catalog.bestSellers;
+  const recommended = catalog.recommended;
+  const trending = catalog.trending;
+  const livestockEssentials = catalog.livestock;
+  const petCareEssentials = catalog.petCare;
+  const supplementsEssentials = catalog.supplements;
 
   const promo1 = dbBanners.find(b => b.position === "promo-1");
   const promo2 = dbBanners.find(b => b.position === "promo-2");

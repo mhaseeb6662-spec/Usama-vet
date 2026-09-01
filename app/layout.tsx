@@ -1,17 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Poppins } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AnimatedBackground from "@/components/layout/AnimatedBackground";
 import FloatingWhatsApp from "@/components/shared/FloatingWhatsApp";
 import { BUSINESS_CONFIG } from "@/lib/constants/config";
 import "./globals.css";
-
-const poppins = Poppins({
-  variable: "--font-poppins",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(BUSINESS_CONFIG.url),
@@ -90,7 +83,7 @@ export default async function RootLayout({
   const categories = await getAllActiveCategories();
 
   return (
-    <html lang="en" className={`${poppins.variable} h-full antialiased`}>
+    <html lang="en" className="h-full antialiased">
       <body className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans relative">
         <AnimatedBackground />
 

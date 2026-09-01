@@ -71,7 +71,11 @@ export default function HeroCarousel({ slides = [] }: { slides?: any[] }) {
   };
 
   const slide = activeSlides[currentSlide];
-  const imageSrc = slide.desktopImage || "";
+  const imageSrc =
+    typeof slide.desktopImage === "string" &&
+    (slide.desktopImage.startsWith("/images/") || slide.desktopImage.startsWith("https://"))
+      ? slide.desktopImage
+      : "";
   const showImage = Boolean(imageSrc) && !imageFailed;
   
   const iconList = [Stethoscope, ShieldCheck, Heart];

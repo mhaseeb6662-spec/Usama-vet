@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import { cache } from "react";
 import { mapProductToUI, mapCategoryToUI } from "./adapters";
-import { toServedImageUrl } from "@/lib/mediaUrl";
+import { isPersistentPublicImage, toServedImageUrl } from "@/lib/mediaUrl";
 
 // Helper to strip non-serializable Prisma types (Date, Decimal, BigInt)
 // This prevents Next.js hydration crashes when passing data to Client Components
@@ -19,11 +19,15 @@ export const getActiveHeroSlides = cache(async () => {
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
     });
-    return serialize(slides).map((slide: any) => ({
-      ...slide,
-      desktopImage: toServedImageUrl(slide.desktopImage),
-      mobileImage: toServedImageUrl(slide.mobileImage),
-    }));
+    return serialize(slides).map((slide: any) => {
+      const desktopImage = toServedImageUrl(slide.desktopImage);
+      const mobileImage = toServedImageUrl(slide.mobileImage);
+      return {
+        ...slide,
+        desktopImage: isPersistentPublicImage(desktopImage) ? desktopImage : null,
+        mobileImage: isPersistentPublicImage(mobileImage) ? mobileImage : null,
+      };
+    });
   } catch (error) {
     console.error("[DB] getActiveHeroSlides failed:", error);
     return [];
@@ -62,11 +66,15 @@ export const getActiveBanners = cache(async () => {
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
     });
-    return serialize(banners).map((banner: any) => ({
-      ...banner,
-      image: toServedImageUrl(banner.image),
-      mobileImage: toServedImageUrl(banner.mobileImage),
-    }));
+    return serialize(banners).map((banner: any) => {
+      const image = toServedImageUrl(banner.image);
+      const mobileImage = toServedImageUrl(banner.mobileImage);
+      return {
+        ...banner,
+        image: isPersistentPublicImage(image) ? image : "",
+        mobileImage: isPersistentPublicImage(mobileImage) ? mobileImage : "",
+      };
+    });
   } catch (error) {
     console.error("[DB] getActiveBanners failed:", error);
     return [];
@@ -86,6 +94,42 @@ export const getHomepageSections = cache(async () => {
   } catch (error) {
     console.error("[DB] getHomepageSections failed:", error);
     return [];
+  }
+});
+
+export const getHomepageCatalog = cache(async () => {
+  const empty = {
+    featured: [],
+    newArrivals: [],
+    bestSellers: [],
+    recommended: [],
+    trending: [],
+    livestock: [],
+    petCare: [],
+    supplements: [],
+  };
+
+  try {
+    const products = await prisma.product.findMany({
+      where: { isActive: true },
+      take: 48,
+      include: { category: true, images: true, brand: true },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return {
+      featured: products.filter((item) => item.isFeatured).slice(0, 8).map(mapProductToUI),
+      newArrivals: products.filter((item) => item.isNewArrival).slice(0, 8).map(mapProductToUI),
+      bestSellers: products.filter((item) => item.isBestSeller).slice(0, 8).map(mapProductToUI),
+      recommended: products.filter((item) => item.isRecommended).slice(0, 8).map(mapProductToUI),
+      trending: products.filter((item) => item.isTrending).slice(0, 8).map(mapProductToUI),
+      livestock: products.filter((item) => item.categoryId === 1).slice(0, 8).map(mapProductToUI),
+      petCare: products.filter((item) => item.categoryId === 2).slice(0, 8).map(mapProductToUI),
+      supplements: products.filter((item) => item.categoryId === 3).slice(0, 8).map(mapProductToUI),
+    };
+  } catch (error) {
+    console.error("[DB] getHomepageCatalog failed:", error);
+    return empty;
   }
 });
 
