@@ -23,19 +23,21 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { rating, title, content, displayName, whatsappNumber } = body;
-    
-    // Basic validation
-    if (!rating || !title || !content || !displayName || !whatsappNumber) {
+    const parsedRating = Number(rating);
+    if (!Number.isInteger(parsedRating) || parsedRating < 1 || parsedRating > 5) {
+      return NextResponse.json({ success: false, message: "Rating must be between 1 and 5." }, { status: 400 });
+    }
+    if (typeof title !== "string" || !title.trim() || typeof content !== "string" || !content.trim() || typeof displayName !== "string" || !displayName.trim() || typeof whatsappNumber !== "string" || !whatsappNumber.trim()) {
       return NextResponse.json({ success: false, message: "Missing required fields." }, { status: 400 });
     }
 
     const review = await prisma.review.create({
       data: {
-        rating,
-        title,
-        content,
-        displayName,
-        whatsappNumber,
+        rating: parsedRating,
+        title: title.trim(),
+        content: content.trim(),
+        displayName: displayName.trim(),
+        whatsappNumber: whatsappNumber.trim(),
         status: "PENDING",
       },
     });

@@ -6,6 +6,7 @@ import {
   getActiveHeroSlides,
   getActiveBanners
 } from "@/lib/data/homepage";
+import { getApprovedHomeReviews } from "@/lib/data/reviews";
 
 // Modular Components
 import HeroCarousel from "@/components/home/HeroCarousel";
@@ -25,11 +26,12 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   // Try fetching dynamic data, fallback to mock data if database is empty/unseeded
   // All query functions have built-in try/catch and return [] on DB failure
-  const [catalog, dbHeroSlides, dbBanners, homepageCategories] = await Promise.all([
+  const [catalog, dbHeroSlides, dbBanners, homepageCategories, approvedReviews] = await Promise.all([
     getHomepageCatalog(),
     getActiveHeroSlides(),
     getActiveBanners(),
     getHomepageCategories(),
+    getApprovedHomeReviews(),
   ]);
 
   const dbFeatured = catalog.featured;
@@ -54,9 +56,7 @@ export default async function HomePage() {
       <HeroCarousel slides={dbHeroSlides} />
 
       {/* 2. CIRCULAR CATEGORY SCROLLER */}
-      {homepageCategories && homepageCategories.length > 0 && (
-        <CategoryScroller categories={homepageCategories} />
-      )}
+      <CategoryScroller categories={homepageCategories} />
 
       {/* 3. UPPER TRUST STRIP (3 boxes) */}
       <TrustStrip />
@@ -80,7 +80,7 @@ export default async function HomePage() {
       />
 
       {/* 6. CLIENT TESTIMONIALS SECTION (4 cards) */}
-      <ReviewsSection />
+      <ReviewsSection reviews={approvedReviews} />
 
       {/* 7. LARGE GREEN SEARCH CTA WITH URDU HEADER */}
       <PromoSearchSection />

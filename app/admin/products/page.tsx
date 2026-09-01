@@ -53,11 +53,16 @@ export default async function ProductsAdmin() {
                     {product.stockQuantity > 0 ? `${product.stockQuantity} in stock` : 'Out of stock'}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-right flex justify-end gap-2">
-                  <form action={deleteProduct}>
-                    <input type="hidden" name="id" value={product.id} />
-                    <button type="submit" title="Delete" className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"><Trash2 className="w-4 h-4" /></button>
-                  </form>
+                <td className="px-6 py-4 text-right">
+                  <div className="flex justify-end gap-2">
+                    <Link href={`/admin/products/${product.id}`} title="Edit" className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
+                      <Edit className="w-4 h-4" />
+                    </Link>
+                    <form action={deleteProduct}>
+                      <input type="hidden" name="id" value={product.id} />
+                      <button type="submit" title="Delete" className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"><Trash2 className="w-4 h-4" /></button>
+                    </form>
+                  </div>
                 </td>
               </tr>
             ))}

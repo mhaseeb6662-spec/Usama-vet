@@ -87,8 +87,18 @@ export default function CategoryScroller({ categories = [] }: { categories?: any
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {/* Categories Array (No duplication as per user request) */}
-          {categories.map((cat, index) => {
-            const imageUrl = cat.image || "https://placehold.co/200x200/10b981/ffffff?text=Cat";
+          {categories.length === 0 ? (
+            <p className="w-full text-center text-slate-500 text-sm py-6">
+              Categories will appear here once they are published from the admin dashboard.
+            </p>
+          ) : categories.map((cat, index) => {
+            const imageUrl = typeof cat.image === "string" ? cat.image.trim() : "";
+            const initials = String(cat.name || "C")
+              .split(" ")
+              .map((part: string) => part[0])
+              .join("")
+              .toUpperCase()
+              .slice(0, 2);
 
             return (
               <div key={`${cat.id}-${index}`} className="shrink-0">
@@ -99,14 +109,18 @@ export default function CategoryScroller({ categories = [] }: { categories?: any
                   >
                     {/* Circular Image Container */}
                     <div className="w-20 h-20 sm:w-[96px] sm:h-[96px] rounded-full bg-slate-50 border-2 border-slate-200 group-hover:border-emerald-500 overflow-hidden transition-all duration-200 ease-out flex items-center justify-center shadow-sm group-hover:scale-105 group-hover:shadow-md">
-                      <Image 
-                        src={imageUrl} 
-                        alt={cat.name} 
-                        width={120} 
-                        height={120} 
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        unoptimized // Allows external images without Next.js config domains
-                      />
+                      {imageUrl ? (
+                        <Image
+                          src={imageUrl}
+                          alt={cat.name}
+                          width={120}
+                          height={120}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          unoptimized
+                        />
+                      ) : (
+                        <span className="text-emerald-700 font-bold text-lg">{initials}</span>
+                      )}
                     </div>
                     
                     {/* Category Title */}

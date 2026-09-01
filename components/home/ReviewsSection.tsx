@@ -3,10 +3,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import SectionHeader from "@/components/shared/SectionHeader";
 import ReviewCard from "@/components/reviews/ReviewCard";
-import { DEMO_REVIEWS } from "@/lib/data/mockData";
+import type { Review } from "@/types";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/AnimationComponents";
 
-export default function ReviewsSection() {
+export default function ReviewsSection({ reviews }: { reviews: Review[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   
@@ -71,26 +71,31 @@ export default function ReviewsSection() {
         <SectionHeader
           preTitle="Testimonials"
           title="WHAT OUR CLIENTS SAY"
-          description="Discover how Usama Vet Care is supporting dairy farmers, livestock breeders, and pet keepers with authentic product delivery. Testimonials shown are mock records."
+          description="Discover how Usama Vet Care is supporting dairy farmers, livestock breeders, and pet keepers with authentic product delivery."
         />
       </FadeUp>
 
-      {/* Auto-scrolling Grid of Testimonial cards */}
-      <StaggerContainer staggerDelay={0.06} className="mt-8">
-        <div 
-          ref={scrollRef}
-          className="flex items-stretch gap-6 overflow-x-auto pb-8 scrollbar-none px-2"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {DEMO_REVIEWS.map((review) => (
-            <div key={review.id} className="shrink-0 w-[300px] sm:w-[350px] h-auto flex">
-              <StaggerItem distance={12} className="w-full flex">
-                <ReviewCard review={review} />
-              </StaggerItem>
-            </div>
-          ))}
+      {reviews.length === 0 ? (
+        <div className="mt-8 bg-white border border-slate-200 rounded-xl p-8 text-center">
+          <p className="text-slate-600">No customer reviews have been published yet.</p>
         </div>
-      </StaggerContainer>
+      ) : (
+        <StaggerContainer staggerDelay={0.06} className="mt-8">
+          <div
+            ref={scrollRef}
+            className="flex items-stretch gap-6 overflow-x-auto pb-8 scrollbar-none px-2"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {reviews.map((review) => (
+              <div key={review.id} className="shrink-0 w-[300px] sm:w-[350px] h-auto flex">
+                <StaggerItem distance={12} className="w-full flex">
+                  <ReviewCard review={review} />
+                </StaggerItem>
+              </div>
+            ))}
+          </div>
+        </StaggerContainer>
+      )}
     </section>
   );
 }

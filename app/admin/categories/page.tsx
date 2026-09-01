@@ -1,27 +1,85 @@
 import React from "react";
+import Link from "next/link";
 import { prisma } from "@/lib/db";
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { Plus, Trash2, Edit } from "lucide-react";
+import ImageUploader from "@/components/admin/ui/ImageUploader";
+import { toServedImageUrl } from "@/lib/mediaUrl";
+
+function readCategoryFields(formData: FormData) {
+  const name = String(formData.get("name") || "").trim();
+  const description = String(formData.get("description") || "").trim();
+  const image = String(formData.get("image") || "").trim();
+  const showOnHomepage = formData.get("showOnHomepage") === "on";
+
+  if (!name) {
+    throw new Error("Category name is required.");
+  }
+  if (showOnHomepage && !image) {
+    throw new Error("Upload a category picture to show it in Shop by Categories.");
+  }
+
+  return { name, description, image, showOnHomepage };
+}
 
 async function addCategory(formData: FormData) {
   "use server";
-  const name = formData.get("name") as string;
-  const description = formData.get("description") as string;
-  
-  if (!name) return;
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  const showOnHomepage = formData.get("showOnHomepage") === "on";
+  const { name, description, image, showOnHomepage } = readCategoryFields(formData);
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 
-  try {
-    await prisma.category.create({
-      data: { name, slug, description, isActive: true, showOnHomepage },
-    });
-    revalidatePath("/");
-    revalidatePath("/admin/categories");
-  } catch (error) {
-    console.error("Error creating category:", error);
-    throw error;
+  await prisma.category.create({
+    data: {
+      name,
+      slug,
+      description: description || null,
+      image: image || null,
+      isActive: true,
+      showOnHomepage,
+    },
+  });
+  revalidatePath("/");
+  revalidatePath("/admin/categories");
+}
+
+async function updateCategory(formData: FormData) {
+  "use server";
+  const id = Number.parseInt(String(formData.get("id") || ""), 10);
+  if (Number.isNaN(id)) {
+    throw new Error("Category id is required to update.");
   }
+
+  const existing = await prisma.category.findUnique({ where: { id } });
+  if (!existing) {
+    throw new Error("Category was not found.");
+  }
+
+  const { name, description, image, showOnHomepage } = readCategoryFields(formData);
+
+  let slug = existing.slug;
+  if (name !== existing.name) {
+    const nextSlug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    const clash = await prisma.category.findFirst({
+      where: { slug: nextSlug, NOT: { id } },
+      select: { id: true },
+    });
+    slug = clash ? `${nextSlug}-${id}` : nextSlug;
+  }
+
+  await prisma.category.update({
+    where: { id },
+    data: {
+      name,
+      slug,
+      description: description || null,
+      image: image || null,
+      showOnHomepage,
+    },
+  });
+
+  revalidatePath("/");
+  revalidatePath("/admin/categories");
+  redirect("/admin/categories");
 }
 
 async function deleteCategory(formData: FormData) {
@@ -41,20 +99,37 @@ async function toggleHomepageCategory(formData: FormData) {
   if (isNaN(id)) {
     throw new Error("Category id is required to update homepage visibility.");
   }
-  const showOnHomepage = formData.get("showOnHomepage") === "true";
+  const currentlyVisible = formData.get("showOnHomepage") === "true";
+  const existing = await prisma.category.findUnique({ where: { id } });
+  if (!existing) {
+    throw new Error("Category was not found.");
+  }
+  if (!currentlyVisible && !existing.image) {
+    throw new Error("Upload a category picture before showing it in Shop by Categories.");
+  }
   await prisma.category.update({
     where: { id },
-    data: { showOnHomepage: !showOnHomepage },
+    data: { showOnHomepage: !currentlyVisible },
   });
   revalidatePath("/");
   revalidatePath("/admin/categories");
 }
 
-export default async function CategoriesAdmin() {
+export default async function CategoriesAdmin({
+  searchParams,
+}: {
+  searchParams: Promise<{ edit?: string }>;
+}) {
+  const params = await searchParams;
   const categories = await prisma.category.findMany({
     orderBy: { createdAt: "desc" },
     include: { _count: { select: { products: true } } }
   });
+  const editId = Number.parseInt(params.edit || "", 10);
+  const editing = Number.isNaN(editId) ? null : categories.find((category) => category.id === editId) || null;
+  if (params.edit && !editing) {
+    throw new Error("Category was not found for editing.");
+  }
 
   return (
     <div className="space-y-6">
@@ -63,25 +138,38 @@ export default async function CategoriesAdmin() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-8">
-        {/* Add Form */}
+        {/* Add / Edit Form */}
         <div className="md:col-span-1 bg-white p-6 rounded-xl border border-slate-200 shadow-sm h-fit">
-          <h2 className="text-lg font-bold text-slate-800 mb-4">Add New Category</h2>
-          <form action={addCategory} className="space-y-4">
+          <h2 className="text-lg font-bold text-slate-800 mb-4">{editing ? "Edit Category" : "Add New Category"}</h2>
+          <p className="text-xs text-slate-500 mb-4">
+            Name and picture added here appear in Shop by Categories when you turn homepage visibility on.
+          </p>
+          <form action={editing ? updateCategory : addCategory} className="space-y-4">
+            {editing ? <input type="hidden" name="id" value={editing.id} /> : null}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Name</label>
-              <input name="name" type="text" required className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="e.g. Pet Food" />
+              <label className="block text-sm font-medium text-slate-700 mb-1">Category Name *</label>
+              <input name="name" type="text" required defaultValue={editing?.name || ""} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="e.g. Pet Food" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Category Picture</label>
+              <ImageUploader key={editing ? `category-${editing.id}` : "category-new"} name="image" defaultImage={editing?.image || ""} />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Description (Optional)</label>
-              <textarea name="description" rows={3} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Category details..." />
+              <textarea name="description" rows={3} defaultValue={editing?.description || ""} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Category details..." />
             </div>
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" name="showOnHomepage" className="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500" />
-              <span className="text-sm font-medium text-slate-700">Show on homepage</span>
+              <input type="checkbox" name="showOnHomepage" defaultChecked={Boolean(editing?.showOnHomepage)} className="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500" />
+              <span className="text-sm font-medium text-slate-700">Show in Shop by Categories</span>
             </label>
             <button type="submit" className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-lg transition-colors">
-              <Plus className="w-4 h-4" /> Save Category
+              <Plus className="w-4 h-4" /> {editing ? "Update Category" : "Save Category"}
             </button>
+            {editing ? (
+              <Link href="/admin/categories" className="block text-center text-sm font-semibold text-slate-600 hover:text-emerald-700">
+                Cancel edit
+              </Link>
+            ) : null}
           </form>
         </div>
 
@@ -90,6 +178,7 @@ export default async function CategoriesAdmin() {
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-50 border-b border-slate-200 text-slate-600">
               <tr>
+                <th className="px-6 py-4 font-semibold w-20">Picture</th>
                 <th className="px-6 py-4 font-semibold">Category Name</th>
                 <th className="px-6 py-4 font-semibold">Slug</th>
                 <th className="px-6 py-4 font-semibold">Products</th>
@@ -100,10 +189,20 @@ export default async function CategoriesAdmin() {
             <tbody className="divide-y divide-slate-100">
               {categories.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-slate-500">No categories found.</td>
+                  <td colSpan={6} className="px-6 py-8 text-center text-slate-500">No categories found.</td>
                 </tr>
               ) : categories.map((cat) => (
                 <tr key={cat.id} className="hover:bg-slate-50">
+                  <td className="px-6 py-4">
+                    {cat.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={toServedImageUrl(cat.image)} alt={cat.name} className="w-12 h-12 rounded-full object-cover border border-slate-200" />
+                    ) : (
+                      <span className="w-12 h-12 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-500">
+                        {cat.name.slice(0, 2).toUpperCase()}
+                      </span>
+                    )}
+                  </td>
                   <td className="px-6 py-4 font-medium text-slate-900">{cat.name}</td>
                   <td className="px-6 py-4 text-slate-500">{cat.slug}</td>
                   <td className="px-6 py-4 text-slate-500">{cat._count.products}</td>
@@ -123,13 +222,18 @@ export default async function CategoriesAdmin() {
                       </button>
                     </form>
                   </td>
-                  <td className="px-6 py-4 text-right flex justify-end gap-2">
-                    <form action={deleteCategory}>
-                      <input type="hidden" name="id" value={String(cat.id)} />
-                      <button type="submit" className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </form>
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex justify-end gap-2">
+                      <Link href={`/admin/categories?edit=${cat.id}`} title="Edit" className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
+                        <Edit className="w-4 h-4" />
+                      </Link>
+                      <form action={deleteCategory}>
+                        <input type="hidden" name="id" value={String(cat.id)} />
+                        <button type="submit" title="Delete" className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </form>
+                    </div>
                   </td>
                 </tr>
               ))}
