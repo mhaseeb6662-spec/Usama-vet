@@ -30,27 +30,20 @@ export default function CategoryScroller({ categories = [] }: { categories?: any
 
       if (scrollRef.current) {
         const { scrollWidth, clientWidth } = scrollRef.current;
-        
-        // Change direction smoothly if we hit the boundaries
-        if (directionRef.current === 1 && Math.ceil(exactPositionRef.current + clientWidth) >= scrollWidth - 2) {
-          directionRef.current = -1; // Turn left
-        } else if (directionRef.current === -1 && exactPositionRef.current <= 2) {
-          directionRef.current = 1; // Turn right
-        }
+        const maxScroll = Math.max(0, scrollWidth - clientWidth);
 
-        // Speed mapping: 0.08 px/ms (normal), 0 px/ms (completely STOP on hover)
-        const targetSpeed = isHovered ? 0 : 0.08;
-        
-        // Increment exact float position (only if not stopped)
-        if (targetSpeed > 0) {
-          exactPositionRef.current += (targetSpeed * deltaTime * directionRef.current);
-          
-          // Apply to DOM
+        if (maxScroll > 8 && !isHovered) {
+          if (directionRef.current === 1 && exactPositionRef.current >= maxScroll - 2) {
+            directionRef.current = -1;
+          } else if (directionRef.current === -1 && exactPositionRef.current <= 2) {
+            directionRef.current = 1;
+          }
+
+          exactPositionRef.current += 0.08 * deltaTime * directionRef.current;
           scrollRef.current.scrollLeft = exactPositionRef.current;
         }
-        
-        // If user manually swipes/scrolls, re-sync our float tracker
-        if (Math.abs(scrollRef.current.scrollLeft - exactPositionRef.current) > 2) {
+
+        if (isHovered || Math.abs(scrollRef.current.scrollLeft - exactPositionRef.current) > 2) {
           exactPositionRef.current = scrollRef.current.scrollLeft;
         }
       }
@@ -62,13 +55,7 @@ export default function CategoryScroller({ categories = [] }: { categories?: any
   }, [isHovered]);
 
   return (
-    <section 
-      className="py-10 px-4 max-w-7xl mx-auto overflow-hidden group/section"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onTouchStart={() => setIsHovered(true)}
-      onTouchEnd={() => setIsHovered(false)}
-    >
+    <section className="py-10 px-4 max-w-7xl mx-auto overflow-hidden group/section">
       {/* Small title matching screenshot */}
       <div className="text-center mb-6">
         <FadeUp distance={10}>
@@ -85,6 +72,10 @@ export default function CategoryScroller({ categories = [] }: { categories?: any
           ref={scrollRef}
           className="flex items-start gap-4 sm:gap-6 overflow-x-auto pb-6 scrollbar-none justify-start px-2"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onTouchStart={() => setIsHovered(true)}
+          onTouchEnd={() => setIsHovered(false)}
         >
           {/* Categories Array (No duplication as per user request) */}
           {categories.length === 0 ? (

@@ -62,7 +62,6 @@ export default function Header() {
 
   const menuLinks = [
     { name: "Home", href: "/" },
-    { name: "Shop", href: "/#products" },
     { name: "About Us", href: "/about" },
     { name: "Reviews", href: "/reviews" },
     { name: "Contact Us", href: "/contact" },
@@ -87,12 +86,9 @@ export default function Header() {
               <div className="w-16 h-16 rounded-full shadow-sm shrink-0 overflow-hidden bg-slate-50 border border-slate-200">
                 <Image src="/logo.jpg" alt="Veterinary Logo" width={64} height={64} className="w-full h-full object-cover" unoptimized />
               </div>
-              <div className="hidden sm:block leading-none text-left">
-                <span className="block font-bold text-slate-800 text-[22px] group-hover:text-[#009473] transition-colors uppercase">
-                  {BUSINESS_CONFIG.shortName}
-                </span>
-                <span className="block text-[11px] text-slate-450 font-medium uppercase mt-1">
-                  Veterinary Pharmacy
+              <div className="leading-none text-left">
+                <span className="block font-bold text-slate-800 text-[16px] sm:text-[20px] group-hover:text-[#009473] transition-colors">
+                  Usamavet & Surgical
                 </span>
               </div>
             </Link>

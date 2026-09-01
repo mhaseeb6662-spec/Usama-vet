@@ -71,14 +71,32 @@ function VideoCard({
   );
 }
 
-export default function JourneyVideos({ videos = [] }: { videos?: AboutVideoItem[] }) {
+export default function JourneyVideos({ videos: initialVideos = [] }: { videos?: AboutVideoItem[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const exactPositionRef = useRef(0);
   const isInitializedRef = useRef(false);
+  const [videos, setVideos] = useState<AboutVideoItem[]>(initialVideos);
   const [isHovered, setIsHovered] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+
+  useEffect(() => {
+    if (initialVideos.length > 0) {
+      return;
+    }
+    fetch("/api/about-videos")
+      .then(async (res) => {
+        const payload = await res.json();
+        if (!res.ok || !payload.success) {
+          throw new Error(payload.message || "Could not load about videos.");
+        }
+        setVideos(payload.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [initialVideos.length]);
 
   const checkScrollState = () => {
     if (!scrollRef.current) return;

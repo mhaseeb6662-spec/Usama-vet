@@ -53,11 +53,8 @@ export default function Footer() {
               <img src="/logo.jpg" alt="Veterinary Logo" className="w-full h-full object-cover" />
             </div>
             <div>
-              <span className="block font-bold text-slate-900 leading-none text-[18px] uppercase">
-                {BUSINESS_CONFIG.shortName}
-              </span>
-              <span className="block text-[12px] text-slate-450 font-medium uppercase mt-1">
-                Veterinary Pharmacy
+              <span className="block font-bold text-slate-900 leading-none text-[18px]">
+                Usamavet & Surgical
               </span>
             </div>
           </div>

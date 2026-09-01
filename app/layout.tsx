@@ -27,6 +27,11 @@ export const metadata: Metadata = {
     "Usama Vet Care",
   ],
   authors: [{ name: BUSINESS_CONFIG.name }],
+  icons: {
+    icon: [{ url: "/logo.jpg", type: "image/jpeg" }],
+    shortcut: "/logo.jpg",
+    apple: "/logo.jpg",
+  },
   robots: {
     index: true,
     follow: true,

@@ -10,11 +10,23 @@ import {
 import Link from "next/link";
 
 export default async function AdminDashboard() {
-  // Fetch real stats
-  const totalProducts = await prisma.product.count();
-  const totalOrders = await prisma.order.count();
-  const pendingOrders = await prisma.order.count({ where: { status: "PENDING" } });
-  const pendingReviews = await prisma.review.count({ where: { status: "PENDING" } });
+  let totalProducts = 0;
+  let totalOrders = 0;
+  let pendingOrders = 0;
+  let pendingReviews = 0;
+  let loadError = "";
+
+  try {
+    [totalProducts, totalOrders, pendingOrders, pendingReviews] = await Promise.all([
+      prisma.product.count(),
+      prisma.order.count(),
+      prisma.order.count({ where: { status: "PENDING" } }),
+      prisma.review.count({ where: { status: "PENDING" } }),
+    ]);
+  } catch (error) {
+    console.error("[admin] dashboard stats failed:", error);
+    loadError = "Could not load dashboard stats. Please try again.";
+  }
 
   const stats = [
     { title: "Total Products", value: totalProducts, icon: Package, color: "bg-blue-500", link: "/admin/products" },
@@ -31,6 +43,10 @@ export default async function AdminDashboard() {
           <p className="text-slate-500 text-sm mt-1">Welcome to the Usama Vet Admin control panel.</p>
         </div>
       </div>
+
+      {loadError ? (
+        <div className="bg-white border border-slate-200 rounded-xl p-6 text-slate-600">{loadError}</div>
+      ) : null}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, idx) => (
