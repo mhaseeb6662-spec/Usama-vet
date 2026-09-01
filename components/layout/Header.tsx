@@ -13,10 +13,18 @@ import MainNav from "./MainNav";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useCart } from "@/components/cart/CartProvider";
 
-export default function Header({ categories = [] }: { categories?: any[] }) {
+type NavCategory = {
+  id: string;
+  slug: string;
+  name: string;
+  iconName?: string;
+};
+
+export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [categories, setCategories] = useState<NavCategory[]>([]);
   const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
   const { count } = useCart();
@@ -37,6 +45,20 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || "Could not load categories.");
+        }
+        setCategories(data.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const menuLinks = [
     { name: "Home", href: "/" },

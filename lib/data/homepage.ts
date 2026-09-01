@@ -111,8 +111,12 @@ export const getHomepageCatalog = cache(async () => {
   try {
     const products = await prisma.product.findMany({
       where: { isActive: true },
-      take: 48,
-      include: { category: true, images: true, brand: true },
+      take: 24,
+      include: {
+        images: { orderBy: { sortOrder: "asc" }, take: 2 },
+        category: { select: { id: true, name: true, slug: true } },
+        brand: { select: { id: true, name: true } },
+      },
       orderBy: { createdAt: "desc" },
     });
 

@@ -71,24 +71,17 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-import { getAllActiveCategories } from "@/lib/data/homepage";
-
-export const revalidate = 60;
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // getAllActiveCategories already handles DB errors internally and returns [] on failure
-  const categories = await getAllActiveCategories();
-
   return (
     <html lang="en" className="h-full antialiased">
       <body className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans relative">
         <AnimatedBackground />
         <AppProviders>
-          <Header categories={categories} />
+          <Header />
           <main className="flex-grow">
             {children}
           </main>

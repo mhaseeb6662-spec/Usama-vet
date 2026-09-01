@@ -23,15 +23,44 @@ import NewsletterSection from "@/components/home/NewsletterSection";
 // Same pattern as /categories and /products: never let Hostinger CDN pin a year-old homepage.
 export const dynamic = "force-dynamic";
 
+const EMPTY_CATALOG = {
+  featured: [],
+  newArrivals: [],
+  bestSellers: [],
+  recommended: [],
+  trending: [],
+  livestock: [],
+  petCare: [],
+  supplements: [],
+};
+
+function withHomeTimeout<T>(label: string, task: Promise<T>, fallback: T, ms = 6000): Promise<T> {
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => {
+      console.error(`[home] ${label} timed out after ${ms}ms`);
+      resolve(fallback);
+    }, ms);
+    task.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timer);
+        console.error(`[home] ${label} failed:`, error);
+        resolve(fallback);
+      }
+    );
+  });
+}
+
 export default async function HomePage() {
-  // Try fetching dynamic data, fallback to mock data if database is empty/unseeded
-  // All query functions have built-in try/catch and return [] on DB failure
   const [catalog, dbHeroSlides, dbBanners, homepageCategories, approvedReviews] = await Promise.all([
-    getHomepageCatalog(),
-    getActiveHeroSlides(),
-    getActiveBanners(),
-    getHomepageCategories(),
-    getApprovedHomeReviews(),
+    withHomeTimeout("catalog", getHomepageCatalog(), EMPTY_CATALOG),
+    withHomeTimeout("hero", getActiveHeroSlides(), []),
+    withHomeTimeout("banners", getActiveBanners(), []),
+    withHomeTimeout("categories", getHomepageCategories(), []),
+    withHomeTimeout("reviews", getApprovedHomeReviews(), []),
   ]);
 
   const dbFeatured = catalog.featured;

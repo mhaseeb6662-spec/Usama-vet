@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 export default function GlobalError({
   error,
   reset,
@@ -7,20 +9,22 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  useEffect(() => {
+    console.error("App error:", error);
+  }, [error]);
+
   return (
     <html lang="en">
-      <body>
-        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem", fontFamily: "system-ui, sans-serif" }}>
-          <div style={{ textAlign: "center", maxWidth: "400px" }}>
-            <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#1e293b", marginBottom: "0.75rem" }}>
-              Something went wrong
-            </h2>
-            <p style={{ color: "#64748b", marginBottom: "1.5rem" }}>
-              We&apos;re experiencing a brief issue. Please try again.
+      <body className="min-h-screen bg-slate-50 text-slate-900">
+        <div className="min-h-screen flex items-center justify-center px-4">
+          <div className="text-center max-w-md">
+            <h2 className="text-2xl font-bold text-slate-800 mb-3">Page Temporarily Unavailable</h2>
+            <p className="text-slate-500 mb-6">
+              We&apos;re experiencing a brief connection issue. Please try again in a moment.
             </p>
             <button
               onClick={() => reset()}
-              style={{ backgroundColor: "#009473", color: "white", fontWeight: "600", padding: "0.75rem 2rem", borderRadius: "0.5rem", border: "none", cursor: "pointer", fontSize: "1rem" }}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-8 py-3 rounded-lg"
             >
               Try Again
             </button>
