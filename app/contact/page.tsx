@@ -24,12 +24,14 @@ export default function ContactPage() {
       {/* Breadcrumb Schema */}
       <BreadcrumbsSchema items={breadcrumbs} />
 
-      <section className="w-full bg-emerald-950">
-        <div className="max-w-6xl mx-auto px-4 py-10 md:py-14 text-center">
-          <h1 className="text-2xl md:text-4xl font-bold text-white">Contact Usama Vet</h1>
-          <p className="mt-3 text-slate-200 text-sm md:text-base max-w-2xl mx-auto">
-            Call, WhatsApp, or send a message. We respond during store hours.
-          </p>
+      {/* PAGE HERO BANNER */}
+      <section className="w-full bg-slate-100">
+        <div className="w-full max-w-[1600px] mx-auto">
+          <img
+            src="/images/contact/hero-banner.jpg"
+            alt="Contact Usama Vet Clinic"
+            className="w-full h-auto object-contain sm:object-cover sm:max-h-[600px] md:max-h-[700px]"
+          />
         </div>
       </section>
 
