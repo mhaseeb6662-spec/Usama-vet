@@ -20,7 +20,7 @@ import LowerTrustStrip from "@/components/home/LowerTrustStrip";
 import NewsletterSection from "@/components/home/NewsletterSection";
 
 // Force dynamic rendering so Next.js doesn't try to query the database during Hostinger's build step
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export default async function HomePage() {
   // Try fetching dynamic data, fallback to mock data if database is empty/unseeded
