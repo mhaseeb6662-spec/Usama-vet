@@ -1,10 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Hostinger Node plans cannot afford Sharp/image optimization on every request.
-  // Header already uses unoptimized images for the same reason.
   images: {
     unoptimized: true,
   },
+  compress: true,
+  poweredByHeader: false,
   serverExternalPackages: ["@prisma/client", "prisma"],
   experimental: {
     serverActions: {
@@ -19,6 +20,24 @@ const nextConfig = {
           {
             key: "Cache-Control",
             value: "private, no-cache, no-store, max-age=0, must-revalidate",
+          },
+        ],
+      },
+      {
+        source: "/images/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
+      {
+        source: "/:file(logo.jpg|bg-texture-1.jpg)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },

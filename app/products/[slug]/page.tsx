@@ -33,13 +33,16 @@ export async function generateMetadata({ params }: ProductPageProps) {
     };
   }
 
-  const primaryImage = product.images.find((img: any) => img.isPrimary)?.imageUrl 
-    || product.images[0]?.imageUrl 
-    || "/images/og-default.jpg";
+  const primaryImage = toServedImageUrl(
+    product.images.find((img: any) => img.isPrimary)?.imageUrl
+      || product.images[0]?.imageUrl
+      || "/images/og-default.jpg"
+  );
 
   return {
     title: product.seoTitle || product.name,
     description: product.metaDescription || product.shortDescription,
+    robots: product.indexable === false ? { index: false, follow: true } : { index: true, follow: true },
     alternates: {
       canonical: `/products/${product.slug}`,
     },

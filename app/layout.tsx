@@ -60,9 +60,6 @@ export const metadata: Metadata = {
     description: BUSINESS_CONFIG.description,
     images: ["/images/og-default.jpg"],
   },
-  alternates: {
-    canonical: "./",
-  },
 };
 
 export const viewport: Viewport = {
@@ -78,7 +75,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans relative">
+      <body className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans relative overflow-x-hidden">
         <AnimatedBackground />
         <AppProviders>
           <Header />

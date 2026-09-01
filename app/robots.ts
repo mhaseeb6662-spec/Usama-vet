@@ -7,16 +7,18 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: ["/", "/about", "/reviews", "/contact", "/products/", "/categories/"],
+      allow: "/",
       disallow: [
+        "/admin",
+        "/admin/",
+        "/account",
+        "/account/",
         "/cart",
         "/checkout",
         "/order-success",
         "/track-order",
         "/order-tracking",
-        "/account",
-        "/admin",
-        "/*?q=", // Disallow search query result crawling to prevent duplicate pages
+        "/api/",
       ],
     },
     sitemap: `${baseUrl}/sitemap.xml`,

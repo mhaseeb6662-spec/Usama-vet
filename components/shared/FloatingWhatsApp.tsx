@@ -6,7 +6,7 @@ import { BUSINESS_CONFIG } from "@/lib/constants/config";
 
 export default function FloatingWhatsApp() {
   return (
-    <div className="fixed bottom-6 left-6 z-[9999] flex items-center justify-center pointer-events-none">
+    <div className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-[9999] flex items-center justify-center pointer-events-none pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)]">
       
       {/* Container to handle pointer events only for the button area */}
       <div className="relative flex items-center justify-center pointer-events-auto">

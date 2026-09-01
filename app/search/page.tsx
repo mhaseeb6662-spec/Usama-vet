@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Search Products",
+  robots: { index: false, follow: true },
 };
 
 export default async function SearchPage({

@@ -71,8 +71,10 @@ export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={imageSrc}
-              alt=""
+              alt="Usama Vet homepage banner"
               className="w-full h-full object-cover"
+              fetchPriority="high"
+              decoding="async"
               onError={() => setImageFailed(true)}
             />
           ) : (

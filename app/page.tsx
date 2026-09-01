@@ -23,6 +23,12 @@ import NewsletterSection from "@/components/home/NewsletterSection";
 // Same pattern as /categories and /products: never let Hostinger CDN pin a year-old homepage.
 export const dynamic = "force-dynamic";
 
+export const metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
+
 const EMPTY_CATALOG = {
   featured: [],
   newArrivals: [],

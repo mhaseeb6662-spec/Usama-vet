@@ -11,14 +11,22 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: "Customer Reviews | Usama Vet & Poultry Store",
   description: "Read trusted reviews from dairy farmers and pet owners across Pakistan.",
+  alternates: {
+    canonical: "/reviews",
+  },
 };
 
 export default async function ReviewsPage() {
-  // Fetch real APPROVED reviews from DB
-  const reviews = await prisma.review.findMany({
-    where: { status: "APPROVED" },
-    orderBy: { createdAt: "desc" },
-  });
+  let reviews: Awaited<ReturnType<typeof prisma.review.findMany>> = [];
+  try {
+    reviews = await prisma.review.findMany({
+      where: { status: "APPROVED" },
+      orderBy: { createdAt: "desc" },
+      take: 48,
+    });
+  } catch (error) {
+    console.error("[reviews] Failed to load reviews:", error);
+  }
 
   return (
     <main className="bg-slate-50 min-h-screen">

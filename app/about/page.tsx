@@ -12,6 +12,9 @@ import { getAboutVideos } from "@/lib/data/aboutVideos";
 export const metadata: Metadata = {
   title: "About Us | Veterinary & Animal Care Products in Pakistan | Usama Vet",
   description: "Learn about Usama Vet Care, your trusted destination for veterinary medicines, livestock products, poultry supplements, and pet care essentials in Pakistan.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export const dynamic = "force-dynamic";

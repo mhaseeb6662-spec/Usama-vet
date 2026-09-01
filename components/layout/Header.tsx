@@ -98,7 +98,7 @@ export default function Header() {
             </Link>
 
             {/* Pill Search Bar */}
-            <div className="hidden md:flex flex-grow max-w-2xl relative">
+            <div className="hidden md:flex flex-grow min-w-0 max-w-2xl relative">
               <HeaderSearch variant="desktop" />
             </div>
 
