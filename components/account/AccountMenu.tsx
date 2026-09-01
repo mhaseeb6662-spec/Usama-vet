@@ -39,7 +39,7 @@ export default function AccountMenu() {
   if (!loaded || !customer) {
     return (
       <Link href="/account/login" className="flex items-center gap-2.5 hover:text-[#009473] transition-colors focus:outline-none text-left group">
-        <div className="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 hover-scale-subtle">
+        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 hover-scale-subtle">
           <User className="w-5 h-5" />
         </div>
         <span className="hidden lg:inline text-[15px] font-semibold text-slate-700 group-hover:text-[#009473] transition-colors">
@@ -50,8 +50,8 @@ export default function AccountMenu() {
   }
 
   return (
-    <div className="flex items-center gap-3">
-      <Link href="/account#updates" className="relative w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center hover:text-[#009473]" aria-label="Product updates">
+    <div className="flex items-center gap-1 sm:gap-3">
+      <Link href="/account#updates" className="relative hidden sm:flex w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 bg-white items-center justify-center hover:text-[#009473]" aria-label="Product updates">
         <Bell className="w-5 h-5" />
         {customer.unreadAlerts > 0 ? (
           <span className="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1 bg-[#009473] text-white text-[11px] font-bold rounded-full flex items-center justify-center border-2 border-white">
@@ -60,7 +60,7 @@ export default function AccountMenu() {
         ) : null}
       </Link>
       <Link href="/account" className="flex items-center gap-2.5 hover:text-[#009473] transition-colors focus:outline-none text-left group">
-        <div className="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 hover-scale-subtle">
+        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 hover-scale-subtle">
           <User className="w-5 h-5" />
         </div>
         <span className="hidden lg:inline text-[15px] font-semibold text-slate-700 group-hover:text-[#009473] transition-colors max-w-[120px] truncate">

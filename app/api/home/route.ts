@@ -6,6 +6,7 @@ import {
   getActiveBanners,
 } from "@/lib/data/homepage";
 import { getApprovedHomeReviews } from "@/lib/data/reviews";
+import { withDatabaseRetry } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -33,13 +34,15 @@ export async function GET() {
   }
 
   try {
-    const [catalog, heroSlides, banners, categories, reviews] = await Promise.all([
-      getHomepageCatalog(),
-      getActiveHeroSlides(),
-      getActiveBanners(),
-      getHomepageCategories(),
-      getApprovedHomeReviews(),
-    ]);
+    const [catalog, heroSlides, banners, categories, reviews] = await withDatabaseRetry(() =>
+      Promise.all([
+        getHomepageCatalog(),
+        getActiveHeroSlides(),
+        getActiveBanners(),
+        getHomepageCategories(),
+        getApprovedHomeReviews(),
+      ])
+    );
 
     const data = { catalog, heroSlides, banners, categories, reviews };
     homeCache = { expiresAt: Date.now() + HOME_CACHE_MS, data };

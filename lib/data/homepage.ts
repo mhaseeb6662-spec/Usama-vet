@@ -2,7 +2,6 @@ import { prisma } from "@/lib/db";
 import { cache } from "react";
 import { mapProductToUI, mapCategoryToUI } from "./adapters";
 import { isPersistentPublicImage, toServedImageUrl } from "@/lib/mediaUrl";
-import { ensureCategorySchema } from "@/lib/services/categorySchema";
 
 function serialize<T>(data: T): T {
   return JSON.parse(JSON.stringify(data, (_, value) =>
@@ -33,7 +32,6 @@ export const getActiveHeroSlides = cache(async () => {
 
 export const getHomepageCategories = cache(async () => {
   try {
-    await ensureCategorySchema();
     const cats = await prisma.category.findMany({
       where: { isActive: true, showOnHomepage: true },
       orderBy: { sortOrder: "asc" },
@@ -47,7 +45,6 @@ export const getHomepageCategories = cache(async () => {
 
 export const getAllActiveCategories = cache(async () => {
   try {
-    await ensureCategorySchema();
     const cats = await prisma.category.findMany({
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },

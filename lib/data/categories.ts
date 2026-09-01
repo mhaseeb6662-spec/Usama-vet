@@ -1,7 +1,6 @@
 import { cache } from "react";
 import { prisma } from "@/lib/db";
 import { mapProductToUI } from "@/lib/data/adapters";
-import { ensureCategorySchema } from "@/lib/services/categorySchema";
 import type { Product as UIProduct } from "@/types";
 
 export class CategoryApplicationError extends Error {
@@ -27,8 +26,6 @@ export const getCategoryListing = cache(async (slug: string): Promise<CategoryLi
   if (!normalized) {
     throw new CategoryApplicationError("Category is required.", 400);
   }
-
-  await ensureCategorySchema();
 
   const category = await prisma.category.findUnique({
     where: { slug: normalized },

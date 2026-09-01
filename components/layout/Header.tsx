@@ -47,6 +47,17 @@ export default function Header() {
   }, [pathname]);
 
   useEffect(() => {
+    if (!isMobileMenuOpen) {
+      return;
+    }
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
     fetch("/api/categories")
       .then(async (res) => {
         const data = await res.json();
@@ -75,19 +86,19 @@ export default function Header() {
       </div>
 
       <div
-        className={`sticky top-0 z-40 w-full transition-all duration-200 ${scrolled ? "shadow-md" : ""}`}
+        className={`sticky top-0 z-40 w-full relative transition-all duration-200 ${scrolled ? "shadow-md" : ""}`}
       >
         {/* 2. MAIN HEADER (Logo, Search Pill, Actions) */}
-        <header className="bg-white/80 backdrop-blur-xl border-b border-slate-100 py-5 px-4">
-          <div className="max-w-7xl mx-auto flex justify-between items-center gap-6">
+        <header className="bg-white/80 backdrop-blur-xl border-b border-slate-100 py-3 px-3 sm:py-5 sm:px-4">
+          <div className="max-w-7xl mx-auto flex justify-between items-center gap-2 sm:gap-4 lg:gap-6 min-w-0">
             
             {/* Logo Group */}
-            <Link href="/" className="flex items-center gap-3 group shrink-0 focus:outline-none">
-              <div className="w-16 h-16 rounded-full shadow-sm shrink-0 overflow-hidden bg-slate-50 border border-slate-200">
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 min-w-0 group focus:outline-none">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full shadow-sm shrink-0 overflow-hidden bg-slate-50 border border-slate-200">
                 <Image src="/logo.jpg" alt="Veterinary Logo" width={64} height={64} className="w-full h-full object-cover" unoptimized />
               </div>
-              <div className="leading-none text-left">
-                <span className="block font-bold text-slate-800 text-[16px] sm:text-[20px] group-hover:text-[#009473] transition-colors">
+              <div className="leading-tight text-left min-w-0">
+                <span className="block font-bold text-slate-800 text-[13px] sm:text-[16px] lg:text-[20px] group-hover:text-[#009473] transition-colors break-words">
                   Usamavet & Surgical
                 </span>
               </div>
@@ -99,7 +110,7 @@ export default function Header() {
             </div>
 
             {/* Right Side Actions: Login & Cart */}
-            <div className="flex items-center gap-6 shrink-0">
+            <div className="flex items-center gap-1 sm:gap-2.5 lg:gap-6 shrink-0">
               
               <AccountMenu />
 
@@ -108,7 +119,7 @@ export default function Header() {
                 href="/cart"
                 className="flex items-center gap-2.5 hover:text-[#009473] transition-colors focus:outline-none text-left group"
               >
-                <div className="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 relative hover-scale-subtle">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 relative hover-scale-subtle">
                   <ShoppingCart className="w-5 h-5" />
                   <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-[#009473] text-white text-[11px] font-bold rounded-full flex items-center justify-center border-2 border-white">
                     {count}
@@ -122,7 +133,7 @@ export default function Header() {
               {/* Mobile Search Toggle */}
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="md:hidden p-2 text-slate-600 hover:text-[#009473] hover:bg-slate-50 rounded-full transition-colors focus:outline-none hover-scale-subtle"
+                className="md:hidden w-9 h-9 flex items-center justify-center text-slate-600 hover:text-[#009473] hover:bg-slate-50 rounded-full transition-colors focus:outline-none hover-scale-subtle"
                 aria-label="Search"
               >
                 <Search className="w-5 h-5" />
@@ -131,7 +142,7 @@ export default function Header() {
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden p-2 text-slate-600 hover:text-[#009473] hover:bg-slate-50 rounded-full transition-colors focus:outline-none hover-scale-subtle"
+                className="lg:hidden w-9 h-9 flex items-center justify-center text-slate-600 hover:text-[#009473] hover:bg-slate-50 rounded-full transition-colors focus:outline-none hover-scale-subtle"
                 aria-expanded={isMobileMenuOpen}
                 aria-label="Menu"
               >
@@ -160,7 +171,7 @@ export default function Header() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-slate-200 shadow-xl py-4 px-4 space-y-4 overflow-hidden"
+              className="lg:hidden absolute top-full left-0 right-0 z-50 w-full max-h-[min(70vh,calc(100dvh-8rem))] bg-white border-t border-slate-200 shadow-xl py-4 px-4 space-y-4 overflow-y-auto"
             >
               <motion.nav
                 initial="hidden"
@@ -186,9 +197,26 @@ export default function Header() {
                   >
                     <Link
                       href={link.href}
-                      className="px-3 py-2 rounded-md font-semibold text-xs uppercase text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors block"
+                      className="px-3 py-3 rounded-md font-semibold text-sm uppercase text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors block"
                     >
                       {link.name}
+                    </Link>
+                  </motion.div>
+                ))}
+                {categories.map((category) => (
+                  <motion.div
+                    key={category.id}
+                    variants={{
+                      hidden: { opacity: 0, x: shouldReduceMotion ? 0 : -8 },
+                      show: { opacity: 1, x: 0 }
+                    }}
+                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <Link
+                      href={`/categories/${category.slug}`}
+                      className="px-3 py-3 rounded-md font-semibold text-sm text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors block"
+                    >
+                      {category.name}
                     </Link>
                   </motion.div>
                 ))}

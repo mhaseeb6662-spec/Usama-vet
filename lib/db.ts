@@ -15,9 +15,9 @@ function withMysqlPoolLimits(url: string): string {
 
   const separator = url.includes("?") ? "&" : "?";
   const extras: string[] = [];
-  if (!url.includes("connection_limit=")) extras.push("connection_limit=5");
-  if (!url.includes("connect_timeout=")) extras.push("connect_timeout=5");
-  if (!url.includes("pool_timeout=")) extras.push("pool_timeout=8");
+  if (!url.includes("connection_limit=")) extras.push("connection_limit=10");
+  if (!url.includes("connect_timeout=")) extras.push("connect_timeout=8");
+  if (!url.includes("pool_timeout=")) extras.push("pool_timeout=10");
   return extras.length === 0 ? url : `${url}${separator}${extras.join("&")}`;
 }
 
@@ -40,6 +40,30 @@ function createPrismaClient(): PrismaClient {
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
 globalForPrisma.prisma = prisma;
+
+export async function pingDatabase(): Promise<void> {
+  await prisma.$queryRaw`SELECT 1`;
+}
+
+export function isDatabaseConnectionError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+  return /P1001|P1002|P1008|P1017|can't reach|timed out|ECONNREFUSED|ECONNRESET|pool timeout/i.test(
+    message
+  );
+}
+
+export async function withDatabaseRetry<T>(operation: () => Promise<T>): Promise<T> {
+  try {
+    return await operation();
+  } catch (error) {
+    if (!isDatabaseConnectionError(error)) {
+      throw error;
+    }
+    console.error("[DB] First connection failed, retrying once:", error);
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    return operation();
+  }
+}
 
 export async function safeQuery<T>(queryFn: () => Promise<T>, fallback: T): Promise<T> {
   try {
