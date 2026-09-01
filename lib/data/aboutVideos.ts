@@ -41,8 +41,8 @@ export const getAboutVideos = cache(async (): Promise<AboutVideoItem[]> => {
       id: String(video.id),
       title: video.title,
       description: video.description || "",
-      url: video.embedUrl,
-      thumbnail: video.thumbnail,
+      url: video.videoUrl || video.embedUrl,
+      thumbnail: video.thumbnail || "",
     }));
   } catch (error) {
     console.error("[DB] getAboutVideos failed:", error);

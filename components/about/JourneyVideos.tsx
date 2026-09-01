@@ -24,22 +24,33 @@ function VideoCard({
     <div className="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-shadow group flex flex-col h-full">
       <div className="relative w-full aspect-video bg-slate-900 overflow-hidden">
         {isPlaying ? (
-          <iframe
-            src={`${video.url}?autoplay=1`}
+          <video
+            src={video.url}
             title={video.title}
-            className="w-full h-full border-0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
+            className="w-full h-full object-cover"
+            controls
+            autoPlay
+            playsInline
           />
         ) : (
           <>
-            <Image
-              src={video.thumbnail}
-              alt={video.title}
-              fill
-              className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
-              unoptimized
-            />
+            {video.thumbnail ? (
+              <Image
+                src={video.thumbnail}
+                alt={video.title}
+                fill
+                className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
+                unoptimized
+              />
+            ) : (
+              <video
+                src={video.url}
+                className="absolute inset-0 w-full h-full object-cover opacity-80"
+                muted
+                playsInline
+                preload="metadata"
+              />
+            )}
             <button
               onClick={playVideo}
               className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors"

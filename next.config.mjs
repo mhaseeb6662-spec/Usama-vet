@@ -6,6 +6,11 @@ const nextConfig = {
     unoptimized: true,
   },
   serverExternalPackages: ["@prisma/client", "prisma"],
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "50mb",
+    },
+  },
   async headers() {
     return [
       {

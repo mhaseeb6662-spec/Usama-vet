@@ -2,22 +2,28 @@ import React from "react";
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { Plus, Trash2 } from "lucide-react";
-import { parseYoutubeUrl } from "@/lib/youtube";
 import { ensureAboutVideoTable } from "@/lib/data/aboutVideos";
+import VideoUploader from "@/components/admin/ui/VideoUploader";
+import ImageUploader from "@/components/admin/ui/ImageUploader";
+import { deleteVideo } from "@/lib/videoStorage";
+import { deleteImage } from "@/lib/imageStorage";
 
 async function addAboutVideo(formData: FormData) {
   "use server";
   const title = String(formData.get("title") || "").trim();
   const description = String(formData.get("description") || "").trim();
   const videoUrl = String(formData.get("videoUrl") || "").trim();
+  const thumbnail = String(formData.get("thumbnail") || "").trim();
   const sortOrderRaw = String(formData.get("sortOrder") || "0").trim();
   const sortOrder = Number.parseInt(sortOrderRaw, 10);
 
   if (!title) {
     throw new Error("Video title is required.");
   }
+  if (!videoUrl.startsWith("/api/videos/")) {
+    throw new Error("Upload a video file before saving.");
+  }
 
-  const parsed = parseYoutubeUrl(videoUrl);
   await ensureAboutVideoTable();
 
   await prisma.aboutVideo.create({
@@ -25,8 +31,8 @@ async function addAboutVideo(formData: FormData) {
       title,
       description: description || null,
       videoUrl,
-      embedUrl: parsed.embedUrl,
-      thumbnail: parsed.thumbnail,
+      embedUrl: videoUrl,
+      thumbnail,
       sortOrder: Number.isNaN(sortOrder) ? 0 : sortOrder,
       isActive: true,
     },
@@ -60,7 +66,16 @@ async function deleteAboutVideo(formData: FormData) {
     throw new Error("Video id is required to delete.");
   }
 
+  const video = await prisma.aboutVideo.findUnique({ where: { id } });
+  if (!video) {
+    throw new Error("Video was not found.");
+  }
+
   await prisma.aboutVideo.delete({ where: { id } });
+  await deleteVideo(video.videoUrl);
+  if (video.thumbnail) {
+    await deleteImage(video.thumbnail);
+  }
 
   revalidatePath("/about");
   revalidatePath("/admin/videos");
@@ -80,7 +95,7 @@ export default async function AboutVideosAdmin() {
 
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-1 bg-white p-6 rounded-xl border border-slate-200 shadow-sm h-fit">
-          <h2 className="text-lg font-bold text-slate-800 mb-4">Add YouTube Video</h2>
+          <h2 className="text-lg font-bold text-slate-800 mb-4">Upload Video</h2>
           <form action={addAboutVideo} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Title *</label>
@@ -91,8 +106,12 @@ export default async function AboutVideosAdmin() {
               <textarea name="description" rows={3} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none resize-y" placeholder="Short text under the video..." />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">YouTube URL *</label>
-              <input name="videoUrl" type="url" required className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="https://www.youtube.com/watch?v=..." />
+              <label className="block text-sm font-medium text-slate-700 mb-2">Video File *</label>
+              <VideoUploader name="videoUrl" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Cover Image (optional)</label>
+              <ImageUploader name="thumbnail" />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Sort Order</label>
@@ -117,13 +136,17 @@ export default async function AboutVideosAdmin() {
             <tbody className="divide-y divide-slate-100">
               {videos.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-slate-500">No videos yet. Add a YouTube link to show it on the About page.</td>
+                  <td colSpan={4} className="px-6 py-8 text-center text-slate-500">No videos yet. Upload a video to show it on the About page.</td>
                 </tr>
               ) : videos.map((video) => (
                 <tr key={video.id} className="hover:bg-slate-50">
                   <td className="px-6 py-4">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={video.thumbnail} alt={video.title} className="w-20 h-12 object-cover rounded shadow-sm border border-slate-200" />
+                    {video.thumbnail ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={video.thumbnail} alt={video.title} className="w-20 h-12 object-cover rounded shadow-sm border border-slate-200" />
+                    ) : (
+                      <video src={video.videoUrl} className="w-20 h-12 object-cover rounded shadow-sm border border-slate-200" muted />
+                    )}
                   </td>
                   <td className="px-6 py-4">
                     <p className="font-bold text-slate-900">{video.title}</p>
