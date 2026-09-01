@@ -100,15 +100,7 @@ export default function HomeStorefront() {
       <HeroCarousel slides={dbHeroSlides} />
       <CategoryScroller categories={homepageCategories} />
       <TrustStrip />
-      <PromoBanner
-        badgeText={promo1 ? promo1.name : "Special Campaign"}
-        title={promo1?.title || "Amazing Offers Inside: Save up to 20% on Veterinary Medicines"}
-        subTitle={promo1?.subtitle || "Get premium antibiotics, dewormers and cattle calcium injections at direct farm rates. Temperature controlled shipping included."}
-        bgClass={promo1?.image ? "bg-contain bg-center bg-no-repeat bg-slate-100" : "bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500"}
-        textClass="text-slate-950 font-sans"
-        href={promo1?.ctaUrl || "#products"}
-        style={promo1?.image ? { backgroundImage: `url(${promo1.image})` } : undefined}
-      />
+      <PromoBanner image={promo1?.image} />
       <ProductTabs
         featuredProducts={catalog.featured}
         newArrivals={catalog.newArrivals}
@@ -148,15 +140,7 @@ export default function HomeStorefront() {
         bgColorClass="bg-cyan-50/70 backdrop-blur-md"
         viewAllHref="/#products"
       />
-      <PromoBanner
-        badgeText={promo2 ? promo2.name : "Seasonal Boost"}
-        title={promo2?.title || "Best Offers of the Season: Nutritional Dairy Enhancers"}
-        subTitle={promo2?.subtitle || "Enhance daily milk fat percentage and protect cattle from ketosis. Secure dry-pack casing on bulk orders."}
-        bgClass={promo2?.image ? "bg-contain bg-center bg-no-repeat bg-emerald-900" : "bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-850"}
-        textClass="text-white"
-        href={promo2?.ctaUrl || "#products"}
-        style={promo2?.image ? { backgroundImage: `url(${promo2.image})` } : undefined}
-      />
+      <PromoBanner image={promo2?.image} />
       <ProductSection
         preTitle="Dogs, Cats & Birds"
         title="Pet & Animal Care"

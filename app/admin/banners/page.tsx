@@ -7,18 +7,10 @@ import { Plus, Trash2, Edit } from "lucide-react";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
 import { toServedImageUrl } from "@/lib/mediaUrl";
 
-function readBannerFields(formData: FormData) {
-  const name = String(formData.get("name") || "").trim();
-  const title = String(formData.get("title") || "").trim();
-  const subtitle = String(formData.get("subtitle") || "").trim();
-  const ctaText = String(formData.get("ctaText") || "").trim();
-  const ctaUrl = String(formData.get("ctaUrl") || "").trim();
+function readBannerImage(formData: FormData) {
   const image = String(formData.get("image") || "").trim();
   const position = String(formData.get("position") || "").trim();
 
-  if (!name) {
-    throw new Error("Banner name is required.");
-  }
   if (!image) {
     throw new Error("Banner image is required.");
   }
@@ -26,12 +18,20 @@ function readBannerFields(formData: FormData) {
     throw new Error("Banner position is invalid.");
   }
 
-  return { name, title, subtitle, ctaText, ctaUrl, image, position };
+  return {
+    name: position === "promo-1" ? "Promo Slot 1" : "Promo Slot 2",
+    title: null,
+    subtitle: null,
+    ctaText: null,
+    ctaUrl: null,
+    image,
+    position,
+  };
 }
 
 async function addBanner(formData: FormData) {
   "use server";
-  const data = readBannerFields(formData);
+  const data = readBannerImage(formData);
   await prisma.banner.create({
     data: { ...data, isActive: true },
   });
@@ -51,7 +51,7 @@ async function updateBanner(formData: FormData) {
   }
   await prisma.banner.update({
     where: { id },
-    data: readBannerFields(formData),
+    data: readBannerImage(formData),
   });
   revalidatePath("/");
   revalidatePath("/admin/banners");
@@ -97,12 +97,9 @@ export default async function BannersAdmin({
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 bg-white p-6 rounded-xl border border-slate-200 shadow-sm h-fit">
           <h2 className="text-lg font-bold text-slate-800 mb-4">{editing ? "Edit Banner" : "Add New Banner"}</h2>
+          <p className="text-sm text-slate-500 mb-4">Upload the promotional image only. No title or button text is shown on the site.</p>
           <form action={editing ? updateBanner : addBanner} className="space-y-4">
             {editing ? <input type="hidden" name="id" value={editing.id} /> : null}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Internal Name *</label>
-              <input name="name" type="text" required defaultValue={editing?.name || ""} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="e.g. Winter Sale 2026" />
-            </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Position *</label>
               <select name="position" required defaultValue={editing?.position || "promo-1"} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
@@ -111,25 +108,7 @@ export default async function BannersAdmin({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Main Title</label>
-              <input name="title" type="text" defaultValue={editing?.title || ""} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Amazing Offers Inside..." />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Subtitle</label>
-              <textarea name="subtitle" rows={2} defaultValue={editing?.subtitle || ""} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none resize-y" placeholder="Get premium antibiotics..." />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">CTA Text</label>
-                <input name="ctaText" type="text" defaultValue={editing?.ctaText || ""} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Shop Now" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">CTA URL</label>
-                <input name="ctaUrl" type="text" defaultValue={editing?.ctaUrl || ""} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="/#products" />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Banner Background Image *</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Promotional Image *</label>
               <ImageUploader key={editing ? `banner-${editing.id}` : "banner-new"} name="image" defaultImage={toServedImageUrl(editing?.image || "")} />
             </div>
             <button type="submit" className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-lg transition-colors mt-4">
@@ -145,8 +124,7 @@ export default async function BannersAdmin({
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-50 border-b border-slate-200 text-slate-600">
               <tr>
-                <th className="px-6 py-4 font-semibold w-24">Image</th>
-                <th className="px-6 py-4 font-semibold">Banner Details</th>
+                <th className="px-6 py-4 font-semibold">Image</th>
                 <th className="px-6 py-4 font-semibold">Position</th>
                 <th className="px-6 py-4 font-semibold text-right">Actions</th>
               </tr>
@@ -154,17 +132,13 @@ export default async function BannersAdmin({
             <tbody className="divide-y divide-slate-100">
               {banners.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-slate-500">No banners found.</td>
+                  <td colSpan={3} className="px-6 py-8 text-center text-slate-500">No banners found. Upload an image to show it on the homepage.</td>
                 </tr>
               ) : banners.map((banner) => (
                 <tr key={banner.id} className="hover:bg-slate-50">
                   <td className="px-6 py-4">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={toServedImageUrl(banner.image)} alt={banner.name} className="w-20 h-12 object-contain bg-slate-50 rounded shadow-sm border border-slate-200" />
-                  </td>
-                  <td className="px-6 py-4">
-                    <p className="font-bold text-slate-900">{banner.name}</p>
-                    {banner.title && <p className="text-xs text-slate-600 mt-1 line-clamp-1">{banner.title}</p>}
+                    <img src={toServedImageUrl(banner.image)} alt="" className="w-48 h-24 object-contain bg-slate-50 rounded shadow-sm border border-slate-200" />
                   </td>
                   <td className="px-6 py-4">
                     <span className="px-2.5 py-1 text-xs font-bold bg-indigo-100 text-indigo-700 rounded-full">
