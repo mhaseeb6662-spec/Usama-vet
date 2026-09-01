@@ -114,8 +114,8 @@ export const getHomepageCatalog = cache(async () => {
       take: 24,
       include: {
         images: { orderBy: { sortOrder: "asc" }, take: 2 },
-        category: { select: { id: true, name: true, slug: true } },
-        brand: { select: { id: true, name: true } },
+        category: true,
+        brand: true,
       },
       orderBy: { createdAt: "desc" },
     });
