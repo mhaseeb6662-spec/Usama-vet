@@ -45,19 +45,11 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
   return (
     <>
       {/* 1. TOP ANNOUNCEMENT TICKER (Fade/Slide load sequence) */}
-      <motion.div
-        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : -6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-      >
+      <div>
         <TopBar />
-      </motion.div>
+      </div>
 
-      {/* STICKY CONTAINER FOR HEADER (Staggered load sequence) */}
-      <motion.div
-        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+      <div
         className={`sticky top-0 z-40 w-full transition-all duration-200 ${scrolled ? "shadow-md" : ""}`}
       >
         {/* 2. MAIN HEADER (Logo, Search Pill, Actions) */}
@@ -171,16 +163,9 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
           )}
         </header>
 
-        {/* 3. MAIN NAVIGATION ROW (Staggered load sequence) */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.35, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <div className="hidden lg:block w-full">
-            <MainNav categories={categories} />
-          </div>
-        </motion.div>
+        <div className="hidden lg:block w-full">
+          <MainNav categories={categories} />
+        </div>
 
         {/* 4. MOBILE SLIDE-OUT MENU DRAWER */}
         <AnimatePresence>
@@ -248,7 +233,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
+      </div>
     </>
   );
 }
