@@ -72,7 +72,7 @@ export const viewport: Viewport = {
 
 import { getAllActiveCategories } from "@/lib/data/homepage";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export default async function RootLayout({
   children,

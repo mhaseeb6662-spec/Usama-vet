@@ -3,7 +3,6 @@ import { OrganizationSchema, WebSiteSchema } from "@/lib/seo/schema";
 import { 
   getHomepageCatalog,
   getHomepageCategories,
-  getActiveHeroSlides,
   getActiveBanners
 } from "@/lib/data/homepage";
 
@@ -25,9 +24,8 @@ export const revalidate = 60;
 export default async function HomePage() {
   // Try fetching dynamic data, fallback to mock data if database is empty/unseeded
   // All query functions have built-in try/catch and return [] on DB failure
-  const [catalog, dbHeroSlides, dbBanners, homepageCategories] = await Promise.all([
+  const [catalog, dbBanners, homepageCategories] = await Promise.all([
     getHomepageCatalog(),
-    getActiveHeroSlides(),
     getActiveBanners(),
     getHomepageCategories(),
   ]);
@@ -51,7 +49,7 @@ export default async function HomePage() {
       <WebSiteSchema />
 
       {/* 1. HERO CAROUSEL BANNER */}
-      <HeroCarousel slides={dbHeroSlides} />
+      <HeroCarousel slides={[]} />
 
       {/* 2. CIRCULAR CATEGORY SCROLLER */}
       {homepageCategories && homepageCategories.length > 0 && (

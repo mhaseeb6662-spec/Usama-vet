@@ -24,14 +24,12 @@ export default function ContactPage() {
       {/* Breadcrumb Schema */}
       <BreadcrumbsSchema items={breadcrumbs} />
 
-      {/* PAGE HERO BANNER */}
-      <section className="w-full bg-slate-100">
-        <div className="w-full max-w-[1600px] mx-auto">
-          <img 
-            src="/images/contact/hero-banner.jpg" 
-            alt="Contact Usama Vet Clinic" 
-            className="w-full h-auto object-contain sm:object-cover sm:max-h-[600px] md:max-h-[700px]"
-          />
+      <section className="w-full bg-emerald-950">
+        <div className="max-w-6xl mx-auto px-4 py-10 md:py-14 text-center">
+          <h1 className="text-2xl md:text-4xl font-bold text-white">Contact Usama Vet</h1>
+          <p className="mt-3 text-slate-200 text-sm md:text-base max-w-2xl mx-auto">
+            Call, WhatsApp, or send a message. We respond during store hours.
+          </p>
         </div>
       </section>
 
@@ -127,20 +125,16 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Embedded Google Map Placeholder */}
-          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm aspect-video sm:aspect-auto sm:h-64 relative">
-            <iframe
-              src={BUSINESS_CONFIG.contact.mapEmbeddedUrl}
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen={false}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Usama Vet Location Map"
-              className="absolute inset-0 w-full h-full"
-            />
-          </div>
+          <a
+            href="https://maps.google.com/?q=Veterinary+Complex+GT+Road+Gujranwala"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:border-emerald-300 transition-colors"
+          >
+            <h3 className="text-slate-900 font-semibold text-[13px] uppercase mb-2">Find Us On Map</h3>
+            <p className="text-sm text-slate-600">{BUSINESS_CONFIG.contact.address}</p>
+            <span className="inline-block mt-3 text-emerald-700 font-semibold text-sm">Open Google Maps</span>
+          </a>
         </div>
       </section>
     </div>
