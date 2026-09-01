@@ -24,31 +24,34 @@ export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   // Try fetching dynamic data, fallback to mock data if database is empty/unseeded
-  const [
-    dbFeatured,
-    dbNewArrivals,
-    dbBestSellers,
-    dbLivestock,
-    dbRecommended,
-    dbPetCare,
-    dbSupplements,
-    dbTrending,
-    dbHeroSlides,
-    dbBanners,
-    homepageCategories
-  ] = await Promise.all([
-    getProductsBySection('FEATURED'),
-    getProductsBySection('NEW_ARRIVALS'),
-    getProductsBySection('BEST_SELLERS'),
-    getProductsBySection('CATEGORY', 1), // Assuming ID 1 is livestock
-    getProductsBySection('RECOMMENDED'),
-    getProductsBySection('CATEGORY', 2), // Pet care
-    getProductsBySection('CATEGORY', 3), // Supplements
-    getProductsBySection('TRENDING'),
-    getActiveHeroSlides(),
-    getActiveBanners(),
-    getHomepageCategories()
-  ]);
+  let dbFeatured = [], dbNewArrivals = [], dbBestSellers = [], dbLivestock = [];
+  let dbRecommended = [], dbPetCare = [], dbSupplements = [], dbTrending = [];
+  let dbHeroSlides = [], dbBanners = [], homepageCategories = [];
+
+  try {
+    const results = await Promise.all([
+      getProductsBySection('FEATURED'),
+      getProductsBySection('NEW_ARRIVALS'),
+      getProductsBySection('BEST_SELLERS'),
+      getProductsBySection('CATEGORY', 1), // Assuming ID 1 is livestock
+      getProductsBySection('RECOMMENDED'),
+      getProductsBySection('CATEGORY', 2), // Pet care
+      getProductsBySection('CATEGORY', 3), // Supplements
+      getProductsBySection('TRENDING'),
+      getActiveHeroSlides(),
+      getActiveBanners(),
+      getHomepageCategories()
+    ]);
+
+    [
+      dbFeatured, dbNewArrivals, dbBestSellers, dbLivestock,
+      dbRecommended, dbPetCare, dbSupplements, dbTrending,
+      dbHeroSlides, dbBanners, homepageCategories
+    ] = results || [[], [], [], [], [], [], [], [], [], [], []];
+  } catch (error) {
+    console.error("Database connection failed on homepage:", error);
+    // Silent fail so the page renders empty sections rather than crashing with 500 error overlay
+  }
 
   const newArrivals = dbNewArrivals;
   const bestSellers = dbBestSellers;

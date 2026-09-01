@@ -16,9 +16,14 @@ interface CategoryPageProps {
 
 export async function generateMetadata({ params }: CategoryPageProps) {
   const { slug } = await params;
-  const category = await prisma.category.findUnique({
-    where: { slug }
-  });
+  let category = null;
+  try {
+    category = await prisma.category.findUnique({
+      where: { slug }
+    });
+  } catch (error) {
+    console.error("Failed to load category for metadata:", error);
+  }
 
   if (!category || !category.isActive) {
     return {
@@ -45,15 +50,20 @@ export async function generateMetadata({ params }: CategoryPageProps) {
 export default async function CategoryDetailPage({ params }: CategoryPageProps) {
   const { slug } = await params;
   
-  const category = await prisma.category.findUnique({
-    where: { slug },
-    include: {
-      products: {
-        where: { isActive: true },
-        include: { images: true, category: true, brand: true }
+  let category = null;
+  try {
+    category = await prisma.category.findUnique({
+      where: { slug },
+      include: {
+        products: {
+          where: { isActive: true },
+          include: { images: true, category: true, brand: true }
+        }
       }
-    }
-  });
+    });
+  } catch (error) {
+    console.error("Failed to load category:", error);
+  }
 
   if (!category || !category.isActive) {
     notFound();

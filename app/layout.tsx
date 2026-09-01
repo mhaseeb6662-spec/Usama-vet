@@ -86,7 +86,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const categories = await getAllActiveCategories();
+  let categories = [];
+  try {
+    categories = await getAllActiveCategories();
+  } catch (error) {
+    console.error("Database connection failed for header categories:", error);
+  }
 
   return (
     <html lang="en" className={`${poppins.variable} h-full antialiased`}>

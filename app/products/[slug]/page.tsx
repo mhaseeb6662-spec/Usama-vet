@@ -15,10 +15,15 @@ interface ProductPageProps {
 
 export async function generateMetadata({ params }: ProductPageProps) {
   const { slug } = await params;
-  const product = await prisma.product.findUnique({
-    where: { slug },
-    include: { images: true }
-  });
+  let product = null;
+  try {
+    product = await prisma.product.findUnique({
+      where: { slug },
+      include: { images: true }
+    });
+  } catch (error) {
+    console.error("Failed to load product for metadata:", error);
+  }
 
   if (!product || !product.isActive) {
     return {
@@ -55,16 +60,21 @@ export async function generateMetadata({ params }: ProductPageProps) {
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = await params;
   
-  const product = await prisma.product.findUnique({
-    where: { slug },
-    include: {
-      images: {
-        orderBy: { sortOrder: 'asc' }
-      },
-      category: true,
-      brand: true
-    }
-  });
+  let product = null;
+  try {
+    product = await prisma.product.findUnique({
+      where: { slug },
+      include: {
+        images: {
+          orderBy: { sortOrder: 'asc' }
+        },
+        category: true,
+        brand: true
+      }
+    });
+  } catch (error) {
+    console.error("Failed to load product:", error);
+  }
 
   if (!product || !product.isActive) {
     notFound();
