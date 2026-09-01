@@ -6,7 +6,7 @@ export default function NotFound() {
       <div className="text-center max-w-md">
         <h1 className="text-2xl font-bold text-slate-800 mb-3">Page not found</h1>
         <p className="text-slate-500 mb-6">
-          This page does not exist. Cart and account checkout are not available yet.
+          This page does not exist. You can continue shopping from the homepage.
         </p>
         <Link
           href="/"

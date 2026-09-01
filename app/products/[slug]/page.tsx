@@ -1,11 +1,12 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ShieldCheck, Truck, ShoppingCart, MessageCircle, AlertTriangle } from "lucide-react";
+import { ShieldCheck, Truck, MessageCircle, AlertTriangle } from "lucide-react";
 import { BUSINESS_CONFIG } from "@/lib/constants/config";
 import { prisma } from "@/lib/db";
 import { ProductSchema, BreadcrumbsSchema } from "@/lib/seo/schema";
-import Button from "@/components/ui/Button";
+import { toServedImageUrl } from "@/lib/mediaUrl";
+import ProductAddToCart from "@/components/cart/ProductAddToCart";
 
 export const dynamic = 'force-dynamic';
 
@@ -82,6 +83,16 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
   const category = product.category;
   const categoryName = category ? category.name : "Veterinary Products";
+  const primaryImage = toServedImageUrl(
+    product.images.find((img: { isPrimary: boolean; imageUrl: string }) => img.isPrimary)?.imageUrl
+    || product.images[0]?.imageUrl
+    || ""
+  );
+  const salePrice = Number(product.salePrice || product.price);
+  const comparePrice = product.salePrice ? Number(product.price) : null;
+  const discountPercent = comparePrice && comparePrice > salePrice
+    ? Math.round(((comparePrice - salePrice) / comparePrice) * 100)
+    : 0;
 
   const breadcrumbs = [
     { name: "Home", item: "/" },
@@ -128,10 +139,14 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           {/* Left Side: Image Gallery Placeholder */}
           <div className="md:col-span-5 flex flex-col gap-4">
             <div className="aspect-square bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center relative overflow-hidden">
-              {/* Fallback graphic for medicines */}
-              <div className="w-24 h-24 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                <ShieldCheck className="w-12 h-12" />
-              </div>
+              {primaryImage ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={primaryImage} alt={product.name} className="w-full h-full object-contain p-6" />
+              ) : (
+                <div className="w-24 h-24 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <ShieldCheck className="w-12 h-12" />
+                </div>
+              )}
               
               <div className="absolute top-4 left-4">
                 <span
@@ -168,9 +183,18 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl flex items-center justify-between">
               <div>
                 <span className="text-[10px] text-slate-450 uppercase font-bold block mb-0.5">Price</span>
-                <span className="text-2xl font-black text-slate-900">
-                  PKR {Number(product.salePrice || product.price).toLocaleString()}
-                </span>
+                <div className="flex items-end gap-2">
+                  {comparePrice && comparePrice > salePrice && (
+                    <span className="text-slate-400 line-through text-sm">PKR {comparePrice.toLocaleString()}</span>
+                  )}
+                  <span className="text-2xl font-black text-slate-900">
+                    PKR {salePrice.toLocaleString()}
+                  </span>
+                  {discountPercent > 0 && (
+                    <span className="text-rose-600 text-xs font-bold">{discountPercent}% OFF</span>
+                  )}
+                </div>
+                <span className="text-xs text-slate-500 mt-1 block">Stock: {product.stockQuantity}</span>
               </div>
               <span className="text-[10px] text-slate-500 font-medium max-w-[150px] text-right">
                 * Prices are inclusive of all import duties.
@@ -184,15 +208,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
             {/* CTA action buttons */}
             <div className="flex flex-wrap gap-4 pt-2">
-              <Button
-                variant="primary"
-                size="md"
-                disabled={product.stockQuantity <= 0}
-                className="flex-1 min-w-[200px]"
-              >
-                <ShoppingCart className="w-4 h-4 mr-2" />
-                {product.stockQuantity > 0 ? "Add to Cart" : "Out of Stock"}
-              </Button>
+              <ProductAddToCart productId={product.id} stockCount={product.stockQuantity} />
               <a
                 href={`${BUSINESS_CONFIG.contact.whatsapp}?text=Hi,%20I%20want%20to%20order%20${encodeURIComponent(product.name)}`}
                 target="_blank"

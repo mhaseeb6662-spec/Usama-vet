@@ -3,6 +3,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AnimatedBackground from "@/components/layout/AnimatedBackground";
 import FloatingWhatsApp from "@/components/shared/FloatingWhatsApp";
+import AppProviders from "@/components/providers/AppProviders";
 import { BUSINESS_CONFIG } from "@/lib/constants/config";
 import "./globals.css";
 
@@ -86,20 +87,14 @@ export default async function RootLayout({
     <html lang="en" className="h-full antialiased">
       <body className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans relative">
         <AnimatedBackground />
-
-        {/* Sticky navigation header */}
-        <Header categories={categories} />
-        
-        {/* Main viewport */}
-        <main className="flex-grow">
-          {children}
-        </main>
-        
-        {/* Footer */}
-        <Footer />
-        
-        {/* Sticky WhatsApp Floating Button */}
-        <FloatingWhatsApp />
+        <AppProviders>
+          <Header categories={categories} />
+          <main className="flex-grow">
+            {children}
+          </main>
+          <Footer />
+          <FloatingWhatsApp />
+        </AppProviders>
       </body>
     </html>
   );

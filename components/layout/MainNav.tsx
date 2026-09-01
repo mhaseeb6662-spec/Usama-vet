@@ -147,7 +147,7 @@ export default function MainNav({ categories = [] }: { categories?: any[] }) {
 
           {/* Track Order */}
           <Link
-            href="/order-tracking"
+            href="/track-order"
             className="flex items-center gap-2 hover:text-[#009473] transition-colors"
           >
             <MapPin className="w-4 h-4 text-[#009473]" />

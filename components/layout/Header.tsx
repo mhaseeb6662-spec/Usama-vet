@@ -9,6 +9,7 @@ import { BUSINESS_CONFIG } from "@/lib/constants/config";
 import TopBar from "./TopBar";
 import MainNav from "./MainNav";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { useCart } from "@/components/cart/CartProvider";
 
 export default function Header({ categories = [] }: { categories?: any[] }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -16,6 +17,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
+  const { count } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -113,7 +115,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
                 <div className="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 relative hover-scale-subtle">
                   <ShoppingCart className="w-5 h-5" />
                   <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-[#009473] text-white text-[11px] font-bold rounded-full flex items-center justify-center border-2 border-white">
-                    0
+                    {count}
                   </span>
                 </div>
                 <span className="hidden lg:inline text-[15px] font-semibold text-slate-700 group-hover:text-[#009473] transition-colors">
@@ -218,9 +220,9 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
                 <div className="px-3 text-xs font-semibold text-slate-700">
                   Call Us: <a href={`tel:${BUSINESS_CONFIG.contact.phone.replace(/[^0-9+]/g, '')}`} className="text-emerald-700 hover:underline">{BUSINESS_CONFIG.contact.phoneDisplay}</a>
                 </div>
-                <div className="px-3 text-xs font-semibold text-slate-700">
+                <Link href="/track-order" className="px-3 text-xs font-semibold text-slate-700 hover:text-emerald-700">
                   Track Your Order
-                </div>
+                </Link>
                 <a
                   href={BUSINESS_CONFIG.contact.whatsapp}
                   target="_blank"

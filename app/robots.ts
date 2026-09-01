@@ -11,6 +11,9 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [
         "/cart",
         "/checkout",
+        "/order-success",
+        "/track-order",
+        "/order-tracking",
         "/account",
         "/admin",
         "/*?q=", // Disallow search query result crawling to prevent duplicate pages

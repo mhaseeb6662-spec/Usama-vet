@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Eye, Heart, ShoppingCart, ShieldCheck } from "lucide-react";
+import { Eye, Heart, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { Product } from "@/types";
+import AddToCartButton from "@/components/cart/AddToCartButton";
 
 interface ProductCardProps {
   product: Product;
@@ -109,14 +110,11 @@ export default function ProductCard({ product }: ProductCardProps) {
             <Heart className={`w-5 h-5 ${isWished ? "fill-current" : ""}`} />
           </button>
 
-          {/* Add to cart Button */}
-          <button
-            disabled={!inStock}
-            className="flex-grow bg-[#009473] hover:bg-[#028467] hover:scale-[1.02] hover:-translate-y-[1px] active:scale-[0.96] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:transition-none text-white font-semibold text-[13px] py-2.5 px-4 rounded-full flex items-center justify-center gap-2 transition-all duration-150 focus:outline-none cursor-pointer shadow-sm"
-          >
-            <ShoppingCart className="w-4 h-4" />
-            <span>Add to cart</span>
-          </button>
+          <AddToCartButton
+            productId={Number.parseInt(product.id, 10)}
+            inStock={inStock}
+            stockCount={product.stockCount}
+          />
         </div>
       </div>
     </div>
