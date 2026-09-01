@@ -77,18 +77,24 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-export default function RootLayout({
+import { getAllActiveCategories } from "@/lib/data/homepage";
+
+export const dynamic = 'force-dynamic';
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const categories = await getAllActiveCategories();
+
   return (
     <html lang="en" className={`${poppins.variable} h-full antialiased`}>
       <body className="flex flex-col min-h-screen bg-transparent text-slate-900 font-sans relative">
         <AnimatedBackground />
 
         {/* Sticky navigation header */}
-        <Header />
+        <Header categories={categories} />
         
         {/* Main viewport */}
         <main className="flex-grow">

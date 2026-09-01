@@ -1,13 +1,22 @@
 "use client";
 
 import React, { useState } from "react";
-import { MOCK_PRODUCTS } from "@/lib/data/mockData";
 import ProductCard from "@/components/product/ProductCard";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 type TabName = "Featured Products" | "New Arrivals" | "Best Selling Products";
 
-export default function ProductTabs() {
+interface ProductTabsProps {
+  featuredProducts?: any[];
+  newArrivals?: any[];
+  bestSellers?: any[];
+}
+
+export default function ProductTabs({ 
+  featuredProducts = [], 
+  newArrivals = [], 
+  bestSellers = [] 
+}: ProductTabsProps) {
   const [activeTab, setActiveTab] = useState<TabName>("Featured Products");
   const shouldReduceMotion = useReducedMotion();
 
@@ -15,16 +24,13 @@ export default function ProductTabs() {
   const getFilteredProducts = () => {
     switch (activeTab) {
       case "Featured Products":
-        // First 8 items
-        return MOCK_PRODUCTS.slice(0, 8);
+        return featuredProducts;
       case "New Arrivals":
-        // Middle 8 items
-        return MOCK_PRODUCTS.slice(8, 16);
+        return newArrivals;
       case "Best Selling Products":
-        // Last 8 items
-        return MOCK_PRODUCTS.slice(16, 24);
+        return bestSellers;
       default:
-        return MOCK_PRODUCTS.slice(0, 8);
+        return featuredProducts;
     }
   };
 
@@ -76,9 +82,15 @@ export default function ProductTabs() {
           }}
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         >
-          {getFilteredProducts().map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+          {getFilteredProducts().length > 0 ? (
+            getFilteredProducts().map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          ) : (
+            <div className="col-span-full py-12 text-center text-slate-500">
+              No products found in this category.
+            </div>
+          )}
         </motion.div>
       </AnimatePresence>
     </section>

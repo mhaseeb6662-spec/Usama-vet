@@ -3,10 +3,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { MOCK_CATEGORIES } from "@/lib/data/mockData";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/AnimationComponents";
 
-export default function CategoryScroller() {
+export default function CategoryScroller({ categories = [] }: { categories?: any[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   
@@ -88,7 +87,7 @@ export default function CategoryScroller() {
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {/* Categories Array (No duplication as per user request) */}
-          {MOCK_CATEGORIES.map((cat, index) => {
+          {categories.map((cat, index) => {
             const imageUrl = cat.image || "https://placehold.co/200x200/10b981/ffffff?text=Cat";
 
             return (

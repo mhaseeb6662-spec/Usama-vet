@@ -18,6 +18,14 @@ export const getHomepageCategories = cache(async () => {
   return cats.map(mapCategoryToUI);
 });
 
+export const getAllActiveCategories = cache(async () => {
+  const cats = await prisma.category.findMany({
+    where: { isActive: true },
+    orderBy: { sortOrder: "asc" },
+  });
+  return cats;
+});
+
 export const getActiveBanners = cache(async () => {
   return prisma.banner.findMany({
     where: { isActive: true },

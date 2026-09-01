@@ -10,7 +10,7 @@ import TopBar from "./TopBar";
 import MainNav from "./MainNav";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
-export default function Header() {
+export default function Header({ categories = [] }: { categories?: any[] }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -176,9 +176,10 @@ export default function Header() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.35, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="hidden lg:block"
         >
-          <MainNav />
+          <div className="hidden lg:block w-full">
+            <MainNav categories={categories} />
+          </div>
         </motion.div>
 
         {/* 4. MOBILE SLIDE-OUT MENU DRAWER */}

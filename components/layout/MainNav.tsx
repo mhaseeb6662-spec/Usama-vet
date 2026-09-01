@@ -7,7 +7,6 @@ import {
   Menu, ChevronDown, ChevronRight, Phone, MapPin, 
   Pill, Milk, Activity, Feather, Heart, Grid, Sparkles, Shield 
 } from "lucide-react";
-import { MOCK_CATEGORIES } from "@/lib/data/mockData";
 import { BUSINESS_CONFIG } from "@/lib/constants/config";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -15,7 +14,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
   Pills: Pill, Milk, Activity, Feather, Heart, Grid, Sparkles, Shield
 };
 
-export default function MainNav() {
+export default function MainNav({ categories = [] }: { categories?: any[] }) {
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
@@ -74,8 +73,8 @@ export default function MainNav() {
               >
                 <div className="bg-white border border-slate-200 shadow-xl rounded-lg overflow-hidden p-3 flex flex-col">
                   <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                    {MOCK_CATEGORIES.map((cat) => {
-                      const Icon = ICON_MAP[cat.iconName] || ChevronRight;
+                    {categories.map((cat) => {
+                      const Icon = ICON_MAP[cat.iconName || cat.icon] || ChevronRight;
                       return (
                         <Link
                           key={cat.id}

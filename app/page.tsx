@@ -6,7 +6,6 @@ import {
   getActiveHeroSlides,
   getActiveBanners
 } from "@/lib/data/homepage";
-import { MOCK_PRODUCTS } from "@/lib/data/mockData";
 
 // Modular Components
 import HeroCarousel from "@/components/home/HeroCarousel";
@@ -26,6 +25,7 @@ export const dynamic = 'force-dynamic';
 export default async function HomePage() {
   // Try fetching dynamic data, fallback to mock data if database is empty/unseeded
   const [
+    dbFeatured,
     dbNewArrivals,
     dbBestSellers,
     dbLivestock,
@@ -34,8 +34,10 @@ export default async function HomePage() {
     dbSupplements,
     dbTrending,
     dbHeroSlides,
-    dbBanners
+    dbBanners,
+    homepageCategories
   ] = await Promise.all([
+    getProductsBySection('FEATURED'),
     getProductsBySection('NEW_ARRIVALS'),
     getProductsBySection('BEST_SELLERS'),
     getProductsBySection('CATEGORY', 1), // Assuming ID 1 is livestock
@@ -44,26 +46,18 @@ export default async function HomePage() {
     getProductsBySection('CATEGORY', 3), // Supplements
     getProductsBySection('TRENDING'),
     getActiveHeroSlides(),
-    getActiveBanners()
+    getActiveBanners(),
+    getHomepageCategories()
   ]);
 
-  // Fallbacks to MOCK_PRODUCTS to preserve the design while the client populates their database.
-  const newArrivals = dbNewArrivals.length > 0 ? dbNewArrivals : MOCK_PRODUCTS.slice(0, 8);
-  const bestSellers = dbBestSellers.length > 0 ? dbBestSellers : MOCK_PRODUCTS.slice(8, 16);
-  const recommended = dbRecommended.length > 0 ? dbRecommended : MOCK_PRODUCTS.slice(12, 20);
-  const trending = dbTrending.length > 0 ? dbTrending : MOCK_PRODUCTS.slice(16, 24);
+  const newArrivals = dbNewArrivals;
+  const bestSellers = dbBestSellers;
+  const recommended = dbRecommended;
+  const trending = dbTrending;
 
-  const livestockEssentials = dbLivestock.length > 0 ? dbLivestock : MOCK_PRODUCTS.filter(
-    (p) => p.categorySlug === "livestock-care" || p.categorySlug === "veterinary-medicines"
-  );
-  
-  const petCareEssentials = dbPetCare.length > 0 ? dbPetCare : MOCK_PRODUCTS.filter(
-    (p) => p.categorySlug === "pet-care"
-  );
-
-  const supplementsEssentials = dbSupplements.length > 0 ? dbSupplements : MOCK_PRODUCTS.filter(
-    (p) => p.categorySlug === "animal-supplements" || p.categorySlug === "feed-supplements"
-  );
+  const livestockEssentials = dbLivestock;
+  const petCareEssentials = dbPetCare;
+  const supplementsEssentials = dbSupplements;
 
   const promo1 = dbBanners.find(b => b.position === "promo-1");
   const promo2 = dbBanners.find(b => b.position === "promo-2");
@@ -78,7 +72,9 @@ export default async function HomePage() {
       <HeroCarousel slides={dbHeroSlides} />
 
       {/* 2. CIRCULAR CATEGORY SCROLLER */}
-      <CategoryScroller />
+      {homepageCategories && homepageCategories.length > 0 && (
+        <CategoryScroller categories={homepageCategories} />
+      )}
 
       {/* 3. UPPER TRUST STRIP (3 boxes) */}
       <TrustStrip />
@@ -95,7 +91,11 @@ export default async function HomePage() {
       />
 
       {/* 5. TAB CONTROLLED GRID (Featured, New, Best Selling) */}
-      <ProductTabs />
+      <ProductTabs 
+        featuredProducts={dbFeatured} 
+        newArrivals={newArrivals} 
+        bestSellers={bestSellers} 
+      />
 
       {/* 6. CLIENT TESTIMONIALS SECTION (4 cards) */}
       <ReviewsSection />
@@ -122,6 +122,8 @@ export default async function HomePage() {
         bgColorClass="bg-emerald-50/70 backdrop-blur-md"
         viewAllHref="/#products"
       />
+
+
 
       {/* 10. SECTION C: LIVESTOCK ESSENTIALS (bg-white) */}
       <ProductSection

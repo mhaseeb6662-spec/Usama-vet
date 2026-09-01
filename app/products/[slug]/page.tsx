@@ -3,48 +3,49 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ShieldCheck, Truck, ShoppingCart, MessageCircle, AlertTriangle } from "lucide-react";
 import { BUSINESS_CONFIG } from "@/lib/constants/config";
-import { MOCK_PRODUCTS, MOCK_CATEGORIES } from "@/lib/data/mockData";
+import { prisma } from "@/lib/db";
 import { ProductSchema, BreadcrumbsSchema } from "@/lib/seo/schema";
 import Button from "@/components/ui/Button";
+
+export const dynamic = 'force-dynamic';
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Generate static routes at build time for instant loading and 100% crawler visibility
-export async function generateStaticParams() {
-  return MOCK_PRODUCTS.map((product) => ({
-    slug: product.slug,
-  }));
-}
-
-// Dynamically generate SEO metadata for each veterinary product page
 export async function generateMetadata({ params }: ProductPageProps) {
   const { slug } = await params;
-  const product = MOCK_PRODUCTS.find((p) => p.slug === slug);
+  const product = await prisma.product.findUnique({
+    where: { slug },
+    include: { images: true }
+  });
 
-  if (!product) {
+  if (!product || !product.isActive) {
     return {
       title: "Product Not Found",
       description: "The requested veterinary product is unavailable.",
     };
   }
 
+  const primaryImage = product.images.find(img => img.isPrimary)?.imageUrl 
+    || product.images[0]?.imageUrl 
+    || "/images/og-default.jpg";
+
   return {
-    title: product.seoTitle,
-    description: product.seoDescription,
+    title: product.seoTitle || product.name,
+    description: product.metaDescription || product.shortDescription,
     alternates: {
       canonical: `/products/${product.slug}`,
     },
     openGraph: {
-      title: product.seoTitle,
-      description: product.seoDescription,
+      title: product.seoTitle || product.name,
+      description: product.metaDescription || product.shortDescription,
       url: `${BUSINESS_CONFIG.url}/products/${product.slug}`,
       type: "website",
       images: [
         {
-          url: product.images[0] || "/images/og-default.jpg",
-          alt: product.imageAlt,
+          url: primaryImage,
+          alt: product.name,
         },
       ],
     },
@@ -53,18 +54,28 @@ export async function generateMetadata({ params }: ProductPageProps) {
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const product = MOCK_PRODUCTS.find((p) => p.slug === slug);
+  
+  const product = await prisma.product.findUnique({
+    where: { slug },
+    include: {
+      images: {
+        orderBy: { sortOrder: 'asc' }
+      },
+      category: true,
+      brand: true
+    }
+  });
 
-  if (!product) {
+  if (!product || !product.isActive) {
     notFound();
   }
 
-  const category = MOCK_CATEGORIES.find((c) => c.slug === product.categorySlug);
+  const category = product.category;
   const categoryName = category ? category.name : "Veterinary Products";
 
   const breadcrumbs = [
     { name: "Home", item: "/" },
-    { name: categoryName, item: `/categories/${product.categorySlug}` },
+    { name: categoryName, item: `/categories/${category?.slug || ""}` },
     { name: product.name, item: `/products/${product.slug}` },
   ];
 
@@ -74,13 +85,13 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       <BreadcrumbsSchema items={breadcrumbs} />
       <ProductSchema
         name={product.name}
-        image={product.images[0]}
-        description={product.description}
-        sku={product.sku}
-        brandName={product.brand}
-        price={product.price}
-        currency={product.currency}
-        inStock={product.inStock}
+        image={product.images[0]?.imageUrl || ""}
+        description={product.description || product.shortDescription || ""}
+        sku={product.sku || ""}
+        brandName={product.brand?.name || "Usama Vet"}
+        price={Number(product.salePrice || product.price)}
+        currency="PKR"
+        inStock={product.stockQuantity > 0}
         productUrl={`/products/${product.slug}`}
         categoryName={categoryName}
       />
@@ -115,12 +126,12 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               <div className="absolute top-4 left-4">
                 <span
                   className={`text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider ${
-                    product.inStock
+                    product.stockQuantity > 0
                       ? "bg-emerald-50 text-emerald-700 border border-emerald-200/65"
                       : "bg-rose-50 text-rose-700 border border-rose-200/65"
                   }`}
                 >
-                  {product.inStock ? "In Stock" : "Out of Stock"}
+                  {product.stockQuantity > 0 ? "In Stock" : "Out of Stock"}
                 </span>
               </div>
             </div>
@@ -133,7 +144,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           <div className="md:col-span-7 space-y-6">
             <div>
               <span className="text-xs uppercase font-bold text-slate-400 tracking-widest block mb-1">
-                Brand: {product.brand}
+                Brand: {product.brand?.name || "Usama Vet"}
               </span>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
                 {product.name}
@@ -148,7 +159,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               <div>
                 <span className="text-[10px] text-slate-450 uppercase font-bold block mb-0.5">Price</span>
                 <span className="text-2xl font-black text-slate-900">
-                  {product.currency} {product.price.toLocaleString()}
+                  PKR {Number(product.salePrice || product.price).toLocaleString()}
                 </span>
               </div>
               <span className="text-[10px] text-slate-500 font-medium max-w-[150px] text-right">
@@ -158,37 +169,19 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
             {/* Product short description */}
             <p className="text-xs text-slate-600 leading-relaxed">
-              {product.description}
+              {product.description || product.shortDescription}
             </p>
-
-            {/* Target Animals Tags */}
-            {product.targetAnimals && product.targetAnimals.length > 0 && (
-              <div className="space-y-1.5">
-                <span className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Target Animal Types
-                </span>
-                <div className="flex flex-wrap gap-2">
-                  {product.targetAnimals.map((animal) => (
-                    <span
-                      key={animal}
-                      className="text-[10px] font-bold bg-slate-100 border border-slate-250 text-slate-700 px-2.5 py-1 rounded"
-                    >
-                      {animal}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
 
             {/* CTA action buttons */}
             <div className="flex flex-wrap gap-4 pt-2">
               <Button
                 variant="primary"
                 size="md"
-                disabled={!product.inStock}
-                className="flex-grow sm:flex-grow-0 sm:px-8 font-bold text-sm tracking-wide gap-2 py-3"
+                disabled={product.stockQuantity <= 0}
+                className="flex-1 min-w-[200px]"
               >
-                <ShoppingCart className="w-4 h-4" /> Add To Cart
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                {product.stockQuantity > 0 ? "Add to Cart" : "Out of Stock"}
               </Button>
               <a
                 href={`${BUSINESS_CONFIG.contact.whatsapp}?text=Hi,%20I%20want%20to%20order%20${encodeURIComponent(product.name)}`}
@@ -218,43 +211,16 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           {/* Specifications list (Left) */}
           <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm space-y-5">
             <h2 className="text-base font-bold text-slate-900 border-b border-slate-100 pb-2">
-              Product Overview & Specifications
+              Product Overview
             </h2>
             
             <div className="text-xs text-slate-600 leading-relaxed">
-              {product.longDescription || product.description}
+              {product.description || product.shortDescription || "No detailed description available."}
             </div>
-
-            {product.specifications && Object.keys(product.specifications).length > 0 && (
-              <div className="border-t border-slate-150 pt-4">
-                <h3 className="font-bold text-slate-900 text-xs mb-3 uppercase tracking-wider">
-                  Technical Specifications
-                </h3>
-                <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5">
-                  {Object.entries(product.specifications).map(([key, val]) => (
-                    <div key={key} className="flex justify-between border-b border-slate-50 pb-1.5 text-xs">
-                      <dt className="text-slate-400 font-medium">{key}</dt>
-                      <dd className="text-slate-800 font-semibold text-right">{val}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            )}
           </div>
 
-          {/* Usage, Dosage Instructions & Legal Warn (Right) */}
+          {/* Legal Warn (Right) */}
           <div className="lg:col-span-5 space-y-6">
-            {product.dosageInstruction && (
-              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-3">
-                <h3 className="font-bold text-slate-900 text-sm border-b border-slate-100 pb-2">
-                  Dosage & Administration
-                </h3>
-                <p className="text-xs text-slate-650 leading-relaxed">
-                  {product.dosageInstruction}
-                </p>
-              </div>
-            )}
-
             {/* Legal Warning Notice */}
             <div className="bg-amber-50/70 border border-amber-200 rounded-2xl p-6 space-y-3">
               <h3 className="font-bold text-amber-900 text-sm flex items-center gap-1.5">
