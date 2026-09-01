@@ -15,22 +15,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  let sqlLogs = [];
   try {
-    // 1. Create tables by executing raw SQL
-    const sqlPath = path.join(process.cwd(), "lib", "schema.sql");
-    const sqlContent = fs.readFileSync(sqlPath, "utf8");
-    
-    // Split by semicolons, but filter out empty statements
-    const statements = sqlContent.split(";").map(s => s.trim()).filter(s => s.length > 0);
-    
-    for (const statement of statements) {
-      if (statement) {
-        await prisma.$executeRawUnsafe(statement);
-        sqlLogs.push("Executed statement successfully.");
-      }
-    }
-    
+    // 1. Prisma db push handled collections.
     // 2. Create the Super Admin user
     const email = "admin@usamavet.com";
     const password = "admin";
@@ -53,7 +39,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ 
       success: true, 
       message: "Database schema updated and Super Admin created successfully!",
-      logs: sqlLogs,
       adminEmail: email,
       adminPassword: password
     });

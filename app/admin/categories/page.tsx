@@ -23,9 +23,8 @@ async function addCategory(formData: FormData) {
 
 async function deleteCategory(formData: FormData) {
   "use server";
-  const idStr = formData.get("id") as string;
-  const id = parseInt(idStr, 10);
-  if (isNaN(id)) return;
+  const id = formData.get("id") as string;
+  if (!id) return;
   await prisma.category.delete({ where: { id } });
   revalidatePath("/admin/categories");
 }

@@ -26,8 +26,8 @@ async function addBanner(formData: FormData) {
 
 async function deleteBanner(formData: FormData) {
   "use server";
-  const id = parseInt(formData.get("id") as string, 10);
-  if (isNaN(id)) return;
+  const id = formData.get("id") as string;
+  if (!id) return;
   await prisma.banner.delete({ where: { id } });
   
   revalidatePath("/");
