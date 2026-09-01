@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ProductCard from "@/components/product/ProductCard";
 import { SearchApplicationError, searchProducts } from "@/lib/services/productSearch";
+import type { Product } from "@/types";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +17,7 @@ export default async function SearchPage({
   const params = await searchParams;
   const rawQuery = params.q?.trim() || "";
 
-  let products = [];
+  let products: Product[] = [];
   let error = "";
   if (!rawQuery) {
     error = "Enter a product name, SKU, or category to search.";
