@@ -2,6 +2,14 @@ import { prisma } from "@/lib/db";
 import { cache } from "react";
 import { mapProductToUI, mapCategoryToUI } from "./adapters";
 
+// Helper to strip non-serializable Prisma types (Date, Decimal, BigInt)
+// This prevents Next.js hydration crashes when passing data to Client Components
+function serialize<T>(data: T): T {
+  return JSON.parse(JSON.stringify(data, (_, value) =>
+    typeof value === 'bigint' ? Number(value) : value
+  ));
+}
+
 // Cache these queries for the current request
 // Each function has its own try/catch so a DB timeout never crashes the page
 export const getActiveHeroSlides = cache(async () => {
@@ -10,11 +18,7 @@ export const getActiveHeroSlides = cache(async () => {
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
     });
-    return slides.map(s => ({
-      ...s,
-      createdAt: s.createdAt.toISOString(),
-      updatedAt: s.updatedAt.toISOString()
-    }));
+    return serialize(slides);
   } catch (error) {
     console.error("[DB] getActiveHeroSlides failed:", error);
     return [];
@@ -49,10 +53,11 @@ export const getAllActiveCategories = cache(async () => {
 
 export const getActiveBanners = cache(async () => {
   try {
-    return await prisma.banner.findMany({
+    const banners = await prisma.banner.findMany({
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
     });
+    return serialize(banners);
   } catch (error) {
     console.error("[DB] getActiveBanners failed:", error);
     return [];
@@ -61,13 +66,14 @@ export const getActiveBanners = cache(async () => {
 
 export const getHomepageSections = cache(async () => {
   try {
-    return await prisma.homepageSection.findMany({
+    const sections = await prisma.homepageSection.findMany({
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
       include: {
         category: true,
       }
     });
+    return serialize(sections);
   } catch (error) {
     console.error("[DB] getHomepageSections failed:", error);
     return [];
