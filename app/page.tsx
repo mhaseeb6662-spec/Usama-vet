@@ -24,9 +24,9 @@ export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   // Try fetching dynamic data, fallback to mock data if database is empty/unseeded
-  let dbFeatured = [], dbNewArrivals = [], dbBestSellers = [], dbLivestock = [];
-  let dbRecommended = [], dbPetCare = [], dbSupplements = [], dbTrending = [];
-  let dbHeroSlides = [], dbBanners = [], homepageCategories = [];
+  let dbFeatured: any[] = [], dbNewArrivals: any[] = [], dbBestSellers: any[] = [], dbLivestock: any[] = [];
+  let dbRecommended: any[] = [], dbPetCare: any[] = [], dbSupplements: any[] = [], dbTrending: any[] = [];
+  let dbHeroSlides: any[] = [], dbBanners: any[] = [], homepageCategories: any[] = [];
 
   try {
     const results = await Promise.all([

@@ -86,7 +86,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  let categories = [];
+  let categories: any[] = [];
   try {
     categories = await getAllActiveCategories();
   } catch (error) {

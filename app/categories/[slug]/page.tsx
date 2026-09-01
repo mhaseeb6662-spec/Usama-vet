@@ -16,7 +16,7 @@ interface CategoryPageProps {
 
 export async function generateMetadata({ params }: CategoryPageProps) {
   const { slug } = await params;
-  let category = null;
+  let category: any = null;
   try {
     category = await prisma.category.findUnique({
       where: { slug }
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: CategoryPageProps) {
 export default async function CategoryDetailPage({ params }: CategoryPageProps) {
   const { slug } = await params;
   
-  let category = null;
+  let category: any = null;
   try {
     category = await prisma.category.findUnique({
       where: { slug },

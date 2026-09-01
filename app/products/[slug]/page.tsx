@@ -15,7 +15,7 @@ interface ProductPageProps {
 
 export async function generateMetadata({ params }: ProductPageProps) {
   const { slug } = await params;
-  let product = null;
+  let product: any = null;
   try {
     product = await prisma.product.findUnique({
       where: { slug },
@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: ProductPageProps) {
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = await params;
   
-  let product = null;
+  let product: any = null;
   try {
     product = await prisma.product.findUnique({
       where: { slug },
