@@ -19,7 +19,16 @@ const nextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+            value: "no-cache, no-store, must-revalidate",
+          },
+        ],
+      },
+      {
+        source: "/:path((?!_next/|api/|images/|logo\\.jpg|bg-texture-1\\.jpg).*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-cache, no-store, must-revalidate",
           },
         ],
       },
