@@ -4,7 +4,9 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Search, ShoppingCart, User, Menu, X } from "lucide-react";
+import { Search, ShoppingCart, Menu, X } from "lucide-react";
+import AccountMenu from "@/components/account/AccountMenu";
+import HeaderSearch from "@/components/search/HeaderSearch";
 import { BUSINESS_CONFIG } from "@/lib/constants/config";
 import TopBar from "./TopBar";
 import MainNav from "./MainNav";
@@ -75,37 +77,13 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
 
             {/* Pill Search Bar */}
             <div className="hidden md:flex flex-grow max-w-2xl relative">
-              <div className="w-full flex items-center bg-slate-100/70 border border-slate-200 rounded-full pl-5 pr-2 py-1.5 focus-within:bg-white focus-within:border-emerald-600 focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:shadow-sm transition-all duration-200 group/search">
-                <input
-                  type="text"
-                  placeholder="What Are You Looking For..."
-                  className="w-full bg-transparent text-[14px] text-slate-850 outline-none placeholder:text-slate-400 focus:outline-none"
-                />
-                <button
-                  type="button"
-                  className="w-10 h-10 rounded-full bg-[#009473] hover:bg-[#028467] text-white flex items-center justify-center shrink-0 hover:scale-[1.02] active:scale-[0.97] transition-all duration-150 group-focus-within/search:bg-emerald-700"
-                  aria-label="Search"
-                >
-                  <Search className="w-5 h-5" />
-                </button>
-              </div>
+              <HeaderSearch variant="desktop" />
             </div>
 
             {/* Right Side Actions: Login & Cart */}
             <div className="flex items-center gap-6 shrink-0">
               
-              {/* Login / Register Link */}
-              <Link
-                href="/account"
-                className="flex items-center gap-2.5 hover:text-[#009473] transition-colors focus:outline-none text-left group"
-              >
-                <div className="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-550 shrink-0 hover-scale-subtle">
-                  <User className="w-5 h-5" />
-                </div>
-                <span className="hidden lg:inline text-[15px] font-semibold text-slate-700 group-hover:text-[#009473] transition-colors">
-                  Login / Register
-                </span>
-              </Link>
+              <AccountMenu />
 
               {/* Cart link */}
               <Link
@@ -147,20 +125,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
           {/* Mobile Search Input focus transition */}
           {isSearchOpen && (
             <div className="md:hidden pt-3 border-t border-slate-100 mt-2">
-              <div className="flex bg-slate-100/70 border border-slate-200 rounded-full pl-3 pr-1 py-1 focus-within:bg-white focus-within:border-emerald-600 focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:shadow-sm transition-all duration-200">
-                <input
-                  type="text"
-                  placeholder="What Are You Looking For"
-                  className="w-full bg-transparent text-xs text-slate-800 outline-none focus:outline-none"
-                />
-                <button
-                  type="button"
-                  className="w-7 h-7 rounded-full bg-[#009473] text-white flex items-center justify-center shrink-0 hover:scale-[1.02] active:scale-[0.97] transition-all duration-150"
-                  aria-label="Search"
-                >
-                  <Search className="w-3.5 h-3.5" />
-                </button>
-              </div>
+              <HeaderSearch variant="mobile" />
             </div>
           )}
         </header>

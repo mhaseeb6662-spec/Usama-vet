@@ -26,8 +26,14 @@ function generateOrderNumber(): string {
   return `ORD-${date}-${suffix}`;
 }
 
-export async function placeOrder(raw: unknown) {
+export async function placeOrder(raw: unknown, customerId?: number) {
   await ensureOrderSchema();
+  if (customerId) {
+    const customer = await prisma.user.findUnique({ where: { id: customerId } });
+    if (!customer || customer.role !== "CUSTOMER" || customer.status !== "ACTIVE") {
+      throw new OrderApplicationError("Your account session is invalid. Please log in again or continue as guest.", 401);
+    }
+  }
   const parsed = checkoutSchema.safeParse(raw);
   if (!parsed.success) {
     throw new OrderApplicationError(
@@ -76,6 +82,7 @@ export async function placeOrder(raw: unknown) {
           created = await tx.order.create({
             data: {
               orderNumber: generateOrderNumber(),
+              customerId: customerId || null,
               customerName: input.customerName,
               phone,
               whatsapp,
@@ -118,6 +125,19 @@ export async function placeOrder(raw: unknown) {
 
       if (!created) {
         throw new OrderApplicationError("Could not generate a unique order number.", 500);
+      }
+
+      if (customerId) {
+        await tx.user.update({
+          where: { id: customerId },
+          data: {
+            name: input.customerName,
+            phone,
+            city: input.city,
+            area: input.area || null,
+            address: input.address,
+          },
+        });
       }
 
       return created;

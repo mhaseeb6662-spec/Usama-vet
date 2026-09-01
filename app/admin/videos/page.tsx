@@ -1,7 +1,9 @@
 import React from "react";
+import Link from "next/link";
 import { prisma } from "@/lib/db";
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Edit } from "lucide-react";
 import { ensureAboutVideoTable } from "@/lib/data/aboutVideos";
 import VideoUploader from "@/components/admin/ui/VideoUploader";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
@@ -81,11 +83,74 @@ async function deleteAboutVideo(formData: FormData) {
   revalidatePath("/admin/videos");
 }
 
-export default async function AboutVideosAdmin() {
+function readVideoFields(formData: FormData) {
+  const title = String(formData.get("title") || "").trim();
+  const description = String(formData.get("description") || "").trim();
+  const videoUrl = String(formData.get("videoUrl") || "").trim();
+  const thumbnail = String(formData.get("thumbnail") || "").trim();
+  const sortOrder = Number.parseInt(String(formData.get("sortOrder") || "0"), 10);
+
+  if (!title) {
+    throw new Error("Video title is required.");
+  }
+  if (!videoUrl.startsWith("/api/videos/")) {
+    throw new Error("Upload a video file before saving.");
+  }
+
+  return {
+    title,
+    description: description || null,
+    videoUrl,
+    embedUrl: videoUrl,
+    thumbnail,
+    sortOrder: Number.isNaN(sortOrder) ? 0 : sortOrder,
+  };
+}
+
+async function updateAboutVideo(formData: FormData) {
+  "use server";
+  const id = Number.parseInt(String(formData.get("id") || ""), 10);
+  if (Number.isNaN(id)) {
+    throw new Error("Video id is required to update.");
+  }
+  const existing = await prisma.aboutVideo.findUnique({ where: { id } });
+  if (!existing) {
+    throw new Error("Video was not found.");
+  }
+
+  const fields = readVideoFields(formData);
+  await prisma.aboutVideo.update({
+    where: { id },
+    data: fields,
+  });
+
+  if (existing.videoUrl !== fields.videoUrl) {
+    await deleteVideo(existing.videoUrl);
+  }
+  if (existing.thumbnail && existing.thumbnail !== fields.thumbnail) {
+    await deleteImage(existing.thumbnail);
+  }
+
+  revalidatePath("/about");
+  revalidatePath("/admin/videos");
+  redirect("/admin/videos");
+}
+
+export default async function AboutVideosAdmin({
+  searchParams,
+}: {
+  searchParams: Promise<{ edit?: string }>;
+}) {
   await ensureAboutVideoTable();
+  const params = await searchParams;
   const videos = await prisma.aboutVideo.findMany({
     orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
   });
+  const editId = Number.parseInt(params.edit || "", 10);
+  const editing = Number.isNaN(editId) ? null : videos.find((video) => video.id === editId) || null;
+  if (params.edit && !editing) {
+    throw new Error("Video was not found for editing.");
+  }
 
   return (
     <div className="space-y-6">
@@ -95,31 +160,35 @@ export default async function AboutVideosAdmin() {
 
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-1 bg-white p-6 rounded-xl border border-slate-200 shadow-sm h-fit">
-          <h2 className="text-lg font-bold text-slate-800 mb-4">Upload Video</h2>
-          <form action={addAboutVideo} className="space-y-4">
+          <h2 className="text-lg font-bold text-slate-800 mb-4">{editing ? "Edit Video" : "Upload Video"}</h2>
+          <form action={editing ? updateAboutVideo : addAboutVideo} className="space-y-4">
+            {editing ? <input type="hidden" name="id" value={editing.id} /> : null}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Title *</label>
-              <input name="title" type="text" required className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="e.g. Warehouse Tour" />
+              <input name="title" type="text" required defaultValue={editing?.title || ""} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="e.g. Warehouse Tour" />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Description</label>
-              <textarea name="description" rows={3} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none resize-y" placeholder="Short text under the video..." />
+              <textarea name="description" rows={3} defaultValue={editing?.description || ""} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none resize-y" placeholder="Short text under the video..." />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Video File *</label>
-              <VideoUploader name="videoUrl" />
+              <VideoUploader key={editing ? `video-${editing.id}` : "video-new"} name="videoUrl" defaultVideo={editing?.videoUrl || ""} />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Cover Image (optional)</label>
-              <ImageUploader name="thumbnail" />
+              <ImageUploader key={editing ? `thumb-${editing.id}` : "thumb-new"} name="thumbnail" defaultImage={editing?.thumbnail || ""} />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Sort Order</label>
-              <input name="sortOrder" type="number" defaultValue={0} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+              <input name="sortOrder" type="number" defaultValue={editing?.sortOrder ?? 0} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
             </div>
             <button type="submit" className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-lg transition-colors mt-4">
-              <Plus className="w-4 h-4" /> Save Video
+              <Plus className="w-4 h-4" /> {editing ? "Update Video" : "Save Video"}
             </button>
+            {editing ? (
+              <Link href="/admin/videos" className="block text-center text-sm font-semibold text-slate-600 hover:text-emerald-700">Cancel edit</Link>
+            ) : null}
           </form>
         </div>
 
@@ -169,12 +238,17 @@ export default async function AboutVideosAdmin() {
                     </form>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <form action={deleteAboutVideo}>
-                      <input type="hidden" name="id" value={video.id} />
-                      <button type="submit" className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors inline-block">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </form>
+                    <div className="flex justify-end gap-2">
+                      <Link href={`/admin/videos?edit=${video.id}`} className="inline-flex items-center gap-1 px-2 py-1.5 text-sm font-semibold text-emerald-700 hover:bg-emerald-50 rounded-lg">
+                        <Edit className="w-4 h-4" /> Edit
+                      </Link>
+                      <form action={deleteAboutVideo}>
+                        <input type="hidden" name="id" value={video.id} />
+                        <button type="submit" className="inline-flex items-center gap-1 px-2 py-1.5 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-lg">
+                          <Trash2 className="w-4 h-4" /> Delete
+                        </button>
+                      </form>
+                    </div>
                   </td>
                 </tr>
               ))}

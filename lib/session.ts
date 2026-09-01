@@ -5,11 +5,11 @@ import { NextRequest } from "next/server";
 const secretKey = process.env.AUTH_SECRET;
 const key = new TextEncoder().encode(secretKey);
 
-export async function encrypt(payload: any) {
+export async function encrypt(payload: any, expirationTime = "24h") {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("24h")
+    .setExpirationTime(expirationTime)
     .sign(key);
 }
 

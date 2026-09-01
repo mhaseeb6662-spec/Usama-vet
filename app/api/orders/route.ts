@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { OrderApplicationError, placeOrder } from "@/lib/services/orders";
+import { getAuthenticatedCustomer } from "@/lib/services/customerAuth";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const order = await placeOrder(body);
+    const customer = await getAuthenticatedCustomer();
+    const order = await placeOrder(body, customer?.id);
 
     const response = NextResponse.json({
       success: true,

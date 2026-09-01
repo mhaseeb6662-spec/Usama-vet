@@ -9,6 +9,7 @@ async function deleteProduct(formData: FormData) {
   const idStr = formData.get("id") as string;
   const id = parseInt(idStr, 10);
   if (isNaN(id)) return;
+  await prisma.productAlert.deleteMany({ where: { productId: id } });
   await prisma.product.delete({ where: { id } });
   revalidatePath("/");
   revalidatePath("/admin/products");

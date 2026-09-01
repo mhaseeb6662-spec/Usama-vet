@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
+import { createProductAlert } from "@/lib/services/productAlerts";
 
 function parseRequiredId(raw: FormDataEntryValue | null): number {
   const id = Number.parseInt(String(raw || ""), 10);
@@ -119,6 +120,8 @@ async function updateProduct(formData: FormData) {
   } else if (existingPrimary) {
     await prisma.productImage.delete({ where: { id: existingPrimary.id } });
   }
+
+  await createProductAlert(id, "UPDATED", name);
 
   revalidatePath("/");
   revalidatePath(`/products/${slug}`);

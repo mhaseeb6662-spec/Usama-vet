@@ -6,6 +6,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import crypto from "crypto";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
+import { createProductAlert } from "@/lib/services/productAlerts";
 
 async function createProduct(formData: FormData) {
   "use server";
@@ -56,6 +57,8 @@ async function createProduct(formData: FormData) {
       }
     });
   }
+
+  await createProductAlert(product.id, "NEW", product.name);
 
   revalidatePath("/");
   revalidatePath("/admin/products");

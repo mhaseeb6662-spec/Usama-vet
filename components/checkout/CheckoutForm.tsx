@@ -27,6 +27,35 @@ export default function CheckoutForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState("");
   const [placing, setPlacing] = useState(false);
+  const [accountName, setAccountName] = useState("");
+
+  useEffect(() => {
+    fetch("/api/account/me")
+      .then(async (res) => {
+        if (res.status === 401) return null;
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || "Could not load account details.");
+        }
+        return data.data;
+      })
+      .then((customer) => {
+        if (!customer) return;
+        setAccountName(customer.name || customer.email);
+        setForm((prev) => ({
+          ...prev,
+          customerName: customer.name || prev.customerName,
+          phone: customer.phone || prev.phone,
+          email: customer.email || prev.email,
+          city: customer.city || prev.city,
+          area: customer.area || prev.area,
+          address: customer.address || prev.address,
+        }));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   useEffect(() => {
     if (items.length === 0) return;
@@ -106,6 +135,13 @@ export default function CheckoutForm() {
     <form onSubmit={onSubmit} className="grid lg:grid-cols-12 gap-6">
       <FadeUp className="lg:col-span-7 bg-white border border-slate-200 rounded-xl p-5 md:p-6 space-y-4">
         <h1 className="text-xl font-bold text-slate-900">Shipping Details</h1>
+        {accountName ? (
+          <p className="text-sm text-emerald-700">Logged in as {accountName}. This order will be saved to your account.</p>
+        ) : (
+          <p className="text-sm text-slate-500">
+            Ordering as guest. <Link href="/account/login?next=/checkout" className="text-emerald-700 font-semibold">Login</Link> to save details and get product updates, or continue without login.
+          </p>
+        )}
         {[
           ["customerName", "Full Name *", "text"],
           ["phone", "Mobile Number *", "tel"],
