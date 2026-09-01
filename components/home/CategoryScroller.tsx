@@ -2,7 +2,6 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/AnimationComponents";
 
 export default function CategoryScroller({ categories = [] }: { categories?: any[] }) {
@@ -110,13 +109,11 @@ export default function CategoryScroller({ categories = [] }: { categories?: any
                     {/* Circular Image Container */}
                     <div className="w-20 h-20 sm:w-[96px] sm:h-[96px] rounded-full bg-slate-50 border-2 border-slate-200 group-hover:border-emerald-500 overflow-hidden transition-all duration-200 ease-out flex items-center justify-center shadow-sm group-hover:scale-105 group-hover:shadow-md">
                       {imageUrl ? (
-                        <Image
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
                           src={imageUrl}
                           alt={cat.name}
-                          width={120}
-                          height={120}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                          unoptimized
                         />
                       ) : (
                         <span className="text-emerald-700 font-bold text-lg">{initials}</span>

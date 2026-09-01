@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { Plus, Trash2, Edit } from "lucide-react";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
 import { toServedImageUrl } from "@/lib/mediaUrl";
+import { ensureCategorySchema } from "@/lib/services/categorySchema";
 
 function readCategoryFields(formData: FormData) {
   const name = String(formData.get("name") || "").trim();
@@ -25,6 +26,7 @@ function readCategoryFields(formData: FormData) {
 
 async function addCategory(formData: FormData) {
   "use server";
+  await ensureCategorySchema();
   const { name, description, image, showOnHomepage } = readCategoryFields(formData);
   const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 
@@ -44,6 +46,7 @@ async function addCategory(formData: FormData) {
 
 async function updateCategory(formData: FormData) {
   "use server";
+  await ensureCategorySchema();
   const id = Number.parseInt(String(formData.get("id") || ""), 10);
   if (Number.isNaN(id)) {
     throw new Error("Category id is required to update.");
@@ -94,6 +97,7 @@ async function deleteCategory(formData: FormData) {
 
 async function toggleHomepageCategory(formData: FormData) {
   "use server";
+  await ensureCategorySchema();
   const idStr = formData.get("id") as string;
   const id = parseInt(idStr, 10);
   if (isNaN(id)) {
@@ -121,6 +125,7 @@ export default async function CategoriesAdmin({
   searchParams: Promise<{ edit?: string }>;
 }) {
   const params = await searchParams;
+  await ensureCategorySchema();
   const categories = await prisma.category.findMany({
     orderBy: { createdAt: "desc" },
     include: { _count: { select: { products: true } } }
