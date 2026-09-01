@@ -5,9 +5,9 @@ import { CheckCircle, XCircle, Trash2, Star } from "lucide-react";
 
 async function updateReviewStatus(formData: FormData) {
   "use server";
-  const id = formData.get("id") as string;
+  const id = parseInt(formData.get("id") as string, 10);
   const status = formData.get("status") as any;
-  if (id) {
+  if (!isNaN(id)) {
     await prisma.review.update({ where: { id }, data: { status } });
   }
   revalidatePath("/admin/reviews");
@@ -15,9 +15,10 @@ async function updateReviewStatus(formData: FormData) {
 
 async function deleteReview(formData: FormData) {
   "use server";
-  const id = formData.get("id") as string;
-  if (!id) return;
-  await prisma.review.delete({ where: { id } });
+  const id = parseInt(formData.get("id") as string, 10);
+  if (!isNaN(id)) {
+    await prisma.review.delete({ where: { id } });
+  }
   revalidatePath("/admin/reviews");
 }
 

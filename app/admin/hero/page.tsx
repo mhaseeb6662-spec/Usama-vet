@@ -25,8 +25,8 @@ async function addHeroSlide(formData: FormData) {
 
 async function deleteHeroSlide(formData: FormData) {
   "use server";
-  const id = formData.get("id") as string;
-  if (!id) return;
+  const id = parseInt(formData.get("id") as string, 10);
+  if (isNaN(id)) return;
   await prisma.heroSlide.delete({ where: { id } });
   
   revalidatePath("/");

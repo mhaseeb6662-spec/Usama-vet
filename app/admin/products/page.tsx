@@ -6,8 +6,9 @@ import { revalidatePath } from "next/cache";
 
 async function deleteProduct(formData: FormData) {
   "use server";
-  const id = formData.get("id") as string;
-  if (!id) return;
+  const idStr = formData.get("id") as string;
+  const id = parseInt(idStr, 10);
+  if (isNaN(id)) return;
   await prisma.product.delete({ where: { id } });
   revalidatePath("/admin/products");
 }

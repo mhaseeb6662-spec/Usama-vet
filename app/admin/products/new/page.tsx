@@ -20,7 +20,7 @@ async function createProduct(formData: FormData) {
   const stockQuantity = parseInt(formData.get("stockQuantity") as string, 10);
   
   const categoryIdStr = formData.get("categoryId") as string;
-  const categoryId = categoryIdStr || null;
+  const categoryId = categoryIdStr ? parseInt(categoryIdStr, 10) : null;
 
   const isFeatured = formData.get("isFeatured") === "on";
   const isNewArrival = formData.get("isNewArrival") === "on";

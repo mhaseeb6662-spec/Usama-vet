@@ -1,7 +1,7 @@
 // Prisma schema for MySQL e‑commerce backend
 
 datasource db {
-  provider = "mongodb"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -12,7 +12,7 @@ generator client {
 
 // ---------- USER ----------
 model User {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  id           Int        @id @default(autoincrement())
   name         String?
   email        String     @unique
   passwordHash String
@@ -36,14 +36,14 @@ enum UserStatus {
 
 // ---------- PRODUCT ----------
 model Product {
-  id               String         @id @default(auto()) @map("_id") @db.ObjectId
+  id               Int            @id @default(autoincrement())
   name             String
   slug             String         @unique
   sku              String         @unique
   shortDescription String?
   description      String?
-  price            Float          @default(0.0)
-  salePrice        Float?
+  price            Decimal        @default(0.0) @db.Decimal(10, 2)
+  salePrice        Decimal?       @db.Decimal(10, 2)
   stockQuantity    Int            @default(0)
   isActive         Boolean        @default(true)
   isFeatured       Boolean        @default(false)
@@ -58,11 +58,11 @@ model Product {
   indexable        Boolean        @default(true)
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
-  categoryId       String?        @db.ObjectId
+  categoryId       Int?
   category         Category?      @relation(fields: [categoryId], references: [id])
-  subcategoryId    String?        @db.ObjectId
+  subcategoryId    Int?
   subcategory      Subcategory?   @relation(fields: [subcategoryId], references: [id])
-  brandId          String?        @db.ObjectId
+  brandId          Int?
   brand            Brand?         @relation(fields: [brandId], references: [id])
   images           ProductImage[]
   reviews          Review[]
@@ -70,8 +70,8 @@ model Product {
 }
 
 model ProductImage {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  productId String   @db.ObjectId
+  id        Int      @id @default(autoincrement())
+  productId Int
   imageUrl  String
   altText   String?
   sortOrder Int      @default(0)
@@ -82,7 +82,7 @@ model ProductImage {
 
 // ---------- CATEGORY ----------
 model Category {
-  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  id              Int               @id @default(autoincrement())
   name            String
   slug            String            @unique
   description     String?
@@ -101,8 +101,8 @@ model Category {
 }
 
 model Subcategory {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  categoryId  String    @db.ObjectId
+  id          Int       @id @default(autoincrement())
+  categoryId  Int
   name        String
   slug        String    @unique
   description String?
@@ -117,7 +117,7 @@ model Subcategory {
 
 // ---------- BRAND ----------
 model Brand {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  id          Int       @id @default(autoincrement())
   name        String
   slug        String    @unique
   logo        String?
@@ -130,7 +130,7 @@ model Brand {
 
 // ---------- HERO SLIDER ----------
 model HeroSlide {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           Int      @id @default(autoincrement())
   title        String
   subtitle     String?
   description  String?
@@ -146,7 +146,7 @@ model HeroSlide {
 
 // ---------- BANNER ----------
 model Banner {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  id          Int       @id @default(autoincrement())
   name        String
   title       String?
   subtitle    String?
@@ -165,12 +165,12 @@ model Banner {
 
 // ---------- HOMEPAGE SECTION ----------
 model HomepageSection {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  id          Int         @id @default(autoincrement())
   key         String      @unique
   title       String?
   subtitle    String?
   type        SectionType
-  categoryId  String?     @db.ObjectId
+  categoryId  Int?
   maxProducts Int         @default(8)
   sortOrder   Int         @default(0)
   isActive    Boolean     @default(true)
@@ -190,7 +190,7 @@ enum SectionType {
 
 // ---------- REVIEW ----------
 model Review {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  id             Int           @id @default(autoincrement())
   rating         Int           @default(0)
   title          String?
   content        String?
@@ -200,7 +200,7 @@ model Review {
   isVerified     Boolean       @default(false)
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
-  productId      String?       @db.ObjectId
+  productId      Int?
   product        Product?      @relation(fields: [productId], references: [id])
   images         ReviewImage[]
 }
@@ -212,8 +212,8 @@ enum ReviewStatus {
 }
 
 model ReviewImage {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  reviewId  String   @db.ObjectId
+  id        Int      @id @default(autoincrement())
+  reviewId  Int
   imageUrl  String
   altText   String?
   createdAt DateTime @default(now())
@@ -222,19 +222,19 @@ model ReviewImage {
 
 // ---------- ORDER ----------
 model Order {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  id            Int         @id @default(autoincrement())
   orderNumber   String      @unique
-  customerId    String?     @db.ObjectId
+  customerId    Int?
   customerName  String
   phone         String
   email         String?
   address       String
   city          String
   notes         String?
-  subtotal      Float       @default(0.0)
-  shippingFee   Float       @default(0.0)
-  discount      Float       @default(0.0)
-  total         Float       @default(0.0)
+  subtotal      Decimal     @default(0.0) @db.Decimal(10, 2)
+  shippingFee   Decimal     @default(0.0) @db.Decimal(10, 2)
+  discount      Decimal     @default(0.0) @db.Decimal(10, 2)
+  total         Decimal     @default(0.0) @db.Decimal(10, 2)
   status        OrderStatus @default(PENDING)
   paymentMethod String?
   paymentStatus String?
@@ -254,21 +254,21 @@ enum OrderStatus {
 }
 
 model OrderItem {
-  id                  String  @id @default(auto()) @map("_id") @db.ObjectId
-  orderId             String  @db.ObjectId
-  productId           String  @db.ObjectId
+  id                  Int     @id @default(autoincrement())
+  orderId             Int
+  productId           Int
   productNameSnapshot String
   skuSnapshot         String
   quantity            Int
-  unitPrice           Float
-  totalPrice          Float
+  unitPrice           Decimal @db.Decimal(10, 2)
+  totalPrice          Decimal @db.Decimal(10, 2)
   order               Order   @relation(fields: [orderId], references: [id])
   product             Product @relation(fields: [productId], references: [id])
 }
 
 // ---------- CONTACT MESSAGE ----------
 model ContactMessage {
-  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int           @id @default(autoincrement())
   name      String
   email     String?
   phone     String?
@@ -286,7 +286,7 @@ enum MessageStatus {
 
 // ---------- SITE SETTINGS ----------
 model SiteSetting {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  id    Int     @id @default(autoincrement())
   key   String  @unique
   value String?
 }
