@@ -87,6 +87,11 @@ export default function RootLayout({
               "html,body{background:#f8fafc;color:#0f172a;margin:0}body{min-height:100vh}",
           }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var k="uv-static-retry";function retry(){if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1");var u=new URL(location.href);u.searchParams.set("_uv",String(Date.now()));location.replace(u.toString())}window.addEventListener("error",function(e){var t=e.target;if(!t)return;var url=t.src||t.href||"";if(url.indexOf("/_next/static/")!==-1)retry()},true)}catch(e){}})();`,
+          }}
+        />
       </head>
       <body className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans relative overflow-x-hidden">
         <AnimatedBackground />
