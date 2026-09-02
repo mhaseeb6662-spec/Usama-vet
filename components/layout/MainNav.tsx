@@ -69,7 +69,7 @@ export default function MainNav({ categories = [] }: { categories?: any[] }) {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -5, scale: 0.985 }}
                 transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute top-full left-0 pt-2 w-[550px] z-50 origin-top-left"
+                className="absolute top-full left-0 pt-2 w-[550px] z-[60] origin-top-left"
               >
                 <div className="bg-white border border-slate-200 shadow-xl rounded-lg overflow-hidden p-3 flex flex-col">
                   <div className="grid grid-cols-2 gap-x-4 gap-y-1">

@@ -53,11 +53,11 @@ export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[
   };
 
   if (activeSlides.length === 0) {
-    return <div className="w-full min-h-[140px] bg-emerald-950" />;
+    return <div className="w-full min-h-[140px] bg-emerald-950 relative z-0" />;
   }
 
   return (
-    <div className="w-full relative bg-slate-100 overflow-hidden shadow-md group">
+    <div className="w-full relative z-0 bg-slate-100 overflow-hidden shadow-md group">
       <AnimatePresence mode="wait">
         <motion.div
           key={safeIndex}
