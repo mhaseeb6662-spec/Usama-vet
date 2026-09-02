@@ -33,6 +33,7 @@ export const BUSINESS_CONFIG = {
     { label: "Products", href: "/#products" }, // Anchor or route placeholder
     { label: "About Us", href: "/about" },
     { label: "Reviews", href: "/reviews" },
+    { label: "How to Order", href: "/how-to-order" },
     { label: "Contact Us", href: "/contact" },
   ],
   features: [

@@ -85,6 +85,11 @@ export default function Footer() {
               </Link>
             </li>
             <li>
+              <Link href="/how-to-order" className="hover:text-[#009473] hover:translate-x-[2px] transition-all duration-200 inline-block">
+                How to Order
+              </Link>
+            </li>
+            <li>
               <Link href="/contact" className="hover:text-[#009473] hover:translate-x-[2px] transition-all duration-200 inline-block">
                 Contact Us
               </Link>

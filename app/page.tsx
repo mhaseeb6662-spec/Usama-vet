@@ -2,8 +2,7 @@ import React from "react";
 import { OrganizationSchema, WebSiteSchema } from "@/lib/seo/schema";
 import HomeStorefront from "@/components/home/HomeStorefront";
 
-export const dynamic = "force-static";
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   alternates: {

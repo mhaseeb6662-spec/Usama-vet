@@ -125,6 +125,14 @@ export default function MainNav({ categories = [] }: { categories?: any[] }) {
             Reviews
           </Link>
           <Link
+            href="/how-to-order"
+            className={`font-semibold text-[15px] transition-colors relative py-4 nav-link-underline h-full flex items-center ${
+              isActive("/how-to-order") ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
+            }`}
+          >
+            How to Order
+          </Link>
+          <Link
             href="/contact"
             className={`font-semibold text-[15px] transition-colors relative py-4 nav-link-underline h-full flex items-center ${
               isActive("/contact") ? "text-[#009473]" : "text-slate-800 hover:text-[#009473]"
