@@ -73,7 +73,7 @@ export default function VideoUploader({ name, defaultVideo }: VideoUploaderProps
             </p>
             <p className="text-xs text-slate-400">MP4, WEBM or MOV, under 40 MB</p>
           </div>
-          <input type="file" className="hidden" accept="video/mp4,video/webm,video/quicktime" onChange={handleFileChange} disabled={isUploading} />
+          <input type="file" form="uv-file-upload-ignore" className="hidden" accept="video/mp4,video/webm,video/quicktime" onChange={handleFileChange} disabled={isUploading} />
         </label>
       )}
       {error && <p className="text-red-500 text-sm mt-2">{error}</p>}

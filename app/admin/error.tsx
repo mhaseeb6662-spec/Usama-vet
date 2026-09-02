@@ -18,7 +18,11 @@ export default function AdminError({
     <div className="min-h-[40vh] flex items-center justify-center px-4">
       <div className="text-center max-w-lg">
         <h2 className="text-2xl font-bold text-slate-800 mb-3">Admin change could not finish</h2>
-        <p className="text-slate-600 mb-6">{error.message || "The dashboard request failed."}</p>
+        <p className="text-slate-600 mb-6">
+          {/unexpected response|failed to fetch|network/i.test(error.message)
+            ? "The dashboard lost the connection while saving. Go back and try the same change again."
+            : error.message || "The dashboard request failed."}
+        </p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <button
             type="button"

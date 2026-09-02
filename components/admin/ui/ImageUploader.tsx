@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { UploadCloud, X, Loader2 } from "lucide-react";
 
 interface ImageUploaderProps {
@@ -12,6 +12,21 @@ export default function ImageUploader({ name, defaultImage }: ImageUploaderProps
   const [imageUrl, setImageUrl] = useState<string>(defaultImage || "");
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState("");
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const form = rootRef.current?.closest("form");
+    if (!form) {
+      return;
+    }
+    const onSubmit = (event: Event) => {
+      if (isUploading) {
+        event.preventDefault();
+      }
+    };
+    form.addEventListener("submit", onSubmit);
+    return () => form.removeEventListener("submit", onSubmit);
+  }, [isUploading]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -47,7 +62,7 @@ export default function ImageUploader({ name, defaultImage }: ImageUploaderProps
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full" ref={rootRef}>
       <input type="hidden" name={name} value={imageUrl} />
       
       {imageUrl ? (
@@ -75,7 +90,7 @@ export default function ImageUploader({ name, defaultImage }: ImageUploaderProps
             </p>
             <p className="text-xs text-slate-400">PNG, JPG or WEBP</p>
           </div>
-          <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} disabled={isUploading} />
+          <input type="file" form="uv-file-upload-ignore" className="hidden" accept="image/*" onChange={handleFileChange} disabled={isUploading} />
         </label>
       )}
       {error && <p className="text-red-500 text-sm mt-2">{error}</p>}

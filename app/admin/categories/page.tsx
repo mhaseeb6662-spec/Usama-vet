@@ -8,22 +8,12 @@ import AdminActionError from "@/components/admin/AdminActionError";
 import { runAdminAction } from "@/lib/admin/mutation";
 import { toServedImageUrl } from "@/lib/mediaUrl";
 import { ensureCategorySchema } from "@/lib/services/categorySchema";
-
-function readCategoryFields(formData: FormData) {
-  const name = String(formData.get("name") || "").trim();
-  const description = String(formData.get("description") || "").trim();
-  const image = String(formData.get("image") || "").trim();
-  const showOnHomepage = formData.get("showOnHomepage") === "on";
-
-  if (!name) {
-    throw new Error("Category name is required.");
-  }
-  if (showOnHomepage && !image) {
-    throw new Error("Upload a category picture to show it in Shop by Categories.");
-  }
-
-  return { name, description, image, showOnHomepage };
-}
+import {
+  createAdminCategory,
+  deleteAdminCategory,
+  toggleAdminCategoryHomepage,
+  updateAdminCategory,
+} from "@/lib/services/adminCategory";
 
 async function loadCategoryList() {
   return prisma.category.findMany({
@@ -35,27 +25,7 @@ async function loadCategoryList() {
 async function addCategory(formData: FormData) {
   "use server";
   await runAdminAction("/admin/categories", async () => {
-    await ensureCategorySchema();
-    const { name, description, image, showOnHomepage } = readCategoryFields(formData);
-    const slugBase = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-    const clash = await prisma.category.findFirst({
-      where: { slug: slugBase },
-      select: { id: true },
-    });
-    if (clash) {
-      throw new Error("A category with this name already exists.");
-    }
-
-    await prisma.category.create({
-      data: {
-        name,
-        slug: slugBase,
-        description: description || null,
-        image: image || null,
-        isActive: true,
-        showOnHomepage,
-      },
-    });
+    await createAdminCategory(formData);
     redirect("/admin/categories");
   });
 }
@@ -65,39 +35,7 @@ async function updateCategory(formData: FormData) {
   const id = Number.parseInt(String(formData.get("id") || ""), 10);
   const returnPath = Number.isNaN(id) ? "/admin/categories" : `/admin/categories?edit=${id}`;
   await runAdminAction(returnPath, async () => {
-    await ensureCategorySchema();
-    if (Number.isNaN(id)) {
-      throw new Error("Category id is required to update.");
-    }
-
-    const existing = await prisma.category.findUnique({ where: { id } });
-    if (!existing) {
-      throw new Error("Category was not found.");
-    }
-
-    const { name, description, image, showOnHomepage } = readCategoryFields(formData);
-
-    let slug = existing.slug;
-    if (name !== existing.name) {
-      const nextSlug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-      const clash = await prisma.category.findFirst({
-        where: { slug: nextSlug, NOT: { id } },
-        select: { id: true },
-      });
-      slug = clash ? `${nextSlug}-${id}` : nextSlug;
-    }
-
-    await prisma.category.update({
-      where: { id },
-      data: {
-        name,
-        slug,
-        description: description || null,
-        image: image || null,
-        showOnHomepage,
-      },
-    });
-
+    await updateAdminCategory(formData);
     redirect("/admin/categories");
   });
 }
@@ -109,23 +47,7 @@ async function deleteCategory(formData: FormData) {
     if (Number.isNaN(id)) {
       throw new Error("Category id is required to delete.");
     }
-    const existing = await prisma.category.findUnique({ where: { id } });
-    if (!existing) {
-      throw new Error("Category was not found.");
-    }
-    const subcategoryCount = await prisma.subcategory.count({ where: { categoryId: id } });
-    if (subcategoryCount > 0) {
-      throw new Error("This category has subcategories and cannot be deleted.");
-    }
-    await prisma.product.updateMany({
-      where: { categoryId: id },
-      data: { categoryId: null },
-    });
-    await prisma.homepageSection.updateMany({
-      where: { categoryId: id },
-      data: { categoryId: null },
-    });
-    await prisma.category.delete({ where: { id } });
+    await deleteAdminCategory(id);
     redirect("/admin/categories");
   });
 }
@@ -133,23 +55,7 @@ async function deleteCategory(formData: FormData) {
 async function toggleHomepageCategory(formData: FormData) {
   "use server";
   await runAdminAction("/admin/categories", async () => {
-    await ensureCategorySchema();
-    const id = Number.parseInt(String(formData.get("id") || ""), 10);
-    if (Number.isNaN(id)) {
-      throw new Error("Category id is required to update homepage visibility.");
-    }
-    const currentlyVisible = formData.get("showOnHomepage") === "true";
-    const existing = await prisma.category.findUnique({ where: { id } });
-    if (!existing) {
-      throw new Error("Category was not found.");
-    }
-    if (!currentlyVisible && !existing.image) {
-      throw new Error("Upload a category picture before showing it in Shop by Categories.");
-    }
-    await prisma.category.update({
-      where: { id },
-      data: { showOnHomepage: !currentlyVisible },
-    });
+    await toggleAdminCategoryHomepage(formData);
     redirect("/admin/categories");
   });
 }
@@ -203,7 +109,7 @@ export default async function CategoriesAdmin({
               <textarea name="description" rows={3} defaultValue={editing?.description || ""} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Category details..." />
             </div>
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" name="showOnHomepage" defaultChecked={editing ? Boolean(editing.showOnHomepage) : true} className="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500" />
+              <input type="checkbox" name="showOnHomepage" defaultChecked={editing ? Boolean(editing.showOnHomepage) : false} className="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500" />
               <span className="text-sm font-medium text-slate-700">Show in Shop by Categories</span>
             </label>
             <button type="submit" className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-lg transition-colors">
