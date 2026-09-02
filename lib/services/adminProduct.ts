@@ -6,123 +6,6 @@ import {
   isMissingTableError,
 } from "@/lib/services/productAlerts";
 
-let productAdminSchemaReady = false;
-
-function isIgnorableSchemaError(error: unknown): boolean {
-  if (isMissingTableError(error)) {
-    return true;
-  }
-  const message = error instanceof Error ? error.message : String(error);
-  return /duplicate|already|check that column\/key exists/i.test(message);
-}
-
-function assertSafeIdent(value: string, label: string): string {
-  if (!/^[A-Za-z0-9_]+$/.test(value)) {
-    throw new Error(`${label} is not a valid database identifier.`);
-  }
-  return value;
-}
-
-async function foreignKeyNames(table: string, column: string): Promise<string[]> {
-  const safeTable = assertSafeIdent(table, "Table");
-  const safeColumn = assertSafeIdent(column, "Column");
-  const rows = await prisma.$queryRawUnsafe<Array<{ CONSTRAINT_NAME: string }>>(
-    `SELECT CONSTRAINT_NAME
-     FROM information_schema.KEY_COLUMN_USAGE
-     WHERE TABLE_SCHEMA = DATABASE()
-       AND TABLE_NAME = '${safeTable}'
-       AND COLUMN_NAME = '${safeColumn}'
-       AND REFERENCED_TABLE_NAME IS NOT NULL`
-  );
-  return rows
-    .map((row) => row.CONSTRAINT_NAME)
-    .filter((name) => /^[A-Za-z0-9_]+$/.test(name));
-}
-
-async function replaceForeignKey(
-  table: string,
-  column: string,
-  constraint: string,
-  referencedTable: string,
-  onDelete: "CASCADE" | "SET NULL"
-) {
-  const safeTable = assertSafeIdent(table, "Table");
-  const safeColumn = assertSafeIdent(column, "Column");
-  const safeConstraint = assertSafeIdent(constraint, "Constraint");
-  const safeReferenced = assertSafeIdent(referencedTable, "Referenced table");
-
-  const names = await foreignKeyNames(safeTable, safeColumn);
-  for (const name of names) {
-    try {
-      await prisma.$executeRawUnsafe(`ALTER TABLE \`${safeTable}\` DROP FOREIGN KEY \`${name}\``);
-    } catch (error) {
-      if (!isIgnorableSchemaError(error)) {
-        throw error;
-      }
-    }
-  }
-
-  try {
-    await prisma.$executeRawUnsafe(
-      `ALTER TABLE \`${safeTable}\` ADD CONSTRAINT \`${safeConstraint}\` FOREIGN KEY (\`${safeColumn}\`) REFERENCES \`${safeReferenced}\`(\`id\`) ON DELETE ${onDelete} ON UPDATE CASCADE`
-    );
-  } catch (error) {
-    if (!isIgnorableSchemaError(error)) {
-      throw error;
-    }
-  }
-}
-
-async function tableExists(table: string): Promise<boolean> {
-  const safeTable = assertSafeIdent(table, "Table");
-  const rows = await prisma.$queryRawUnsafe<Array<{ c: number | bigint }>>(
-    `SELECT COUNT(*) AS c
-     FROM information_schema.TABLES
-     WHERE TABLE_SCHEMA = DATABASE()
-       AND TABLE_NAME = '${safeTable}'`
-  );
-  return Number(rows[0]?.c || 0) > 0;
-}
-
-async function runOptionalSchemaFix(statement: string) {
-  try {
-    await prisma.$executeRawUnsafe(statement);
-  } catch (error) {
-    if (!isIgnorableSchemaError(error)) {
-      throw error;
-    }
-  }
-}
-
-export async function ensureProductAdminSchema(): Promise<void> {
-  if (productAdminSchemaReady) {
-    return;
-  }
-
-  if (await tableExists("Product")) {
-    if (await tableExists("Category")) {
-      await runOptionalSchemaFix(
-        "UPDATE `Product` LEFT JOIN `Category` ON `Product`.`categoryId` = `Category`.`id` SET `Product`.`categoryId` = NULL WHERE `Product`.`categoryId` IS NOT NULL AND `Category`.`id` IS NULL"
-      );
-      await replaceForeignKey("Product", "categoryId", "Product_categoryId_fkey", "Category", "SET NULL");
-    }
-    if (await tableExists("ProductImage")) {
-      await runOptionalSchemaFix(
-        "DELETE `ProductImage` FROM `ProductImage` LEFT JOIN `Product` ON `ProductImage`.`productId` = `Product`.`id` WHERE `Product`.`id` IS NULL"
-      );
-      await replaceForeignKey("ProductImage", "productId", "ProductImage_productId_fkey", "Product", "CASCADE");
-    }
-    if (await tableExists("Review")) {
-      await runOptionalSchemaFix(
-        "UPDATE `Review` LEFT JOIN `Product` ON `Review`.`productId` = `Product`.`id` SET `Review`.`productId` = NULL WHERE `Review`.`productId` IS NOT NULL AND `Product`.`id` IS NULL"
-      );
-      await replaceForeignKey("Review", "productId", "Review_productId_fkey", "Product", "SET NULL");
-    }
-  }
-
-  productAdminSchemaReady = true;
-}
-
 export async function resolveOptionalCategoryId(raw: string): Promise<number | null> {
   const trimmed = raw.trim();
   if (!trimmed) {
@@ -199,7 +82,6 @@ function readProductFields(formData: FormData, options: { requireSku: boolean })
 }
 
 export async function createAdminProduct(formData: FormData) {
-  await ensureProductAdminSchema();
   const fields = readProductFields(formData, { requireSku: false });
   const sku = fields.sku || crypto.randomBytes(4).toString("hex").toUpperCase();
   const categoryId = await resolveOptionalCategoryId(fields.categoryIdStr);
@@ -259,7 +141,6 @@ export async function createAdminProduct(formData: FormData) {
 }
 
 export async function updateAdminProduct(formData: FormData) {
-  await ensureProductAdminSchema();
   const id = Number.parseInt(String(formData.get("id") || ""), 10);
   if (Number.isNaN(id)) {
     throw new Error("Product id is required to update.");
@@ -346,8 +227,29 @@ export async function updateAdminProduct(formData: FormData) {
   }
 }
 
+async function detachOrderItems(productId: number) {
+  try {
+    await prisma.$executeRawUnsafe(
+      `UPDATE \`OrderItem\` SET \`productId\` = NULL WHERE \`productId\` = ${productId}`
+    );
+  } catch (error) {
+    if (!isMissingTableError(error)) {
+      const message = error instanceof Error ? error.message : String(error);
+      if (!/null|cannot|1146|1364|1048/i.test(message)) {
+        throw error;
+      }
+    }
+  }
+}
+
+function isForeignKeyError(error: unknown): boolean {
+  if (!error || typeof error !== "object" || !("code" in error)) {
+    return false;
+  }
+  return String((error as { code?: unknown }).code || "") === "P2003";
+}
+
 export async function deleteAdminProduct(id: number) {
-  await ensureProductAdminSchema();
   const existing = await prisma.product.findUnique({
     where: { id },
     select: { id: true },
@@ -356,13 +258,14 @@ export async function deleteAdminProduct(id: number) {
     throw new Error("Product was not found.");
   }
 
-  const orderCount = await prisma.orderItem.count({ where: { productId: id } });
-  if (orderCount > 0) {
-    throw new Error(`This product is on ${orderCount} order(s) and cannot be deleted.`);
-  }
-
   await deleteProductAlertsForProduct(id);
-  await prisma.productImage.deleteMany({ where: { productId: id } });
+  try {
+    await prisma.productImage.deleteMany({ where: { productId: id } });
+  } catch (error) {
+    if (!isMissingTableError(error)) {
+      throw error;
+    }
+  }
   try {
     await prisma.review.updateMany({
       where: { productId: id },
@@ -373,5 +276,21 @@ export async function deleteAdminProduct(id: number) {
       throw error;
     }
   }
-  await prisma.product.delete({ where: { id } });
+
+  try {
+    await prisma.product.delete({ where: { id } });
+    return;
+  } catch (error) {
+    if (!isForeignKeyError(error)) {
+      throw error;
+    }
+    await detachOrderItems(id);
+    try {
+      await prisma.product.delete({ where: { id } });
+    } catch (retryError) {
+      throw new Error("This product is on existing orders and cannot be deleted.", {
+        cause: retryError,
+      });
+    }
+  }
 }

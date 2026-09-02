@@ -233,7 +233,7 @@ model ReviewImage {
   imageUrl  String
   altText   String?
   createdAt DateTime @default(now())
-  review    Review   @relation(fields: [reviewId], references: [id])
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 }
 
 // ---------- ORDER ----------

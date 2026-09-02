@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { CheckCircle, XCircle, Trash2, Star, Plus, Edit } from "lucide-react";
 import AdminActionError from "@/components/admin/AdminActionError";
 import { runAdminAction } from "@/lib/admin/mutation";
+import { isMissingTableError } from "@/lib/services/productAlerts";
 
 function readReviewFields(formData: FormData) {
   const displayName = String(formData.get("displayName") || "").trim();
@@ -117,6 +118,13 @@ async function deleteReview(formData: FormData) {
       throw new Error("Review was not found.");
     }
 
+    try {
+      await prisma.reviewImage.deleteMany({ where: { reviewId: id } });
+    } catch (error) {
+      if (!isMissingTableError(error)) {
+        throw error;
+      }
+    }
     await prisma.review.delete({ where: { id } });
     redirect("/admin/reviews");
   });
