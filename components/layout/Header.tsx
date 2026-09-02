@@ -4,7 +4,23 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Search, ShoppingCart, Menu, X } from "lucide-react";
+import {
+  Search,
+  ShoppingCart,
+  Menu,
+  X,
+  ChevronRight,
+  Phone,
+  MapPin,
+  Pill,
+  Milk,
+  Activity,
+  Feather,
+  Heart,
+  Grid,
+  Sparkles,
+  Shield,
+} from "lucide-react";
 import AccountMenu from "@/components/account/AccountMenu";
 import HeaderSearch from "@/components/search/HeaderSearch";
 import { BUSINESS_CONFIG } from "@/lib/constants/config";
@@ -20,11 +36,31 @@ type NavCategory = {
   iconName?: string;
 };
 
+const CATEGORY_ICON_MAP: Record<string, React.ElementType> = {
+  Pills: Pill,
+  Milk,
+  Activity,
+  Feather,
+  Heart,
+  Grid,
+  Sparkles,
+  Shield,
+};
+
+const menuLinks = [
+  { name: "Home", href: "/" },
+  { name: "About Us", href: "/about" },
+  { name: "Reviews", href: "/reviews" },
+  { name: "How to Order", href: "/how-to-order" },
+  { name: "Contact Us", href: "/contact" },
+];
+
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [categories, setCategories] = useState<NavCategory[]>([]);
+  const [categoriesError, setCategoriesError] = useState("");
   const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
   const { count } = useCart();
@@ -41,7 +77,6 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile drawer on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
@@ -52,8 +87,15 @@ export default function Header() {
     }
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
     };
   }, [isMobileMenuOpen]);
 
@@ -65,23 +107,28 @@ export default function Header() {
           throw new Error(data.message || "Could not load categories.");
         }
         setCategories(data.data);
+        setCategoriesError("");
       })
       .catch((error) => {
         console.error(error);
+        setCategories([]);
+        setCategoriesError(error instanceof Error ? error.message : "Could not load categories.");
       });
   }, []);
 
-  const menuLinks = [
-    { name: "Home", href: "/" },
-    { name: "About Us", href: "/about" },
-    { name: "Reviews", href: "/reviews" },
-    { name: "How to Order", href: "/how-to-order" },
-    { name: "Contact Us", href: "/contact" },
-  ];
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const drawerMotion = {
+    duration: shouldReduceMotion ? 0 : 0.28,
+    ease: [0.22, 1, 0.36, 1] as const,
+  };
 
   return (
     <>
-      {/* 1. TOP ANNOUNCEMENT TICKER (Fade/Slide load sequence) */}
       <div>
         <TopBar />
       </div>
@@ -89,11 +136,8 @@ export default function Header() {
       <div
         className={`sticky top-0 z-40 w-full relative transition-all duration-200 ${scrolled ? "shadow-md" : ""}`}
       >
-        {/* 2. MAIN HEADER (Logo, Search Pill, Actions) */}
         <header className="bg-white/80 backdrop-blur-xl border-b border-slate-100 py-3 px-3 sm:py-5 sm:px-4">
           <div className="max-w-7xl mx-auto flex justify-between items-center gap-2 sm:gap-4 lg:gap-6 min-w-0">
-            
-            {/* Logo Group */}
             <Link href="/" className="flex items-center gap-2 sm:gap-3 min-w-0 group focus:outline-none">
               <div className="w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full shadow-sm shrink-0 overflow-hidden bg-slate-50 border border-slate-200">
                 <Image src="/logo.jpg" alt="Veterinary Logo" width={64} height={64} className="w-full h-full object-cover" unoptimized />
@@ -105,17 +149,13 @@ export default function Header() {
               </div>
             </Link>
 
-            {/* Pill Search Bar */}
             <div className="hidden md:flex flex-grow min-w-0 max-w-2xl relative">
               <HeaderSearch variant="desktop" />
             </div>
 
-            {/* Right Side Actions: Login & Cart */}
             <div className="flex items-center gap-1 sm:gap-2.5 lg:gap-6 shrink-0">
-              
               <AccountMenu />
 
-              {/* Cart link */}
               <Link
                 href="/cart"
                 className="flex items-center gap-2.5 hover:text-[#009473] transition-colors focus:outline-none text-left group"
@@ -131,20 +171,19 @@ export default function Header() {
                 </span>
               </Link>
 
-              {/* Mobile Search Toggle */}
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="md:hidden w-9 h-9 flex items-center justify-center text-slate-600 hover:text-[#009473] hover:bg-slate-50 rounded-full transition-colors focus:outline-none hover-scale-subtle"
+                className="md:hidden w-9 h-9 flex items-center justify-center text-slate-600 hover:text-[#009473] hover:bg-slate-50 rounded-full border border-slate-200 bg-white transition-colors focus:outline-none hover-scale-subtle"
                 aria-label="Search"
               >
                 <Search className="w-5 h-5" />
               </button>
 
-              {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden w-9 h-9 flex items-center justify-center text-slate-600 hover:text-[#009473] hover:bg-slate-50 rounded-full transition-colors focus:outline-none hover-scale-subtle"
+                className="lg:hidden w-9 h-9 flex items-center justify-center text-slate-700 hover:text-[#009473] hover:bg-[#eef8f4] rounded-full border border-slate-200 bg-white transition-colors focus:outline-none hover-scale-subtle"
                 aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-menu-drawer"
                 aria-label="Menu"
               >
                 {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -152,7 +191,6 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Mobile Search Input focus transition */}
           {isSearchOpen && (
             <div className="md:hidden pt-3 border-t border-slate-100 mt-2">
               <HeaderSearch variant="mobile" />
@@ -163,91 +201,131 @@ export default function Header() {
         <div className="hidden lg:block w-full">
           <MainNav categories={categories} />
         </div>
+      </div>
 
-        {/* 4. MOBILE SLIDE-OUT MENU DRAWER */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="lg:hidden absolute top-full left-0 right-0 z-50 w-full max-h-[min(70vh,calc(100dvh-8rem))] bg-white border-t border-slate-200 shadow-xl py-4 px-4 space-y-4 overflow-y-auto"
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <div className="lg:hidden fixed inset-0 z-[10050]" role="dialog" aria-modal="true" aria-label="Menu">
+            <motion.button
+              type="button"
+              aria-label="Close menu"
+              className="absolute inset-0 bg-slate-900/45"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={drawerMotion}
+              onClick={closeMobileMenu}
+            />
+            <motion.aside
+              id="mobile-menu-drawer"
+              initial={{ x: shouldReduceMotion ? 0 : "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: shouldReduceMotion ? 0 : "100%" }}
+              transition={drawerMotion}
+              className="absolute top-0 right-0 h-full w-[min(86vw,340px)] bg-white shadow-2xl flex flex-col"
             >
-              <motion.nav
-                initial="hidden"
-                animate="show"
-                variants={{
-                  hidden: {},
-                  show: {
-                    transition: {
-                      staggerChildren: shouldReduceMotion ? 0 : 0.04
-                    }
-                  }
-                }}
-                className="flex flex-col gap-2"
-              >
-                {menuLinks.map((link) => (
-                  <motion.div
-                    key={link.name}
-                    variants={{
-                      hidden: { opacity: 0, x: shouldReduceMotion ? 0 : -8 },
-                      show: { opacity: 1, x: 0 }
-                    }}
-                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <Link
-                      href={link.href}
-                      className="px-3 py-3 rounded-md font-semibold text-sm uppercase text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors block"
-                    >
-                      {link.name}
-                    </Link>
-                  </motion.div>
-                ))}
-                {categories.map((category) => (
-                  <motion.div
-                    key={category.id}
-                    variants={{
-                      hidden: { opacity: 0, x: shouldReduceMotion ? 0 : -8 },
-                      show: { opacity: 1, x: 0 }
-                    }}
-                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <Link
-                      href={`/categories/${category.slug}`}
-                      className="px-3 py-3 rounded-md font-semibold text-sm text-slate-800 hover:bg-slate-50 hover:text-emerald-600 transition-colors block"
-                    >
-                      {category.name}
-                    </Link>
-                  </motion.div>
-                ))}
-              </motion.nav>
+              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+                <p className="text-[15px] font-bold text-slate-800">Menu</p>
+                <button
+                  type="button"
+                  onClick={closeMobileMenu}
+                  className="w-9 h-9 flex items-center justify-center rounded-full border border-slate-200 text-slate-600 hover:text-[#009473] hover:bg-[#eef8f4]"
+                  aria-label="Close menu"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.3 }}
-                className="pt-4 border-t border-slate-100 space-y-3"
-              >
-                <div className="px-3 text-xs font-semibold text-slate-700">
-                  Call Us: <a href={`tel:${BUSINESS_CONFIG.contact.phone.replace(/[^0-9+]/g, '')}`} className="text-emerald-700 hover:underline">{BUSINESS_CONFIG.contact.phoneDisplay}</a>
+              <div className="flex-1 overflow-y-auto px-4 py-4 space-y-5">
+                <nav className="flex flex-col gap-1">
+                  {menuLinks.map((link) => {
+                    const active = isActive(link.href);
+                    return (
+                      <Link
+                        key={link.name}
+                        href={link.href}
+                        onClick={closeMobileMenu}
+                        className={`px-3 py-2.5 rounded-lg text-[14px] font-semibold transition-colors ${
+                          active
+                            ? "bg-[#eef8f4] text-[#009473]"
+                            : "text-slate-800 hover:bg-slate-50 hover:text-[#009473]"
+                        }`}
+                      >
+                        {link.name}
+                      </Link>
+                    );
+                  })}
+                </nav>
+
+                <div className="rounded-xl border border-slate-200 overflow-hidden">
+                  <div className="bg-[#009473] text-white px-3 py-2.5 text-[13px] font-semibold uppercase flex items-center gap-2">
+                    <Menu className="w-4 h-4 shrink-0" />
+                    <span>Categories</span>
+                  </div>
+                  <div className="p-1.5">
+                    {categoriesError ? (
+                      <p className="px-3 py-2.5 text-xs text-rose-600">{categoriesError}</p>
+                    ) : categories.length === 0 ? (
+                      <p className="px-3 py-2.5 text-xs text-slate-500">
+                        Categories will appear here once they are published from the admin dashboard.
+                      </p>
+                    ) : (
+                      categories.map((category) => {
+                        const Icon = CATEGORY_ICON_MAP[category.iconName || ""] || ChevronRight;
+                        const active = pathname === `/categories/${category.slug}`;
+                        return (
+                          <Link
+                            key={category.id}
+                            href={`/categories/${category.slug}`}
+                            onClick={closeMobileMenu}
+                            className={`flex items-center justify-between px-3 py-2.5 rounded-md text-[14px] font-medium transition-colors ${
+                              active
+                                ? "bg-[#eef8f4] text-[#009473]"
+                                : "text-slate-700 hover:bg-[#eef8f4] hover:text-[#009473]"
+                            }`}
+                          >
+                            <span className="flex items-center gap-3 min-w-0">
+                              <Icon className="w-4 h-4 shrink-0 text-slate-400" />
+                              <span className="truncate">{category.name}</span>
+                            </span>
+                            <ChevronRight className="w-4 h-4 shrink-0 text-[#009473]" />
+                          </Link>
+                        );
+                      })
+                    )}
+                  </div>
                 </div>
-                <Link href="/track-order" className="px-3 text-xs font-semibold text-slate-700 hover:text-emerald-700">
-                  Track Your Order
+              </div>
+
+              <div className="border-t border-slate-100 px-4 py-3 space-y-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+                <a
+                  href={`tel:${BUSINESS_CONFIG.contact.phone.replace(/[^0-9+]/g, "")}`}
+                  className="flex items-center gap-2 px-1 text-[13px] font-semibold text-slate-700 hover:text-[#009473]"
+                >
+                  <Phone className="w-4 h-4 text-[#009473]" />
+                  <span>Call Us {BUSINESS_CONFIG.contact.phoneDisplay}</span>
+                </a>
+                <Link
+                  href="/track-order"
+                  onClick={closeMobileMenu}
+                  className="flex items-center gap-2 px-1 text-[13px] font-semibold text-slate-700 hover:text-[#009473]"
+                >
+                  <MapPin className="w-4 h-4 text-[#009473]" />
+                  <span>Track Your Order</span>
                 </Link>
                 <a
                   href={BUSINESS_CONFIG.contact.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mx-3 bg-[#009473] hover:bg-[#028467] text-white font-semibold text-center py-2.5 rounded-md text-xs transition-colors flex items-center justify-center gap-1.5 shadow-sm active:scale-95 duration-150"
+                  className="bg-[#009473] hover:bg-[#028467] text-white font-semibold text-center py-2.5 rounded-md text-xs transition-colors flex items-center justify-center shadow-sm active:scale-95 duration-150"
                 >
-                  <span>WhatsApp Support</span>
+                  WhatsApp Support
                 </a>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              </div>
+            </motion.aside>
+          </div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
