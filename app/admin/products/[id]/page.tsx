@@ -5,134 +5,17 @@ import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
 import AdminActionError from "@/components/admin/AdminActionError";
-import { createProductAlert } from "@/lib/services/productAlerts";
 import { runAdminAction } from "@/lib/admin/mutation";
+import { updateAdminProduct } from "@/lib/services/adminProduct";
 import { toServedImageUrl } from "@/lib/mediaUrl";
-
-function parseRequiredId(raw: FormDataEntryValue | null): number {
-  const id = Number.parseInt(String(raw || ""), 10);
-  if (Number.isNaN(id)) {
-    throw new Error("Product id is required to update.");
-  }
-  return id;
-}
 
 async function updateProduct(formData: FormData) {
   "use server";
   const rawId = Number.parseInt(String(formData.get("id") || ""), 10);
   const returnPath = Number.isNaN(rawId) ? "/admin/products" : `/admin/products/${rawId}`;
   await runAdminAction(returnPath, async () => {
-  const id = parseRequiredId(formData.get("id"));
-  const existing = await prisma.product.findUnique({
-    where: { id },
-    include: { images: true },
-  });
-  if (!existing) {
-    throw new Error("Product was not found.");
-  }
-
-  const name = String(formData.get("name") || "").trim();
-  const sku = String(formData.get("sku") || "").trim();
-  const shortDescription = String(formData.get("shortDescription") || "");
-  const description = String(formData.get("description") || "");
-  const primaryImage = String(formData.get("primaryImage") || "").trim();
-  const price = Number.parseFloat(String(formData.get("price") || ""));
-  const salePriceRaw = String(formData.get("salePrice") || "").trim();
-  const salePrice = salePriceRaw ? Number.parseFloat(salePriceRaw) : null;
-  const stockQuantity = Number.parseInt(String(formData.get("stockQuantity") || ""), 10);
-  const categoryIdStr = String(formData.get("categoryId") || "");
-  const categoryId = categoryIdStr ? Number.parseInt(categoryIdStr, 10) : null;
-
-  if (!name) {
-    throw new Error("Product name is required.");
-  }
-  if (!sku) {
-    throw new Error("SKU is required.");
-  }
-  if (Number.isNaN(price)) {
-    throw new Error("Regular price is required.");
-  }
-  if (salePriceRaw && Number.isNaN(salePrice)) {
-    throw new Error("Sale price must be a valid number.");
-  }
-  if (Number.isNaN(stockQuantity)) {
-    throw new Error("Stock quantity is required.");
-  }
-  if (categoryIdStr && Number.isNaN(categoryId)) {
-    throw new Error("Category is invalid.");
-  }
-
-  const skuClash = await prisma.product.findFirst({
-    where: { sku, NOT: { id } },
-    select: { id: true },
-  });
-  if (skuClash) {
-    throw new Error("Another product already uses this SKU.");
-  }
-
-  let slug = existing.slug;
-  if (name !== existing.name) {
-    let nextSlug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-    if (nextSlug.length < 3) nextSlug = `${nextSlug}-${sku}`.replace(/^-+|-+$/g, "");
-    const slugClash = await prisma.product.findFirst({
-      where: { slug: nextSlug, NOT: { id } },
-      select: { id: true },
-    });
-    slug = slugClash ? `${nextSlug}-${id}` : nextSlug;
-  }
-
-  await prisma.product.update({
-    where: { id },
-    data: {
-      name,
-      slug,
-      sku,
-      shortDescription,
-      description,
-      price,
-      salePrice,
-      stockQuantity,
-      categoryId,
-      isFeatured: formData.get("isFeatured") === "on",
-      isNewArrival: formData.get("isNewArrival") === "on",
-      isBestSeller: formData.get("isBestSeller") === "on",
-      isRecommended: formData.get("isRecommended") === "on",
-      isTrending: formData.get("isTrending") === "on",
-      seoTitle: String(formData.get("seoTitle") || ""),
-      metaDescription: String(formData.get("metaDescription") || ""),
-    },
-  });
-
-  const existingPrimary = existing.images.find((image) => image.isPrimary) || existing.images[0] || null;
-  if (primaryImage) {
-    if (existingPrimary) {
-      if (existingPrimary.imageUrl !== primaryImage) {
-        await prisma.productImage.update({
-          where: { id: existingPrimary.id },
-          data: { imageUrl: primaryImage, isPrimary: true },
-        });
-      }
-    } else {
-      await prisma.productImage.create({
-        data: {
-          productId: id,
-          imageUrl: primaryImage,
-          isPrimary: true,
-          sortOrder: 0,
-        },
-      });
-    }
-  } else if (existingPrimary) {
-    await prisma.productImage.delete({ where: { id: existingPrimary.id } });
-  }
-
-  try {
-    await createProductAlert(id, "UPDATED", name);
-  } catch (error) {
-    console.error("[admin] Product updated but alert failed:", error);
-  }
-
-  redirect("/admin/products");
+    await updateAdminProduct(formData);
+    redirect("/admin/products");
   });
 }
 

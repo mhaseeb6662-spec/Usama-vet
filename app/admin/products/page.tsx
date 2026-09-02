@@ -2,9 +2,10 @@ import React from "react";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { Plus, Edit, Trash2 } from "lucide-react";
+import { redirect } from "next/navigation";
 import AdminActionError from "@/components/admin/AdminActionError";
-import { deleteProductAlertsForProduct } from "@/lib/services/productAlerts";
 import { runAdminAction } from "@/lib/admin/mutation";
+import { deleteAdminProduct } from "@/lib/services/adminProduct";
 
 async function loadProductList() {
   return prisma.product.findMany({
@@ -20,12 +21,8 @@ async function deleteProduct(formData: FormData) {
     if (Number.isNaN(id)) {
       throw new Error("Product id is required to delete.");
     }
-    const existing = await prisma.product.findUnique({ where: { id }, select: { id: true } });
-    if (!existing) {
-      throw new Error("Product was not found.");
-    }
-    await deleteProductAlertsForProduct(id);
-    await prisma.product.delete({ where: { id } });
+    await deleteAdminProduct(id);
+    redirect("/admin/products");
   });
 }
 

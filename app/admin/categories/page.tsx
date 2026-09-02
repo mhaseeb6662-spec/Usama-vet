@@ -113,6 +113,18 @@ async function deleteCategory(formData: FormData) {
     if (!existing) {
       throw new Error("Category was not found.");
     }
+    const subcategoryCount = await prisma.subcategory.count({ where: { categoryId: id } });
+    if (subcategoryCount > 0) {
+      throw new Error("This category has subcategories and cannot be deleted.");
+    }
+    await prisma.product.updateMany({
+      where: { categoryId: id },
+      data: { categoryId: null },
+    });
+    await prisma.homepageSection.updateMany({
+      where: { categoryId: id },
+      data: { categoryId: null },
+    });
     await prisma.category.delete({ where: { id } });
     redirect("/admin/categories");
   });

@@ -63,7 +63,7 @@ model Product {
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
   categoryId       Int?
-  category         Category?      @relation(fields: [categoryId], references: [id])
+  category         Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   subcategoryId    Int?
   subcategory      Subcategory?   @relation(fields: [subcategoryId], references: [id])
   brandId          Int?
@@ -93,7 +93,7 @@ model ProductImage {
   sortOrder Int      @default(0)
   isPrimary Boolean  @default(false)
   createdAt DateTime @default(now())
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 // ---------- CATEGORY ----------
@@ -217,7 +217,7 @@ model Review {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   productId      Int?
-  product        Product?      @relation(fields: [productId], references: [id])
+  product        Product?      @relation(fields: [productId], references: [id], onDelete: SetNull)
   images         ReviewImage[]
 }
 
