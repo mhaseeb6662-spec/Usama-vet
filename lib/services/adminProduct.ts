@@ -1,12 +1,19 @@
 import crypto from "crypto";
 import { prisma } from "@/lib/db";
-import { createProductAlert, deleteProductAlertsForProduct } from "@/lib/services/productAlerts";
+import {
+  createProductAlert,
+  deleteProductAlertsForProduct,
+  isMissingTableError,
+} from "@/lib/services/productAlerts";
 
 let productAdminSchemaReady = false;
 
 function isIgnorableSchemaError(error: unknown): boolean {
+  if (isMissingTableError(error)) {
+    return true;
+  }
   const message = error instanceof Error ? error.message : String(error);
-  return /duplicate|exists|already|check that column\/key exists|unknown table|does not exist/i.test(message);
+  return /duplicate|already|check that column\/key exists/i.test(message);
 }
 
 function assertSafeIdent(value: string, label: string): string {
@@ -66,6 +73,17 @@ async function replaceForeignKey(
   }
 }
 
+async function tableExists(table: string): Promise<boolean> {
+  const safeTable = assertSafeIdent(table, "Table");
+  const rows = await prisma.$queryRawUnsafe<Array<{ c: number | bigint }>>(
+    `SELECT COUNT(*) AS c
+     FROM information_schema.TABLES
+     WHERE TABLE_SCHEMA = DATABASE()
+       AND TABLE_NAME = '${safeTable}'`
+  );
+  return Number(rows[0]?.c || 0) > 0;
+}
+
 async function runOptionalSchemaFix(statement: string) {
   try {
     await prisma.$executeRawUnsafe(statement);
@@ -81,23 +99,27 @@ export async function ensureProductAdminSchema(): Promise<void> {
     return;
   }
 
-  await runOptionalSchemaFix(
-    "UPDATE `Product` LEFT JOIN `Category` ON `Product`.`categoryId` = `Category`.`id` SET `Product`.`categoryId` = NULL WHERE `Product`.`categoryId` IS NOT NULL AND `Category`.`id` IS NULL"
-  );
-  await runOptionalSchemaFix(
-    "DELETE `ProductImage` FROM `ProductImage` LEFT JOIN `Product` ON `ProductImage`.`productId` = `Product`.`id` WHERE `Product`.`id` IS NULL"
-  );
-  await runOptionalSchemaFix(
-    "UPDATE `Review` LEFT JOIN `Product` ON `Review`.`productId` = `Product`.`id` SET `Review`.`productId` = NULL WHERE `Review`.`productId` IS NOT NULL AND `Product`.`id` IS NULL"
-  );
-  await runOptionalSchemaFix(
-    "DELETE `ProductAlert` FROM `ProductAlert` LEFT JOIN `Product` ON `ProductAlert`.`productId` = `Product`.`id` WHERE `Product`.`id` IS NULL"
-  );
+  if (await tableExists("Product")) {
+    if (await tableExists("Category")) {
+      await runOptionalSchemaFix(
+        "UPDATE `Product` LEFT JOIN `Category` ON `Product`.`categoryId` = `Category`.`id` SET `Product`.`categoryId` = NULL WHERE `Product`.`categoryId` IS NOT NULL AND `Category`.`id` IS NULL"
+      );
+      await replaceForeignKey("Product", "categoryId", "Product_categoryId_fkey", "Category", "SET NULL");
+    }
+    if (await tableExists("ProductImage")) {
+      await runOptionalSchemaFix(
+        "DELETE `ProductImage` FROM `ProductImage` LEFT JOIN `Product` ON `ProductImage`.`productId` = `Product`.`id` WHERE `Product`.`id` IS NULL"
+      );
+      await replaceForeignKey("ProductImage", "productId", "ProductImage_productId_fkey", "Product", "CASCADE");
+    }
+    if (await tableExists("Review")) {
+      await runOptionalSchemaFix(
+        "UPDATE `Review` LEFT JOIN `Product` ON `Review`.`productId` = `Product`.`id` SET `Review`.`productId` = NULL WHERE `Review`.`productId` IS NOT NULL AND `Product`.`id` IS NULL"
+      );
+      await replaceForeignKey("Review", "productId", "Review_productId_fkey", "Product", "SET NULL");
+    }
+  }
 
-  await replaceForeignKey("Product", "categoryId", "Product_categoryId_fkey", "Category", "SET NULL");
-  await replaceForeignKey("ProductImage", "productId", "ProductImage_productId_fkey", "Product", "CASCADE");
-  await replaceForeignKey("Review", "productId", "Review_productId_fkey", "Product", "SET NULL");
-  await replaceForeignKey("ProductAlert", "productId", "ProductAlert_productId_fkey", "Product", "CASCADE");
   productAdminSchemaReady = true;
 }
 
@@ -341,9 +363,15 @@ export async function deleteAdminProduct(id: number) {
 
   await deleteProductAlertsForProduct(id);
   await prisma.productImage.deleteMany({ where: { productId: id } });
-  await prisma.review.updateMany({
-    where: { productId: id },
-    data: { productId: null },
-  });
+  try {
+    await prisma.review.updateMany({
+      where: { productId: id },
+      data: { productId: null },
+    });
+  } catch (error) {
+    if (!isMissingTableError(error)) {
+      throw error;
+    }
+  }
   await prisma.product.delete({ where: { id } });
 }

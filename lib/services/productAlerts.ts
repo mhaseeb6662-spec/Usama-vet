@@ -3,9 +3,11 @@ import { ensureCustomerSchema } from "@/lib/services/customerSchema";
 
 export type ProductAlertKind = "NEW" | "UPDATED";
 
-function isMissingAlertTable(error: unknown): boolean {
+export function isMissingTableError(error: unknown): boolean {
   const message = error instanceof Error ? error.message : String(error);
-  return /P2021|does not exist|no such table|Unknown table/i.test(message);
+  return /P2021|1146|ER_NO_SUCH_TABLE|doesn't exist|does not exist|no such table|unknown table/i.test(
+    message
+  );
 }
 
 export async function createProductAlert(
@@ -23,7 +25,7 @@ export async function createProductAlert(
       data: { productId, kind, title: name },
     });
   } catch (error) {
-    if (!isMissingAlertTable(error)) {
+    if (!isMissingTableError(error)) {
       throw error;
     }
     await ensureCustomerSchema();
@@ -37,7 +39,7 @@ export async function deleteProductAlertsForProduct(productId: number) {
   try {
     await prisma.productAlert.deleteMany({ where: { productId } });
   } catch (error) {
-    if (!isMissingAlertTable(error)) {
+    if (!isMissingTableError(error)) {
       throw error;
     }
   }
