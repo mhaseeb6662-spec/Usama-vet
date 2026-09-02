@@ -29,14 +29,18 @@ export default function ImageUploader({ name, defaultImage }: ImageUploaderProps
         body: formData,
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to upload");
+      let data: { url?: string; error?: string };
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error("Upload failed. The server did not return a valid response.");
       }
-
-      const data = await res.json();
+      if (!res.ok || !data.url) {
+        throw new Error(data.error || "Failed to upload image.");
+      }
       setImageUrl(data.url);
-    } catch (err: any) {
-      setError(err.message || "Upload failed");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setIsUploading(false);
     }

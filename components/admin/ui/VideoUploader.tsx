@@ -28,12 +28,15 @@ export default function VideoUploader({ name, defaultVideo }: VideoUploaderProps
         method: "POST",
         body: formData,
       });
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to upload video");
+      let data: { url?: string; error?: string };
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error("Upload failed. The server did not return a valid response.");
       }
-
+      if (!res.ok || !data.url) {
+        throw new Error(data.error || "Failed to upload video.");
+      }
       setVideoUrl(data.url);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed");

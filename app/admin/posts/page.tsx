@@ -2,9 +2,10 @@ import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { Plus, Trash2, Edit } from "lucide-react";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
+import AdminActionError from "@/components/admin/AdminActionError";
+import { runAdminAction } from "@/lib/admin/mutation";
 import { toServedImageUrl } from "@/lib/mediaUrl";
 import { deleteImage } from "@/lib/imageStorage";
 import { ensureHowToOrderPostTable } from "@/lib/data/howToOrderPosts";
@@ -23,89 +24,104 @@ function readPostFields(formData: FormData) {
   };
 }
 
+async function loadPostList() {
+  return prisma.howToOrderPost.findMany({
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+  });
+}
+
 async function addPost(formData: FormData) {
   "use server";
-  await ensureHowToOrderPostTable();
-  await prisma.howToOrderPost.create({
-    data: {
-      ...readPostFields(formData),
-      isActive: true,
-    },
+  await runAdminAction("/admin/posts", async () => {
+    await ensureHowToOrderPostTable();
+    await prisma.howToOrderPost.create({
+      data: {
+        ...readPostFields(formData),
+        isActive: true,
+      },
+    });
+    redirect("/admin/posts");
   });
-  revalidatePath("/how-to-order");
-  revalidatePath("/admin/posts");
 }
 
 async function updatePost(formData: FormData) {
   "use server";
   const id = Number.parseInt(String(formData.get("id") || ""), 10);
-  if (Number.isNaN(id)) {
-    throw new Error("Post id is required to update.");
-  }
-  const existing = await prisma.howToOrderPost.findUnique({ where: { id } });
-  if (!existing) {
-    throw new Error("Post was not found.");
-  }
-  const fields = readPostFields(formData);
-  await prisma.howToOrderPost.update({
-    where: { id },
-    data: fields,
+  const returnPath = Number.isNaN(id) ? "/admin/posts" : `/admin/posts?edit=${id}`;
+  await runAdminAction(returnPath, async () => {
+    if (Number.isNaN(id)) {
+      throw new Error("Post id is required to update.");
+    }
+    const existing = await prisma.howToOrderPost.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error("Post was not found.");
+    }
+    const fields = readPostFields(formData);
+    await prisma.howToOrderPost.update({
+      where: { id },
+      data: fields,
+    });
+    if (existing.image && existing.image !== fields.image) {
+      await deleteImage(existing.image);
+    }
+    redirect("/admin/posts");
   });
-  if (existing.image && existing.image !== fields.image) {
-    await deleteImage(existing.image);
-  }
-  revalidatePath("/how-to-order");
-  revalidatePath("/admin/posts");
-  redirect("/admin/posts");
 }
 
 async function togglePost(formData: FormData) {
   "use server";
-  const id = Number.parseInt(String(formData.get("id") || ""), 10);
-  const isActive = formData.get("isActive") === "true";
-  if (Number.isNaN(id)) {
-    throw new Error("Post id is required to update visibility.");
-  }
-  await prisma.howToOrderPost.update({
-    where: { id },
-    data: { isActive: !isActive },
+  await runAdminAction("/admin/posts", async () => {
+    const id = Number.parseInt(String(formData.get("id") || ""), 10);
+    const isActive = formData.get("isActive") === "true";
+    if (Number.isNaN(id)) {
+      throw new Error("Post id is required to update visibility.");
+    }
+    await prisma.howToOrderPost.update({
+      where: { id },
+      data: { isActive: !isActive },
+    });
+    redirect("/admin/posts");
   });
-  revalidatePath("/how-to-order");
-  revalidatePath("/admin/posts");
 }
 
 async function deletePost(formData: FormData) {
   "use server";
-  const id = Number.parseInt(String(formData.get("id") || ""), 10);
-  if (Number.isNaN(id)) {
-    throw new Error("Post id is required to delete.");
-  }
-  const existing = await prisma.howToOrderPost.findUnique({ where: { id } });
-  if (!existing) {
-    throw new Error("Post was not found.");
-  }
-  await prisma.howToOrderPost.delete({ where: { id } });
-  if (existing.image) {
-    await deleteImage(existing.image);
-  }
-  revalidatePath("/how-to-order");
-  revalidatePath("/admin/posts");
+  await runAdminAction("/admin/posts", async () => {
+    const id = Number.parseInt(String(formData.get("id") || ""), 10);
+    if (Number.isNaN(id)) {
+      throw new Error("Post id is required to delete.");
+    }
+    const existing = await prisma.howToOrderPost.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error("Post was not found.");
+    }
+    await prisma.howToOrderPost.delete({ where: { id } });
+    if (existing.image) {
+      await deleteImage(existing.image);
+    }
+    redirect("/admin/posts");
+  });
 }
 
 export default async function HowToOrderPostsAdmin({
   searchParams,
 }: {
-  searchParams: Promise<{ edit?: string }>;
+  searchParams: Promise<{ edit?: string; error?: string }>;
 }) {
-  await ensureHowToOrderPostTable();
   const params = await searchParams;
-  const posts = await prisma.howToOrderPost.findMany({
-    orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-  });
+  let posts: Awaited<ReturnType<typeof loadPostList>> = [];
+  let loadError = "";
+  try {
+    await ensureHowToOrderPostTable();
+    posts = await loadPostList();
+  } catch (error) {
+    console.error("[admin] post list failed:", error);
+    loadError = "Could not load posts. Please try again.";
+  }
   const editId = Number.parseInt(params.edit || "", 10);
   const editing = Number.isNaN(editId) ? null : posts.find((post) => post.id === editId) || null;
   if (params.edit && !editing) {
-    throw new Error("Post was not found for editing.");
+    redirect("/admin/posts");
   }
 
   return (
@@ -116,6 +132,7 @@ export default async function HowToOrderPostsAdmin({
       <p className="text-sm text-slate-500">
         Upload an image only. It appears full width on the How to Order page.
       </p>
+      <AdminActionError message={params.error || loadError} />
 
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 bg-white p-6 rounded-xl border border-slate-200 shadow-sm h-fit">

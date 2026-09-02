@@ -1,72 +1,119 @@
 import React from "react";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import crypto from "crypto";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
+import AdminActionError from "@/components/admin/AdminActionError";
 import { createProductAlert } from "@/lib/services/productAlerts";
+import { runAdminAction } from "@/lib/admin/mutation";
 
 async function createProduct(formData: FormData) {
   "use server";
-  const name = formData.get("name") as string;
-  const sku = formData.get("sku") as string || crypto.randomBytes(4).toString("hex").toUpperCase();
-  const shortDescription = formData.get("shortDescription") as string;
-  const description = formData.get("description") as string;
-  const primaryImage = formData.get("primaryImage") as string;
-  
-  const price = parseFloat(formData.get("price") as string);
-  const salePriceRaw = formData.get("salePrice") as string;
-  const salePrice = salePriceRaw ? parseFloat(salePriceRaw) : null;
-  const stockQuantity = parseInt(formData.get("stockQuantity") as string, 10);
-  
-  const categoryIdStr = formData.get("categoryId") as string;
-  const categoryId = categoryIdStr ? parseInt(categoryIdStr, 10) : null;
+  await runAdminAction("/admin/products/new", async () => {
+    const name = String(formData.get("name") || "").trim();
+    const sku = String(formData.get("sku") || "").trim() || crypto.randomBytes(4).toString("hex").toUpperCase();
+    const shortDescription = String(formData.get("shortDescription") || "");
+    const description = String(formData.get("description") || "");
+    const primaryImage = String(formData.get("primaryImage") || "").trim();
+    const price = Number.parseFloat(String(formData.get("price") || ""));
+    const salePriceRaw = String(formData.get("salePrice") || "").trim();
+    const salePrice = salePriceRaw ? Number.parseFloat(salePriceRaw) : null;
+    const stockQuantity = Number.parseInt(String(formData.get("stockQuantity") || ""), 10);
+    const categoryIdStr = String(formData.get("categoryId") || "");
+    const categoryId = categoryIdStr ? Number.parseInt(categoryIdStr, 10) : null;
 
-  const isFeatured = formData.get("isFeatured") === "on";
-  const isNewArrival = formData.get("isNewArrival") === "on";
-  const isBestSeller = formData.get("isBestSeller") === "on";
-  const isRecommended = formData.get("isRecommended") === "on";
-  const isTrending = formData.get("isTrending") === "on";
-  
-  const seoTitle = formData.get("seoTitle") as string;
-  const metaDescription = formData.get("metaDescription") as string;
-
-  let slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  if (slug.length < 3) slug += `-${sku}`;
-
-  const product = await prisma.product.create({
-    data: {
-      name, slug, sku, 
-      shortDescription, description, 
-      price, salePrice, stockQuantity, 
-      categoryId,
-      isFeatured, isNewArrival, isBestSeller, isRecommended, isTrending,
-      seoTitle, metaDescription
+    if (!name) {
+      throw new Error("Product name is required.");
     }
-  });
+    if (Number.isNaN(price)) {
+      throw new Error("Regular price is required.");
+    }
+    if (Number.isNaN(stockQuantity)) {
+      throw new Error("Stock quantity is required.");
+    }
+    if (salePriceRaw && Number.isNaN(salePrice)) {
+      throw new Error("Sale price must be a valid number.");
+    }
+    if (categoryIdStr && Number.isNaN(categoryId)) {
+      throw new Error("Category is invalid.");
+    }
 
-  if (primaryImage) {
-    await prisma.productImage.create({
-      data: {
-        productId: product.id,
-        imageUrl: primaryImage,
-        isPrimary: true,
-        sortOrder: 0
-      }
+    const skuClash = await prisma.product.findFirst({
+      where: { sku },
+      select: { id: true },
     });
-  }
+    if (skuClash) {
+      throw new Error("Another product already uses this SKU.");
+    }
 
-  await createProductAlert(product.id, "NEW", product.name);
+    let slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    if (slug.length < 3) slug = `${slug}-${sku}`.replace(/^-+|-+$/g, "");
+    const slugClash = await prisma.product.findFirst({
+      where: { slug },
+      select: { id: true },
+    });
+    if (slugClash) {
+      slug = `${slug}-${sku}`.replace(/^-+|-+$/g, "");
+    }
 
-  revalidatePath("/");
-  revalidatePath("/admin/products");
-  redirect("/admin/products");
+    const product = await prisma.product.create({
+      data: {
+        name,
+        slug,
+        sku,
+        shortDescription,
+        description,
+        price,
+        salePrice,
+        stockQuantity,
+        categoryId,
+        isFeatured: formData.get("isFeatured") === "on",
+        isNewArrival: formData.get("isNewArrival") === "on",
+        isBestSeller: formData.get("isBestSeller") === "on",
+        isRecommended: formData.get("isRecommended") === "on",
+        isTrending: formData.get("isTrending") === "on",
+        seoTitle: String(formData.get("seoTitle") || ""),
+        metaDescription: String(formData.get("metaDescription") || ""),
+      },
+    });
+
+    if (primaryImage) {
+      await prisma.productImage.create({
+        data: {
+          productId: product.id,
+          imageUrl: primaryImage,
+          isPrimary: true,
+          sortOrder: 0,
+        },
+      });
+    }
+
+    try {
+      await createProductAlert(product.id, "NEW", product.name);
+    } catch (error) {
+      console.error("[admin] Product saved but alert failed:", error);
+    }
+
+    redirect("/admin/products");
+  });
 }
 
-export default async function NewProductAdmin() {
-  const categories = await prisma.category.findMany();
+export default async function NewProductAdmin({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const params = await searchParams;
+  let categories: Awaited<ReturnType<typeof prisma.category.findMany>> = [];
+  let loadError = "";
+  try {
+    categories = await prisma.category.findMany();
+  } catch (error) {
+    console.error("[admin] product categories failed:", error);
+    loadError = "Could not load categories. Please try again.";
+  }
 
   return (
     <div className="space-y-6 max-w-4xl">
@@ -74,6 +121,7 @@ export default async function NewProductAdmin() {
         <Link href="/admin/products" className="p-2 hover:bg-slate-200 rounded-full transition-colors"><ArrowLeft className="w-5 h-5 text-slate-600" /></Link>
         <h1 className="text-2xl font-bold text-slate-900">Add New Product</h1>
       </div>
+      <AdminActionError message={params.error || loadError} />
 
       <div className="bg-white p-6 md:p-8 rounded-xl border border-slate-200 shadow-sm">
         <form action={createProduct} className="space-y-8">

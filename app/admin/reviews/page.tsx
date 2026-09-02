@@ -2,14 +2,9 @@ import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { CheckCircle, XCircle, Trash2, Star, Plus, Edit } from "lucide-react";
-
-function revalidateReviewPages() {
-  revalidatePath("/");
-  revalidatePath("/reviews");
-  revalidatePath("/admin/reviews");
-}
+import AdminActionError from "@/components/admin/AdminActionError";
+import { runAdminAction } from "@/lib/admin/mutation";
 
 function readReviewFields(formData: FormData) {
   const displayName = String(formData.get("displayName") || "").trim();
@@ -34,100 +29,117 @@ function readReviewFields(formData: FormData) {
   return { displayName, title, content, whatsappNumber: whatsappNumber || null, rating };
 }
 
+async function loadReviewList() {
+  return prisma.review.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 async function addReview(formData: FormData) {
   "use server";
-  const fields = readReviewFields(formData);
-
-  await prisma.review.create({
-    data: {
-      ...fields,
-      status: "APPROVED",
-      isVerified: true,
-    },
+  await runAdminAction("/admin/reviews", async () => {
+    const fields = readReviewFields(formData);
+    await prisma.review.create({
+      data: {
+        ...fields,
+        status: "APPROVED",
+        isVerified: true,
+      },
+    });
+    redirect("/admin/reviews");
   });
-
-  revalidateReviewPages();
 }
 
 async function updateReview(formData: FormData) {
   "use server";
   const id = Number.parseInt(String(formData.get("id") || ""), 10);
-  if (Number.isNaN(id)) {
-    throw new Error("Review id is required to update.");
-  }
+  const returnPath = Number.isNaN(id) ? "/admin/reviews" : `/admin/reviews?edit=${id}`;
+  await runAdminAction(returnPath, async () => {
+    if (Number.isNaN(id)) {
+      throw new Error("Review id is required to update.");
+    }
 
-  const existing = await prisma.review.findUnique({ where: { id } });
-  if (!existing) {
-    throw new Error("Review was not found.");
-  }
+    const existing = await prisma.review.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error("Review was not found.");
+    }
 
-  const fields = readReviewFields(formData);
-  const statusRaw = String(formData.get("status") || existing.status);
-  if (statusRaw !== "PENDING" && statusRaw !== "APPROVED" && statusRaw !== "REJECTED") {
-    throw new Error("Review status is invalid.");
-  }
+    const fields = readReviewFields(formData);
+    const statusRaw = String(formData.get("status") || existing.status);
+    if (statusRaw !== "PENDING" && statusRaw !== "APPROVED" && statusRaw !== "REJECTED") {
+      throw new Error("Review status is invalid.");
+    }
 
-  await prisma.review.update({
-    where: { id },
-    data: {
-      ...fields,
-      status: statusRaw,
-    },
+    await prisma.review.update({
+      where: { id },
+      data: {
+        ...fields,
+        status: statusRaw,
+      },
+    });
+
+    redirect("/admin/reviews");
   });
-
-  revalidateReviewPages();
-  redirect("/admin/reviews");
 }
 
 async function updateReviewStatus(formData: FormData) {
   "use server";
-  const id = Number.parseInt(String(formData.get("id") || ""), 10);
-  const status = String(formData.get("status") || "");
-  if (Number.isNaN(id)) {
-    throw new Error("Review id is required to update status.");
-  }
-  if (status !== "APPROVED" && status !== "REJECTED") {
-    throw new Error("Review status is invalid.");
-  }
+  await runAdminAction("/admin/reviews", async () => {
+    const id = Number.parseInt(String(formData.get("id") || ""), 10);
+    const status = String(formData.get("status") || "");
+    if (Number.isNaN(id)) {
+      throw new Error("Review id is required to update status.");
+    }
+    if (status !== "APPROVED" && status !== "REJECTED") {
+      throw new Error("Review status is invalid.");
+    }
 
-  const existing = await prisma.review.findUnique({ where: { id } });
-  if (!existing) {
-    throw new Error("Review was not found.");
-  }
+    const existing = await prisma.review.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error("Review was not found.");
+    }
 
-  await prisma.review.update({ where: { id }, data: { status } });
-  revalidateReviewPages();
+    await prisma.review.update({ where: { id }, data: { status } });
+    redirect("/admin/reviews");
+  });
 }
 
 async function deleteReview(formData: FormData) {
   "use server";
-  const id = Number.parseInt(String(formData.get("id") || ""), 10);
-  if (Number.isNaN(id)) {
-    throw new Error("Review id is required to delete.");
-  }
+  await runAdminAction("/admin/reviews", async () => {
+    const id = Number.parseInt(String(formData.get("id") || ""), 10);
+    if (Number.isNaN(id)) {
+      throw new Error("Review id is required to delete.");
+    }
 
-  const existing = await prisma.review.findUnique({ where: { id } });
-  if (!existing) {
-    throw new Error("Review was not found.");
-  }
+    const existing = await prisma.review.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error("Review was not found.");
+    }
 
-  await prisma.review.delete({ where: { id } });
-  revalidateReviewPages();
+    await prisma.review.delete({ where: { id } });
+    redirect("/admin/reviews");
+  });
 }
 
 export default async function ReviewsAdmin({
   searchParams,
 }: {
-  searchParams: Promise<{ edit?: string }>;
+  searchParams: Promise<{ edit?: string; error?: string }>;
 }) {
   const params = await searchParams;
-  const reviews = await prisma.review.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  let reviews: Awaited<ReturnType<typeof loadReviewList>> = [];
+  let loadError = "";
+  try {
+    reviews = await loadReviewList();
+  } catch (error) {
+    console.error("[admin] review list failed:", error);
+    loadError = "Could not load reviews. Please try again.";
+  }
   const editId = Number.parseInt(params.edit || "", 10);
   const editing = Number.isNaN(editId) ? null : reviews.find((review) => review.id === editId) || null;
   if (params.edit && !editing) {
-    throw new Error("Review was not found for editing.");
+    redirect("/admin/reviews");
   }
 
   return (
@@ -135,6 +147,7 @@ export default async function ReviewsAdmin({
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-slate-900">Reviews</h1>
       </div>
+      <AdminActionError message={params.error || loadError} />
 
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 bg-white p-6 rounded-xl border border-slate-200 shadow-sm h-fit">

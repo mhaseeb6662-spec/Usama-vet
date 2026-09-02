@@ -2,24 +2,47 @@ import React from "react";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { Plus, Edit, Trash2 } from "lucide-react";
-import { revalidatePath } from "next/cache";
+import AdminActionError from "@/components/admin/AdminActionError";
+import { deleteProductAlertsForProduct } from "@/lib/services/productAlerts";
+import { runAdminAction } from "@/lib/admin/mutation";
 
-async function deleteProduct(formData: FormData) {
-  "use server";
-  const idStr = formData.get("id") as string;
-  const id = parseInt(idStr, 10);
-  if (isNaN(id)) return;
-  await prisma.productAlert.deleteMany({ where: { productId: id } });
-  await prisma.product.delete({ where: { id } });
-  revalidatePath("/");
-  revalidatePath("/admin/products");
-}
-
-export default async function ProductsAdmin() {
-  const products = await prisma.product.findMany({
+async function loadProductList() {
+  return prisma.product.findMany({
     include: { category: true },
     orderBy: { createdAt: "desc" },
   });
+}
+
+async function deleteProduct(formData: FormData) {
+  "use server";
+  await runAdminAction("/admin/products", async () => {
+    const id = Number.parseInt(String(formData.get("id") || ""), 10);
+    if (Number.isNaN(id)) {
+      throw new Error("Product id is required to delete.");
+    }
+    const existing = await prisma.product.findUnique({ where: { id }, select: { id: true } });
+    if (!existing) {
+      throw new Error("Product was not found.");
+    }
+    await deleteProductAlertsForProduct(id);
+    await prisma.product.delete({ where: { id } });
+  });
+}
+
+export default async function ProductsAdmin({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const params = await searchParams;
+  let products: Awaited<ReturnType<typeof loadProductList>> = [];
+  let loadError = "";
+  try {
+    products = await loadProductList();
+  } catch (error) {
+    console.error("[admin] product list failed:", error);
+    loadError = "Could not load products. Please try again.";
+  }
 
   return (
     <div className="space-y-6">
@@ -29,6 +52,7 @@ export default async function ProductsAdmin() {
           <Plus className="w-4 h-4" /> Add Product
         </Link>
       </div>
+      <AdminActionError message={params.error || loadError} />
 
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <table className="w-full text-left text-sm">
@@ -50,8 +74,8 @@ export default async function ProductsAdmin() {
                 <td className="px-6 py-4 text-slate-500">{product.category?.name || "Uncategorized"}</td>
                 <td className="px-6 py-4 text-slate-900 font-medium">Rs. {product.price.toString()}</td>
                 <td className="px-6 py-4">
-                  <span className={`px-2.5 py-1 text-xs font-bold rounded-full ${product.stockQuantity > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
-                    {product.stockQuantity > 0 ? `${product.stockQuantity} in stock` : 'Out of stock'}
+                  <span className={`px-2.5 py-1 text-xs font-bold rounded-full ${product.stockQuantity > 0 ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}`}>
+                    {product.stockQuantity > 0 ? `${product.stockQuantity} in stock` : "Out of stock"}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">
@@ -73,4 +97,3 @@ export default async function ProductsAdmin() {
     </div>
   );
 }
-

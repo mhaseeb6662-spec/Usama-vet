@@ -1,11 +1,12 @@
 import React from "react";
 import { prisma } from "@/lib/db";
 import { notFound, redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
+import AdminActionError from "@/components/admin/AdminActionError";
 import { createProductAlert } from "@/lib/services/productAlerts";
+import { runAdminAction } from "@/lib/admin/mutation";
 import { toServedImageUrl } from "@/lib/mediaUrl";
 
 function parseRequiredId(raw: FormDataEntryValue | null): number {
@@ -18,6 +19,9 @@ function parseRequiredId(raw: FormDataEntryValue | null): number {
 
 async function updateProduct(formData: FormData) {
   "use server";
+  const rawId = Number.parseInt(String(formData.get("id") || ""), 10);
+  const returnPath = Number.isNaN(rawId) ? "/admin/products" : `/admin/products/${rawId}`;
+  await runAdminAction(returnPath, async () => {
   const id = parseRequiredId(formData.get("id"));
   const existing = await prisma.product.findUnique({
     where: { id },
@@ -122,20 +126,25 @@ async function updateProduct(formData: FormData) {
     await prisma.productImage.delete({ where: { id: existingPrimary.id } });
   }
 
-  await createProductAlert(id, "UPDATED", name);
+  try {
+    await createProductAlert(id, "UPDATED", name);
+  } catch (error) {
+    console.error("[admin] Product updated but alert failed:", error);
+  }
 
-  revalidatePath("/");
-  revalidatePath(`/products/${slug}`);
-  revalidatePath("/admin/products");
   redirect("/admin/products");
+  });
 }
 
 export default async function EditProductAdmin({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ error?: string }>;
 }) {
   const { id } = await params;
+  const query = await searchParams;
   const productId = Number.parseInt(id, 10);
   if (Number.isNaN(productId)) notFound();
 
@@ -157,6 +166,7 @@ export default async function EditProductAdmin({
         <Link href="/admin/products" className="p-2 hover:bg-slate-200 rounded-full transition-colors"><ArrowLeft className="w-5 h-5 text-slate-600" /></Link>
         <h1 className="text-2xl font-bold text-slate-900">Edit Product</h1>
       </div>
+      <AdminActionError message={query.error} />
 
       <div className="bg-white p-6 md:p-8 rounded-xl border border-slate-200 shadow-sm">
         <form action={updateProduct} className="space-y-8">

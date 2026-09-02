@@ -2,9 +2,10 @@ import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { Plus, Trash2, Edit } from "lucide-react";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
+import AdminActionError from "@/components/admin/AdminActionError";
+import { runAdminAction } from "@/lib/admin/mutation";
 import { toServedImageUrl } from "@/lib/mediaUrl";
 
 function readBannerImage(formData: FormData) {
@@ -31,61 +32,71 @@ function readBannerImage(formData: FormData) {
 
 async function addBanner(formData: FormData) {
   "use server";
-  const data = readBannerImage(formData);
-  await prisma.banner.create({
-    data: { ...data, isActive: true },
+  await runAdminAction("/admin/banners", async () => {
+    const data = readBannerImage(formData);
+    await prisma.banner.create({
+      data: { ...data, isActive: true },
+    });
+    redirect("/admin/banners");
   });
-  revalidatePath("/");
-  revalidatePath("/admin/banners");
 }
 
 async function updateBanner(formData: FormData) {
   "use server";
   const id = Number.parseInt(String(formData.get("id") || ""), 10);
-  if (Number.isNaN(id)) {
-    throw new Error("Banner id is required to update.");
-  }
-  const existing = await prisma.banner.findUnique({ where: { id } });
-  if (!existing) {
-    throw new Error("Banner was not found.");
-  }
-  await prisma.banner.update({
-    where: { id },
-    data: readBannerImage(formData),
+  const returnPath = Number.isNaN(id) ? "/admin/banners" : `/admin/banners?edit=${id}`;
+  await runAdminAction(returnPath, async () => {
+    if (Number.isNaN(id)) {
+      throw new Error("Banner id is required to update.");
+    }
+    const existing = await prisma.banner.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error("Banner was not found.");
+    }
+    await prisma.banner.update({
+      where: { id },
+      data: readBannerImage(formData),
+    });
+    redirect("/admin/banners");
   });
-  revalidatePath("/");
-  revalidatePath("/admin/banners");
-  redirect("/admin/banners");
 }
 
 async function deleteBanner(formData: FormData) {
   "use server";
-  const id = Number.parseInt(String(formData.get("id") || ""), 10);
-  if (Number.isNaN(id)) {
-    throw new Error("Banner id is required to delete.");
-  }
-  const existing = await prisma.banner.findUnique({ where: { id } });
-  if (!existing) {
-    throw new Error("Banner was not found.");
-  }
-  await prisma.banner.delete({ where: { id } });
-  revalidatePath("/");
-  revalidatePath("/admin/banners");
+  await runAdminAction("/admin/banners", async () => {
+    const id = Number.parseInt(String(formData.get("id") || ""), 10);
+    if (Number.isNaN(id)) {
+      throw new Error("Banner id is required to delete.");
+    }
+    const existing = await prisma.banner.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error("Banner was not found.");
+    }
+    await prisma.banner.delete({ where: { id } });
+    redirect("/admin/banners");
+  });
 }
 
 export default async function BannersAdmin({
   searchParams,
 }: {
-  searchParams: Promise<{ edit?: string }>;
+  searchParams: Promise<{ edit?: string; error?: string }>;
 }) {
   const params = await searchParams;
-  const banners = await prisma.banner.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  let banners: Awaited<ReturnType<typeof prisma.banner.findMany>> = [];
+  let loadError = "";
+  try {
+    banners = await prisma.banner.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    console.error("[admin] banner list failed:", error);
+    loadError = "Could not load banners. Please try again.";
+  }
   const editId = Number.parseInt(params.edit || "", 10);
   const editing = Number.isNaN(editId) ? null : banners.find((banner) => banner.id === editId) || null;
   if (params.edit && !editing) {
-    throw new Error("Banner was not found for editing.");
+    redirect("/admin/banners");
   }
 
   return (
@@ -93,6 +104,7 @@ export default async function BannersAdmin({
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-slate-900">Manage Promotional Banners</h1>
       </div>
+      <AdminActionError message={params.error || loadError} />
 
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 bg-white p-6 rounded-xl border border-slate-200 shadow-sm h-fit">

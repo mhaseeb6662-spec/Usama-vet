@@ -2,9 +2,10 @@ import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { Plus, Trash2, Edit } from "lucide-react";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
+import AdminActionError from "@/components/admin/AdminActionError";
+import { runAdminAction } from "@/lib/admin/mutation";
 import { toServedImageUrl } from "@/lib/mediaUrl";
 import { ensureCategorySchema } from "@/lib/services/categorySchema";
 
@@ -24,116 +25,142 @@ function readCategoryFields(formData: FormData) {
   return { name, description, image, showOnHomepage };
 }
 
+async function loadCategoryList() {
+  return prisma.category.findMany({
+    orderBy: { createdAt: "desc" },
+    include: { _count: { select: { products: true } } },
+  });
+}
+
 async function addCategory(formData: FormData) {
   "use server";
-  await ensureCategorySchema();
-  const { name, description, image, showOnHomepage } = readCategoryFields(formData);
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  await runAdminAction("/admin/categories", async () => {
+    await ensureCategorySchema();
+    const { name, description, image, showOnHomepage } = readCategoryFields(formData);
+    const slugBase = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    const clash = await prisma.category.findFirst({
+      where: { slug: slugBase },
+      select: { id: true },
+    });
+    if (clash) {
+      throw new Error("A category with this name already exists.");
+    }
 
-  await prisma.category.create({
-    data: {
-      name,
-      slug,
-      description: description || null,
-      image: image || null,
-      isActive: true,
-      showOnHomepage,
-    },
+    await prisma.category.create({
+      data: {
+        name,
+        slug: slugBase,
+        description: description || null,
+        image: image || null,
+        isActive: true,
+        showOnHomepage,
+      },
+    });
+    redirect("/admin/categories");
   });
-  revalidatePath("/");
-  revalidatePath("/admin/categories");
 }
 
 async function updateCategory(formData: FormData) {
   "use server";
-  await ensureCategorySchema();
   const id = Number.parseInt(String(formData.get("id") || ""), 10);
-  if (Number.isNaN(id)) {
-    throw new Error("Category id is required to update.");
-  }
+  const returnPath = Number.isNaN(id) ? "/admin/categories" : `/admin/categories?edit=${id}`;
+  await runAdminAction(returnPath, async () => {
+    await ensureCategorySchema();
+    if (Number.isNaN(id)) {
+      throw new Error("Category id is required to update.");
+    }
 
-  const existing = await prisma.category.findUnique({ where: { id } });
-  if (!existing) {
-    throw new Error("Category was not found.");
-  }
+    const existing = await prisma.category.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error("Category was not found.");
+    }
 
-  const { name, description, image, showOnHomepage } = readCategoryFields(formData);
+    const { name, description, image, showOnHomepage } = readCategoryFields(formData);
 
-  let slug = existing.slug;
-  if (name !== existing.name) {
-    const nextSlug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-    const clash = await prisma.category.findFirst({
-      where: { slug: nextSlug, NOT: { id } },
-      select: { id: true },
+    let slug = existing.slug;
+    if (name !== existing.name) {
+      const nextSlug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+      const clash = await prisma.category.findFirst({
+        where: { slug: nextSlug, NOT: { id } },
+        select: { id: true },
+      });
+      slug = clash ? `${nextSlug}-${id}` : nextSlug;
+    }
+
+    await prisma.category.update({
+      where: { id },
+      data: {
+        name,
+        slug,
+        description: description || null,
+        image: image || null,
+        showOnHomepage,
+      },
     });
-    slug = clash ? `${nextSlug}-${id}` : nextSlug;
-  }
 
-  await prisma.category.update({
-    where: { id },
-    data: {
-      name,
-      slug,
-      description: description || null,
-      image: image || null,
-      showOnHomepage,
-    },
+    redirect("/admin/categories");
   });
-
-  revalidatePath("/");
-  revalidatePath("/admin/categories");
-  redirect("/admin/categories");
 }
 
 async function deleteCategory(formData: FormData) {
   "use server";
-  const idStr = formData.get("id") as string;
-  const id = parseInt(idStr, 10);
-  if (isNaN(id)) return;
-  await prisma.category.delete({ where: { id } });
-  revalidatePath("/");
-  revalidatePath("/admin/categories");
+  await runAdminAction("/admin/categories", async () => {
+    const id = Number.parseInt(String(formData.get("id") || ""), 10);
+    if (Number.isNaN(id)) {
+      throw new Error("Category id is required to delete.");
+    }
+    const existing = await prisma.category.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error("Category was not found.");
+    }
+    await prisma.category.delete({ where: { id } });
+    redirect("/admin/categories");
+  });
 }
 
 async function toggleHomepageCategory(formData: FormData) {
   "use server";
-  await ensureCategorySchema();
-  const idStr = formData.get("id") as string;
-  const id = parseInt(idStr, 10);
-  if (isNaN(id)) {
-    throw new Error("Category id is required to update homepage visibility.");
-  }
-  const currentlyVisible = formData.get("showOnHomepage") === "true";
-  const existing = await prisma.category.findUnique({ where: { id } });
-  if (!existing) {
-    throw new Error("Category was not found.");
-  }
-  if (!currentlyVisible && !existing.image) {
-    throw new Error("Upload a category picture before showing it in Shop by Categories.");
-  }
-  await prisma.category.update({
-    where: { id },
-    data: { showOnHomepage: !currentlyVisible },
+  await runAdminAction("/admin/categories", async () => {
+    await ensureCategorySchema();
+    const id = Number.parseInt(String(formData.get("id") || ""), 10);
+    if (Number.isNaN(id)) {
+      throw new Error("Category id is required to update homepage visibility.");
+    }
+    const currentlyVisible = formData.get("showOnHomepage") === "true";
+    const existing = await prisma.category.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error("Category was not found.");
+    }
+    if (!currentlyVisible && !existing.image) {
+      throw new Error("Upload a category picture before showing it in Shop by Categories.");
+    }
+    await prisma.category.update({
+      where: { id },
+      data: { showOnHomepage: !currentlyVisible },
+    });
+    redirect("/admin/categories");
   });
-  revalidatePath("/");
-  revalidatePath("/admin/categories");
 }
 
 export default async function CategoriesAdmin({
   searchParams,
 }: {
-  searchParams: Promise<{ edit?: string }>;
+  searchParams: Promise<{ edit?: string; error?: string }>;
 }) {
   const params = await searchParams;
-  await ensureCategorySchema();
-  const categories = await prisma.category.findMany({
-    orderBy: { createdAt: "desc" },
-    include: { _count: { select: { products: true } } }
-  });
+  let categories: Awaited<ReturnType<typeof loadCategoryList>> = [];
+  let loadError = "";
+  try {
+    await ensureCategorySchema();
+    categories = await loadCategoryList();
+  } catch (error) {
+    console.error("[admin] category list failed:", error);
+    loadError = "Could not load categories. Please try again.";
+  }
   const editId = Number.parseInt(params.edit || "", 10);
   const editing = Number.isNaN(editId) ? null : categories.find((category) => category.id === editId) || null;
   if (params.edit && !editing) {
-    throw new Error("Category was not found for editing.");
+    redirect("/admin/categories");
   }
 
   return (
@@ -141,9 +168,9 @@ export default async function CategoriesAdmin({
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-slate-900">Manage Categories</h1>
       </div>
+      <AdminActionError message={params.error || loadError} />
 
       <div className="grid md:grid-cols-3 gap-8">
-        {/* Add / Edit Form */}
         <div className="md:col-span-1 bg-white p-6 rounded-xl border border-slate-200 shadow-sm h-fit">
           <h2 className="text-lg font-bold text-slate-800 mb-4">{editing ? "Edit Category" : "Add New Category"}</h2>
           <p className="text-xs text-slate-500 mb-4">
@@ -178,7 +205,6 @@ export default async function CategoriesAdmin({
           </form>
         </div>
 
-        {/* List */}
         <div className="md:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-50 border-b border-slate-200 text-slate-600">
@@ -249,4 +275,3 @@ export default async function CategoriesAdmin({
     </div>
   );
 }
-

@@ -2,9 +2,10 @@ import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { Plus, Trash2, Edit } from "lucide-react";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
+import AdminActionError from "@/components/admin/AdminActionError";
+import { runAdminAction } from "@/lib/admin/mutation";
 import { toServedImageUrl } from "@/lib/mediaUrl";
 
 function readHeroImage(formData: FormData) {
@@ -17,66 +18,69 @@ function readHeroImage(formData: FormData) {
 
 async function addHeroSlide(formData: FormData) {
   "use server";
-  const desktopImage = readHeroImage(formData);
-  await prisma.heroSlide.create({
-    data: {
-      title: "Hero slide",
-      subtitle: null,
-      description: null,
-      desktopImage,
-      ctaText: null,
-      ctaUrl: null,
-      isActive: true,
-    },
+  await runAdminAction("/admin/hero", async () => {
+    const desktopImage = readHeroImage(formData);
+    await prisma.heroSlide.create({
+      data: {
+        title: "Hero slide",
+        subtitle: null,
+        description: null,
+        desktopImage,
+        ctaText: null,
+        ctaUrl: null,
+        isActive: true,
+      },
+    });
+    redirect("/admin/hero");
   });
-  revalidatePath("/");
-  revalidatePath("/admin/hero");
 }
 
 async function updateHeroSlide(formData: FormData) {
   "use server";
   const id = Number.parseInt(String(formData.get("id") || ""), 10);
-  if (Number.isNaN(id)) {
-    throw new Error("Slide id is required to update.");
-  }
-  const existing = await prisma.heroSlide.findUnique({ where: { id } });
-  if (!existing) {
-    throw new Error("Slide was not found.");
-  }
-  await prisma.heroSlide.update({
-    where: { id },
-    data: {
-      desktopImage: readHeroImage(formData),
-      subtitle: null,
-      description: null,
-      ctaText: null,
-      ctaUrl: null,
-    },
+  const returnPath = Number.isNaN(id) ? "/admin/hero" : `/admin/hero?edit=${id}`;
+  await runAdminAction(returnPath, async () => {
+    if (Number.isNaN(id)) {
+      throw new Error("Slide id is required to update.");
+    }
+    const existing = await prisma.heroSlide.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error("Slide was not found.");
+    }
+    await prisma.heroSlide.update({
+      where: { id },
+      data: {
+        desktopImage: readHeroImage(formData),
+        subtitle: null,
+        description: null,
+        ctaText: null,
+        ctaUrl: null,
+      },
+    });
+    redirect("/admin/hero");
   });
-  revalidatePath("/");
-  revalidatePath("/admin/hero");
-  redirect("/admin/hero");
 }
 
 async function deleteHeroSlide(formData: FormData) {
   "use server";
-  const id = Number.parseInt(String(formData.get("id") || ""), 10);
-  if (Number.isNaN(id)) {
-    throw new Error("Slide id is required to delete.");
-  }
-  const existing = await prisma.heroSlide.findUnique({ where: { id } });
-  if (!existing) {
-    throw new Error("Slide was not found.");
-  }
-  await prisma.heroSlide.delete({ where: { id } });
-  revalidatePath("/");
-  revalidatePath("/admin/hero");
+  await runAdminAction("/admin/hero", async () => {
+    const id = Number.parseInt(String(formData.get("id") || ""), 10);
+    if (Number.isNaN(id)) {
+      throw new Error("Slide id is required to delete.");
+    }
+    const existing = await prisma.heroSlide.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error("Slide was not found.");
+    }
+    await prisma.heroSlide.delete({ where: { id } });
+    redirect("/admin/hero");
+  });
 }
 
 export default async function HeroAdmin({
   searchParams,
 }: {
-  searchParams: Promise<{ edit?: string }>;
+  searchParams: Promise<{ edit?: string; error?: string }>;
 }) {
   const params = await searchParams;
   let slides: Awaited<ReturnType<typeof prisma.heroSlide.findMany>> = [];
@@ -101,9 +105,7 @@ export default async function HeroAdmin({
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-slate-900">Manage Hero Slider</h1>
       </div>
-      {loadError ? (
-        <div className="bg-white border border-slate-200 rounded-xl p-6 text-slate-600">{loadError}</div>
-      ) : null}
+      <AdminActionError message={params.error || loadError} />
 
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-1 bg-white p-6 rounded-xl border border-slate-200 shadow-sm h-fit">
