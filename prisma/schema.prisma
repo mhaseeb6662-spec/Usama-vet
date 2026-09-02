@@ -305,6 +305,18 @@ enum MessageStatus {
   ARCHIVED
 }
 
+// ---------- HOW TO ORDER POSTS ----------
+model HowToOrderPost {
+  id        Int      @id @default(autoincrement())
+  title     String?
+  body      String?  @db.Text
+  image     String?  @db.VarChar(500)
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // ---------- ABOUT PAGE VIDEOS ----------
 model AboutVideo {
   id          Int      @id @default(autoincrement())
