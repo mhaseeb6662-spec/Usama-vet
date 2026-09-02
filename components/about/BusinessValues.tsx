@@ -27,7 +27,7 @@ export default function BusinessValues() {
           {ABOUT_DATA.values.map((value, idx) => {
             return (
               <StaggerItem key={idx} distance={30}>
-                <article className="group relative bg-white border border-slate-100 rounded-3xl p-8 sm:p-10 hover:bg-slate-900 transition-all duration-500 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(16,185,129,0.2)] flex flex-col sm:flex-row gap-6 items-start">
+                <article className="group relative bg-white border border-slate-100 rounded-3xl p-5 sm:p-10 hover:bg-slate-900 transition-all duration-500 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(16,185,129,0.2)] flex flex-col sm:flex-row gap-6 items-start">
                   
                   {/* Large Decorative Number inside Card */}
                   <div className="absolute -right-6 -bottom-10 text-[130px] font-black text-slate-50 group-hover:text-white/5 transition-colors duration-500 pointer-events-none select-none z-0 leading-none">

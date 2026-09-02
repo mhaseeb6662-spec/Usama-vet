@@ -164,7 +164,7 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6 md:p-8 shadow-sm">
+    <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-6 md:p-8 shadow-sm">
       <h3 className="text-lg font-bold text-slate-900 mb-6 border-b border-slate-100 pb-3">
         Send Us a Message
       </h3>

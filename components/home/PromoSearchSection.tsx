@@ -29,9 +29,9 @@ export default function PromoSearchSection() {
   };
 
   return (
-    <section className="px-4 max-w-7xl mx-auto py-10 overflow-hidden">
+    <section className="px-3 sm:px-4 max-w-7xl mx-auto py-6 sm:py-10 overflow-hidden">
       <FadeUp distance={16}>
-        <div className="bg-gradient-to-br from-emerald-900 to-emerald-950 text-white rounded-xl p-8 py-20 md:py-32 text-center shadow-xl relative overflow-hidden flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="bg-gradient-to-br from-emerald-900 to-emerald-950 text-white rounded-xl p-5 sm:p-8 py-10 sm:py-20 md:py-32 text-center shadow-xl relative overflow-hidden flex flex-col items-center justify-center min-h-0 md:min-h-[60vh]">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,#065f46_0%,transparent_50%)] opacity-40" />
           <div className="absolute -top-24 -left-24 w-48 h-48 rounded-full bg-emerald-800/10 blur-2xl" />
 
@@ -49,7 +49,7 @@ export default function PromoSearchSection() {
 
             <StaggerItem distance={8}>
               <form action="/search" method="get" onSubmit={onSubmit} className="w-full max-w-2xl mx-auto">
-                <div className="w-full flex shadow-xl rounded-lg overflow-hidden border border-emerald-700/30 focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:border-emerald-500 transition-all duration-200 h-14 sm:h-16">
+                <div className="w-full flex shadow-xl rounded-lg overflow-hidden border border-emerald-700/30 focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:border-emerald-500 transition-all duration-200 h-12 sm:h-16">
                   <input
                     type="search"
                     name="q"
@@ -57,14 +57,14 @@ export default function PromoSearchSection() {
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Enter medicine name, compound or brand..."
                     aria-label="Search products"
-                    className="w-full bg-white text-slate-800 text-[14px] sm:text-[15px] px-5 py-3 focus:outline-none placeholder:text-slate-400"
+                    className="w-full min-w-0 bg-white text-slate-800 text-base sm:text-[15px] px-3 sm:px-5 py-3 focus:outline-none placeholder:text-slate-400"
                   />
                   <button
                     type="submit"
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-[13px] sm:text-[15px] uppercase px-8 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.97] duration-150 shrink-0"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-[13px] sm:text-[15px] uppercase px-4 sm:px-8 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.97] duration-150 shrink-0"
                   >
                     <Search className="w-5 h-5" />
-                    <span>Search</span>
+                    <span className="hidden sm:inline">Search</span>
                   </button>
                 </div>
                 {error ? <p className="mt-2 text-sm text-amber-200">{error}</p> : null}

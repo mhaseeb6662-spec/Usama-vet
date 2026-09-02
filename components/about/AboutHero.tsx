@@ -46,7 +46,7 @@ export default function AboutHero() {
           <img
             src={SLIDES[currentIndex].image}
             alt="Usama Vet Banner"
-            className="block w-full h-auto max-h-[70vh] object-contain object-center mx-auto"
+            className="block w-full h-[210px] sm:h-[280px] md:h-auto md:max-h-[70vh] object-cover object-center md:object-contain"
           />
         </motion.div>
       </AnimatePresence>

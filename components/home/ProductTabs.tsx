@@ -37,14 +37,14 @@ export default function ProductTabs({
   const tabs: TabName[] = ["Featured Products", "New Arrivals", "Best Selling Products"];
 
   return (
-    <section className="py-12 px-4 max-w-7xl mx-auto overflow-hidden">
+    <section className="py-8 sm:py-12 px-3 sm:px-4 max-w-7xl mx-auto overflow-hidden">
       {/* Tab Controls Row */}
-      <div className="flex justify-center border-b border-slate-200 mb-8 flex-wrap gap-1 sm:gap-2">
+      <div className="flex justify-start sm:justify-center border-b border-slate-200 mb-6 sm:mb-8 gap-1 sm:gap-2 overflow-x-auto scrollbar-none -mx-3 px-3 sm:mx-0 sm:px-0 sm:flex-wrap">
         {tabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 sm:px-6 py-2.5 text-xs sm:text-[13px] font-semibold uppercase relative transition-all duration-200 focus:outline-none cursor-pointer ${
+            className={`shrink-0 px-3 sm:px-6 py-2.5 text-[11px] sm:text-[13px] font-semibold uppercase relative transition-all duration-200 focus:outline-none cursor-pointer ${
               activeTab === tab
                 ? "text-emerald-600 bg-slate-50/50"
                 : "text-slate-500 hover:text-[#009473] hover:bg-slate-50"
@@ -80,7 +80,7 @@ export default function ProductTabs({
             y: shouldReduceMotion ? 0 : 4,
             transition: { duration: 0.15, ease: [0.22, 1, 0.36, 1] } 
           }}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"
         >
           {getFilteredProducts().length > 0 ? (
             getFilteredProducts().map((product) => (

@@ -19,6 +19,9 @@ const emptyForm = {
   notes: "",
 };
 
+const fieldClass =
+  "mt-1 w-full min-w-0 border border-slate-300 rounded-lg px-3 py-3 text-base outline-none focus:ring-2 focus:ring-emerald-500";
+
 export default function CheckoutForm() {
   const router = useRouter();
   const { items, clearCart } = useCart();
@@ -124,17 +127,29 @@ export default function CheckoutForm() {
 
   if (items.length === 0) {
     return (
-      <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center">
-        <h1 className="text-2xl font-bold mb-3">Your cart is empty</h1>
-        <Link href="/" className="text-emerald-700 font-semibold">Continue Shopping</Link>
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-10 text-center">
+        <h1 className="text-xl sm:text-2xl font-bold mb-3">Your cart is empty</h1>
+        <Link href="/" className="inline-flex min-h-11 items-center text-emerald-700 font-semibold">
+          Continue Shopping
+        </Link>
       </div>
     );
   }
 
+  const placeOrderButton = (
+    <button
+      type="submit"
+      disabled={placing || !quote?.canCheckout}
+      className="w-full min-h-12 bg-[#009473] hover:bg-[#028467] disabled:opacity-50 text-white font-semibold py-3 rounded-lg"
+    >
+      {placing ? "Placing Order..." : "Place Order"}
+    </button>
+  );
+
   return (
-    <form onSubmit={onSubmit} className="grid lg:grid-cols-12 gap-6">
-      <FadeUp className="lg:col-span-7 bg-white border border-slate-200 rounded-xl p-5 md:p-6 space-y-4">
-        <h1 className="text-xl font-bold text-slate-900">Shipping Details</h1>
+    <form onSubmit={onSubmit} className="grid lg:grid-cols-12 gap-4 sm:gap-6">
+      <FadeUp className="order-2 lg:order-1 lg:col-span-7 bg-white border border-slate-200 rounded-xl p-4 sm:p-5 md:p-6 space-y-4">
+        <h1 className="text-lg sm:text-xl font-bold text-slate-900">Shipping Details</h1>
         {accountName ? (
           <p className="text-sm text-emerald-700">Logged in as {accountName}. This order will be saved to your account.</p>
         ) : (
@@ -147,9 +162,6 @@ export default function CheckoutForm() {
           ["phone", "Mobile Number *", "tel"],
           ["whatsapp", "WhatsApp Number", "tel"],
           ["email", "Email", "email"],
-          ["city", "City *", "text"],
-          ["area", "Area", "text"],
-          ["landmark", "Landmark", "text"],
         ].map(([name, label, type]) => (
           <label key={name} className="block text-sm">
             <span className="font-medium text-slate-700">{label}</span>
@@ -158,18 +170,46 @@ export default function CheckoutForm() {
               type={type}
               value={form[name as keyof typeof form]}
               onChange={(e) => setForm((prev) => ({ ...prev, [name]: e.target.value }))}
-              className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500"
+              className={fieldClass}
             />
             {errors[name] && <span className="text-rose-600 text-xs">{errors[name]}</span>}
           </label>
         ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            ["city", "City *", "text"],
+            ["area", "Area", "text"],
+          ].map(([name, label, type]) => (
+            <label key={name} className="block text-sm">
+              <span className="font-medium text-slate-700">{label}</span>
+              <input
+                name={name}
+                type={type}
+                value={form[name as keyof typeof form]}
+                onChange={(e) => setForm((prev) => ({ ...prev, [name]: e.target.value }))}
+                className={fieldClass}
+              />
+              {errors[name] && <span className="text-rose-600 text-xs">{errors[name]}</span>}
+            </label>
+          ))}
+        </div>
+        <label className="block text-sm">
+          <span className="font-medium text-slate-700">Landmark</span>
+          <input
+            name="landmark"
+            type="text"
+            value={form.landmark}
+            onChange={(e) => setForm((prev) => ({ ...prev, landmark: e.target.value }))}
+            className={fieldClass}
+          />
+        </label>
         <label className="block text-sm">
           <span className="font-medium text-slate-700">Complete Address *</span>
           <textarea
             value={form.address}
             onChange={(e) => setForm((prev) => ({ ...prev, address: e.target.value }))}
             rows={3}
-            className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500"
+            className={fieldClass}
           />
           {errors.address && <span className="text-rose-600 text-xs">{errors.address}</span>}
         </label>
@@ -179,22 +219,23 @@ export default function CheckoutForm() {
             value={form.notes}
             onChange={(e) => setForm((prev) => ({ ...prev, notes: e.target.value }))}
             rows={2}
-            className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500"
+            className={fieldClass}
           />
         </label>
         <div className="border border-emerald-200 bg-emerald-50 rounded-xl p-4">
-          <label className="flex items-center gap-3 cursor-pointer">
+          <label className="flex items-center gap-3 cursor-pointer min-h-11">
             <input type="radio" name="paymentMethod" value="COD" defaultChecked className="text-emerald-600" />
             <span className="font-semibold text-slate-900">Cash on Delivery (COD)</span>
           </label>
         </div>
+        <div className="lg:hidden">{placeOrderButton}</div>
       </FadeUp>
 
-      <aside className="lg:col-span-5">
-        <FadeUp className="bg-white border border-slate-200 rounded-xl p-5 space-y-4 sticky top-28">
+      <aside className="order-1 lg:order-2 lg:col-span-5">
+        <FadeUp className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 space-y-4 lg:sticky lg:top-28">
           <h2 className="font-bold text-slate-900">Order Summary</h2>
           {quote?.items.map((item) => (
-            <div key={item.productId} className="flex gap-3 text-sm">
+            <div key={item.productId} className="flex gap-3 text-sm min-w-0">
               <div className="w-14 h-14 rounded-lg bg-slate-50 overflow-hidden shrink-0">
                 {item.image ? <img src={item.image} alt={item.name} className="w-full h-full object-contain" /> : null}
               </div>
@@ -202,23 +243,17 @@ export default function CheckoutForm() {
                 <p className="font-medium truncate">{item.name}</p>
                 <p className="text-slate-500">Qty {item.quantity} × Rs. {item.unitPrice.toLocaleString()}</p>
               </div>
-              <p className="font-semibold">Rs. {(item.unitPrice * item.quantity).toLocaleString()}</p>
+              <p className="font-semibold shrink-0">Rs. {(item.unitPrice * item.quantity).toLocaleString()}</p>
             </div>
           ))}
           <div className="border-t border-slate-100 pt-3 space-y-2 text-sm">
-            <div className="flex justify-between"><span>Subtotal</span><span>Rs. {(quote?.subtotal || 0).toLocaleString()}</span></div>
-            <div className="flex justify-between"><span>Shipping</span><span>{quote?.shippingFee ? `Rs. ${quote.shippingFee.toLocaleString()}` : "Free"}</span></div>
-            <div className="flex justify-between"><span>Discount</span><span>Rs. {(quote?.discount || 0).toLocaleString()}</span></div>
-            <div className="flex justify-between font-bold"><span>Grand Total</span><span>Rs. {(quote?.total || 0).toLocaleString()}</span></div>
+            <div className="flex justify-between gap-3"><span>Subtotal</span><span>Rs. {(quote?.subtotal || 0).toLocaleString()}</span></div>
+            <div className="flex justify-between gap-3"><span>Shipping</span><span>{quote?.shippingFee ? `Rs. ${quote.shippingFee.toLocaleString()}` : "Free"}</span></div>
+            <div className="flex justify-between gap-3"><span>Discount</span><span>Rs. {(quote?.discount || 0).toLocaleString()}</span></div>
+            <div className="flex justify-between gap-3 font-bold"><span>Grand Total</span><span>Rs. {(quote?.total || 0).toLocaleString()}</span></div>
           </div>
           {submitError && <p className="text-rose-600 text-sm">{submitError}</p>}
-          <button
-            type="submit"
-            disabled={placing || !quote?.canCheckout}
-            className="w-full bg-[#009473] hover:bg-[#028467] disabled:opacity-50 text-white font-semibold py-3 rounded-lg"
-          >
-            {placing ? "Placing Order..." : "Place Order"}
-          </button>
+          {placeOrderButton}
         </FadeUp>
       </aside>
     </form>

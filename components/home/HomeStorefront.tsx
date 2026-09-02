@@ -111,7 +111,7 @@ export default function HomeStorefront() {
       <HeroCarousel slides={dbHeroSlides} />
       <CategoryScroller categories={homepageCategories} />
       <TrustStrip />
-      <PromoBanner image={promo1?.image} />
+      <PromoBanner image={promo1?.image} mobileImage={promo1?.mobileImage} />
       <ProductTabs
         featuredProducts={catalog.featured}
         newArrivals={catalog.newArrivals}
@@ -151,7 +151,7 @@ export default function HomeStorefront() {
         bgColorClass="bg-cyan-50/70 backdrop-blur-md"
         viewAllHref="/#products"
       />
-      <PromoBanner image={promo2?.image} />
+      <PromoBanner image={promo2?.image} mobileImage={promo2?.mobileImage} />
       <ProductSection
         preTitle="Dogs, Cats & Birds"
         title="Pet & Animal Care"

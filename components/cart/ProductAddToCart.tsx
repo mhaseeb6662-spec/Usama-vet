@@ -56,7 +56,7 @@ export default function ProductAddToCart({
         stockCount={stockCount}
         quantity={safeQty}
         label="Add to Cart"
-        className="min-w-[200px] rounded-lg text-sm py-3"
+        className="w-full sm:w-auto sm:min-w-[200px] rounded-lg text-sm py-3"
       />
     </div>
   );

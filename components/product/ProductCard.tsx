@@ -67,10 +67,10 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* 2. PRODUCT INFO AREA */}
-      <div className="p-4 flex-grow flex flex-col text-left">
+      <div className="p-3 sm:p-4 flex-grow flex flex-col text-left">
         {/* Product Title (Subtle color transition) */}
         <Link href={`/products/${slug}`} className="block focus:outline-none mb-2 group/title">
-          <h3 className="font-semibold text-slate-800 text-[15px] sm:text-[16px] line-clamp-2 leading-snug group-hover/title:text-[#009473] transition-colors duration-150">
+          <h3 className="font-semibold text-slate-800 text-[13px] sm:text-[16px] line-clamp-2 leading-snug group-hover/title:text-[#009473] transition-colors duration-150">
             {name}
           </h3>
         </Link>
@@ -91,25 +91,25 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* 3. ACTIONS ROW (Eye, Heart, Add to cart Button aligned horizontally) */}
-        <div className="mt-auto flex items-center gap-2">
+        <div className="mt-auto flex items-center gap-1.5 sm:gap-2">
           {/* Compare/View Button */}
           <Link
             href={`/products/${slug}`}
-            className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-[#f0f8f5] text-[#009473] flex items-center justify-center shrink-0 transition-all hover:scale-[1.07] active:scale-[0.9] duration-150 focus:outline-none cursor-pointer shadow-sm"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-slate-200 bg-white hover:bg-[#f0f8f5] text-[#009473] flex items-center justify-center shrink-0 transition-all hover:scale-[1.07] active:scale-[0.9] duration-150 focus:outline-none cursor-pointer shadow-sm"
             aria-label="View Product Details"
           >
-            <Eye className="w-5 h-5" />
+            <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
           </Link>
 
           {/* Wishlist Button */}
           <button
             onClick={() => setIsWished(!isWished)}
-            className={`w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-[#f0f8f5] flex items-center justify-center shrink-0 transition-all hover:scale-[1.07] active:scale-[0.9] duration-150 focus:outline-none cursor-pointer shadow-sm ${
+            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-slate-200 bg-white hover:bg-[#f0f8f5] flex items-center justify-center shrink-0 transition-all hover:scale-[1.07] active:scale-[0.9] duration-150 focus:outline-none cursor-pointer shadow-sm ${
               isWished ? "text-red-500 border-red-200 bg-red-50" : "text-[#009473]"
             }`}
             aria-label="Add to Wishlist"
           >
-            <Heart className={`w-5 h-5 ${isWished ? "fill-current" : ""}`} />
+            <Heart className={`w-4 h-4 sm:w-5 sm:h-5 ${isWished ? "fill-current" : ""}`} />
           </button>
 
           <AddToCartButton

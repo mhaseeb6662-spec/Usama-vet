@@ -32,7 +32,7 @@ export default function WhyChooseUs() {
             const Icon = benefit.icon;
             return (
               <StaggerItem key={idx} distance={20}>
-                <article className="group relative bg-white h-full rounded-2xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(16,185,129,0.12)] transition-all duration-500 overflow-hidden border border-slate-100 hover:border-emerald-200">
+                <article className="group relative bg-white h-full rounded-2xl p-5 sm:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgba(16,185,129,0.12)] transition-all duration-500 overflow-hidden border border-slate-100 hover:border-emerald-200">
                   
                   {/* Subtle Gradient Hover Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/0 via-transparent to-emerald-50/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

@@ -23,7 +23,7 @@ export default function NewsletterSection() {
   };
 
   return (
-    <section className="bg-slate-100 border-t border-b border-slate-200 py-12 px-4 overflow-hidden">
+    <section className="bg-slate-100 border-t border-b border-slate-200 py-8 sm:py-12 px-3 sm:px-4 overflow-hidden">
       <StaggerContainer staggerDelay={0.06} className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
         
         {/* Left Side: Call to action */}
@@ -47,19 +47,19 @@ export default function NewsletterSection() {
                 Subscribed successfully! Thank you for staying updated.
               </div>
             ) : (
-              <form onSubmit={handleSubscribe} className="flex gap-2 shadow-sm rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:border-emerald-600 transition-all duration-200">
+              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2 shadow-sm rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:border-emerald-600 transition-all duration-200">
                 <input
                   type="email"
                   placeholder="Enter your email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full bg-white border border-slate-300 rounded-l-lg py-2.5 px-4 text-[13px] text-slate-855 focus:outline-none focus:border-emerald-500 placeholder:text-slate-400"
+                  className="w-full min-w-0 bg-white border border-slate-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none py-3 px-4 text-base sm:text-[13px] text-slate-855 focus:outline-none focus:border-emerald-500 placeholder:text-slate-400"
                 />
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-xs sm:text-[13px] uppercase px-5 py-2.5 rounded-r-lg transition-colors shrink-0 focus:outline-none active:scale-[0.96] duration-150"
+                  className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-xs sm:text-[13px] uppercase px-5 py-3 rounded-lg sm:rounded-r-lg sm:rounded-l-none transition-colors shrink-0 focus:outline-none active:scale-[0.96] duration-150 min-h-12"
                 >
                   {loading ? "..." : "Subscribe"}
                 </button>

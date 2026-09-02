@@ -104,27 +104,27 @@ export default async function CategoryDetailPage({ params }: CategoryPageProps) 
     <>
       <BreadcrumbsSchema items={breadcrumbs} />
       <main className="min-h-screen bg-slate-50 pb-16">
-        <div className="bg-emerald-800 text-white pb-12 pt-8 relative overflow-hidden">
+        <div className="bg-emerald-800 text-white pb-8 pt-6 sm:pb-12 sm:pt-8 relative overflow-hidden">
           <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-emerald-700/50 rounded-full blur-3xl"></div>
 
-          <div className="max-w-[1400px] mx-auto px-4 md:px-6 2xl:px-8 relative z-10">
+          <div className="max-w-[1400px] mx-auto px-3 sm:px-4 md:px-6 2xl:px-8 relative z-10">
             <Link
               href="/"
-              className="inline-flex items-center text-emerald-100 hover:text-white transition-colors mb-6 group text-sm font-medium"
+              className="inline-flex items-center text-emerald-100 hover:text-white transition-colors mb-4 sm:mb-6 group text-sm font-medium"
             >
               <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
               Back to Store
             </Link>
 
-            <div className="flex items-center space-x-4 mb-4">
-              <div className="w-14 h-14 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20 shadow-inner">
-                <Layers className="w-7 h-7 text-emerald-100" />
+            <div className="flex items-start sm:items-center space-x-3 sm:space-x-4 mb-4">
+              <div className="w-11 h-11 sm:w-14 sm:h-14 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20 shadow-inner shrink-0">
+                <Layers className="w-6 h-6 sm:w-7 sm:h-7 text-emerald-100" />
               </div>
-              <div>
-                <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-2 drop-shadow-sm">
+              <div className="min-w-0">
+                <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-2 drop-shadow-sm break-words">
                   {listingName}
                 </h1>
-                <p className="text-emerald-100 max-w-2xl text-lg font-light leading-relaxed">
+                <p className="text-emerald-100 max-w-2xl text-sm sm:text-lg font-light leading-relaxed">
                   {listingDescription}
                 </p>
               </div>
@@ -132,10 +132,10 @@ export default async function CategoryDetailPage({ params }: CategoryPageProps) 
           </div>
         </div>
 
-        <div className="max-w-[1400px] mx-auto px-4 md:px-6 2xl:px-8 -mt-6 relative z-20">
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
-            <div className="flex items-center justify-between mb-8 pb-6 border-b border-slate-100">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+        <div className="max-w-[1400px] mx-auto px-3 sm:px-4 md:px-6 2xl:px-8 -mt-4 sm:-mt-6 relative z-20">
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-3 sm:p-6 md:p-8">
+            <div className="flex items-center justify-between mb-5 sm:mb-8 pb-4 sm:pb-6 border-b border-slate-100">
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-800 flex items-center">
                 All Products
                 <span className="ml-3 bg-emerald-100 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-full">
                   {products.length} items
@@ -144,7 +144,7 @@ export default async function CategoryDetailPage({ params }: CategoryPageProps) 
             </div>
 
             {products.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+              <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 md:gap-8">
                 {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

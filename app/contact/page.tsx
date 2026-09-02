@@ -36,7 +36,7 @@ export default function ContactPage() {
       </section>
 
       {/* MAIN LAYOUT: Form + Contact Info */}
-      <section className="max-w-6xl mx-auto px-4 mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <section className="max-w-6xl mx-auto px-3 sm:px-4 mt-6 sm:mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
         {/* Left Columns: Interactive Form */}
         <div className="lg:col-span-7">
           <ContactForm />

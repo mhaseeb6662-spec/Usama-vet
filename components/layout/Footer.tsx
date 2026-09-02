@@ -44,7 +44,7 @@ export default function Footer() {
     >
       
       {/* 4-COLUMN SCREENSHOT-ALIGNED GRID */}
-      <div className="max-w-7xl mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
         
         {/* Column 1: Logo & Business Intro */}
         <motion.div variants={columnVariants} className="space-y-5 text-left">
@@ -132,19 +132,19 @@ export default function Footer() {
               Subscribed successfully!
             </div>
           ) : (
-            <form onSubmit={handleSubscribe} className="flex items-center bg-white border border-slate-250 rounded-full pl-5 pr-1 py-1.5 w-full shadow-sm focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:border-emerald-600 transition-all duration-200">
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row items-stretch sm:items-center bg-white border border-slate-250 rounded-2xl sm:rounded-full pl-4 sm:pl-5 pr-1 py-1.5 w-full min-w-0 shadow-sm focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:border-emerald-600 transition-all duration-200">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter email address"
                 required
-                className="w-full bg-transparent text-[14px] text-slate-850 outline-none placeholder:text-slate-400 focus:outline-none"
+                className="w-full min-w-0 bg-transparent text-base sm:text-[14px] text-slate-850 outline-none placeholder:text-slate-400 focus:outline-none py-2 sm:py-0"
               />
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-[#009473] hover:bg-[#028467] text-white font-semibold text-[13px] uppercase px-5 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all flex items-center justify-center min-w-[100px] shrink-0 active:scale-[0.97]"
+                className="bg-[#009473] hover:bg-[#028467] text-white font-semibold text-[13px] uppercase px-5 py-2.5 rounded-xl sm:rounded-full shadow-sm hover:shadow-md transition-all flex items-center justify-center min-w-[100px] shrink-0 active:scale-[0.97]"
               >
                 {loading ? "..." : "Subscribe"}
               </button>

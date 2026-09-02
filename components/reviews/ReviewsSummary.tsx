@@ -17,15 +17,15 @@ export default function ReviewsSummary({ reviews }: { reviews: any[] }) {
   });
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 md:p-10 mb-8 max-w-4xl mx-auto">
+    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-8 md:p-10 mb-8 max-w-4xl mx-auto">
       <h2 className="text-center text-[22px] font-bold text-slate-900 mb-6">Customer Reviews</h2>
       
       <div className="flex flex-col items-center justify-center mb-8">
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-2">
           {[1, 2, 3, 4, 5].map((star) => (
             <Star key={star} className={`w-6 h-6 ${star <= Math.round(avgRating) ? "fill-amber-400 text-amber-400" : "text-slate-200"}`} />
           ))}
-          <span className="text-[18px] font-bold text-slate-900 ml-2">
+          <span className="text-[16px] sm:text-[18px] font-bold text-slate-900 ml-2">
             {totalReviews > 0 ? avgRating.toFixed(2) : "0.00"} out of 5
           </span>
         </div>

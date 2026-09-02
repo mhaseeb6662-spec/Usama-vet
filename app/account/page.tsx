@@ -38,10 +38,10 @@ export default async function AccountPage() {
 
   return (
     <div className="bg-slate-50 min-h-screen pb-16">
-      <div className="max-w-5xl mx-auto px-4 pt-8 space-y-6">
-        <div className="bg-white border border-slate-200 rounded-xl p-5 flex items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900">Welcome, {user.name || "Customer"}</h1>
+      <div className="max-w-5xl mx-auto px-3 sm:px-4 pt-5 sm:pt-8 space-y-6">
+        <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 break-words">Welcome, {user.name || "Customer"}</h1>
             <p className="text-sm text-slate-500">{user.email}</p>
           </div>
           <AccountLogoutButton />

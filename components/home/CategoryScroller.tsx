@@ -55,7 +55,7 @@ export default function CategoryScroller({ categories = [] }: { categories?: any
   }, [isHovered]);
 
   return (
-    <section className="py-10 px-4 max-w-7xl mx-auto overflow-hidden group/section">
+    <section className="py-6 sm:py-10 px-3 sm:px-4 max-w-7xl mx-auto overflow-hidden group/section">
       {/* Small title matching screenshot */}
       <div className="text-center mb-6">
         <FadeUp distance={10}>

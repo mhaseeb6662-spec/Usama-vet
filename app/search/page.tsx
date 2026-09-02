@@ -37,20 +37,20 @@ export default async function SearchPage({
 
   return (
     <main className="min-h-screen bg-slate-50 pb-16">
-      <div className="max-w-[1400px] mx-auto px-4 md:px-6 pt-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">Search Products</h1>
-        <p className="text-slate-500 mb-6">
+      <div className="max-w-[1400px] mx-auto px-3 sm:px-4 md:px-6 pt-5 sm:pt-8">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 mb-2">Search Products</h1>
+        <p className="text-slate-500 mb-5 sm:mb-6 text-sm sm:text-base">
           {rawQuery ? `Results for “${rawQuery}”` : "Find veterinary medicines, supplements, and farm supplies."}
         </p>
 
-        <form action="/search" className="mb-8 flex gap-2 max-w-xl">
+        <form action="/search" className="mb-6 sm:mb-8 flex flex-col sm:flex-row gap-2 max-w-xl">
           <input
             name="q"
             defaultValue={rawQuery}
             placeholder="Enter medicine name, SKU or category..."
-            className="flex-1 border border-slate-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-emerald-500"
+            className="flex-1 min-w-0 border border-slate-300 rounded-lg px-4 py-3 text-base outline-none focus:ring-2 focus:ring-emerald-500"
           />
-          <button type="submit" className="bg-[#009473] hover:bg-[#028467] text-white font-semibold px-5 rounded-lg">
+          <button type="submit" className="bg-[#009473] hover:bg-[#028467] text-white font-semibold px-5 min-h-12 rounded-lg">
             Search
           </button>
         </form>
@@ -63,7 +63,7 @@ export default async function SearchPage({
             <Link href="/" className="text-emerald-700 font-semibold">Continue Shopping</Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

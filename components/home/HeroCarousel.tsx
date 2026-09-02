@@ -3,22 +3,29 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { isPersistentPublicImage } from "@/lib/mediaUrl";
 
 type HeroSlideImage = {
   desktopImage?: string | null;
+  mobileImage?: string | null;
 };
 
-function slideImageSrc(slide: HeroSlideImage | undefined) {
-  const image = typeof slide?.desktopImage === "string" ? slide.desktopImage.trim() : "";
-  if (
-    image.startsWith("/images/") ||
-    image.startsWith("/api/images/") ||
-    image.startsWith("https://")
-  ) {
-    return image;
-  }
-  return "";
+function publicImageSrc(value?: string | null) {
+  const image = typeof value === "string" ? value.trim() : "";
+  return isPersistentPublicImage(image) ? image : "";
 }
+
+function slideSources(slide: HeroSlideImage | undefined) {
+  const desktop = publicImageSrc(slide?.desktopImage);
+  const mobile = publicImageSrc(slide?.mobileImage);
+  return {
+    desktop: desktop || mobile,
+    mobile: mobile || desktop,
+  };
+}
+
+const BANNER_IMG_CLASS =
+  "block w-full h-[210px] sm:h-[280px] md:h-auto md:max-h-[70vh] object-cover object-center md:object-contain";
 
 export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -26,10 +33,13 @@ export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[
   const [imageFailed, setImageFailed] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
-  const activeSlides = slides.filter((slide) => slideImageSrc(slide));
+  const activeSlides = slides.filter((slide) => {
+    const sources = slideSources(slide);
+    return Boolean(sources.desktop || sources.mobile);
+  });
   const safeIndex = activeSlides.length > 0 ? currentSlide % activeSlides.length : 0;
-  const imageSrc = slideImageSrc(activeSlides[safeIndex]);
-  const showImage = Boolean(imageSrc) && !imageFailed;
+  const sources = slideSources(activeSlides[safeIndex]);
+  const showImage = Boolean(sources.desktop || sources.mobile) && !imageFailed;
 
   useEffect(() => {
     setImageFailed(false);
@@ -53,7 +63,7 @@ export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[
   };
 
   if (activeSlides.length === 0) {
-    return <div className="w-full min-h-[140px] bg-emerald-950 relative z-0" />;
+    return <div className="w-full min-h-[210px] sm:min-h-[280px] bg-emerald-950 relative z-0" />;
   }
 
   return (
@@ -68,48 +78,53 @@ export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[
           className="w-full"
         >
           {showImage ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={imageSrc}
-              alt="Usama Vet homepage banner"
-              className="block w-full h-auto max-h-[70vh] object-contain object-center mx-auto"
-              fetchPriority="high"
-              decoding="async"
-              onError={() => setImageFailed(true)}
-            />
+            <picture>
+              {sources.mobile && sources.mobile !== sources.desktop ? (
+                <source media="(max-width: 767px)" srcSet={sources.mobile} />
+              ) : null}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={sources.desktop || sources.mobile}
+                alt="Usama Vet homepage banner"
+                className={BANNER_IMG_CLASS}
+                fetchPriority="high"
+                decoding="async"
+                onError={() => setImageFailed(true)}
+              />
+            </picture>
           ) : (
-            <div className="w-full min-h-[140px] bg-emerald-950" />
+            <div className="w-full h-[210px] sm:h-[280px] md:min-h-[140px] bg-emerald-950" />
           )}
         </motion.div>
       </AnimatePresence>
 
       {activeSlides.length > 1 ? (
-        <div className="absolute bottom-4 sm:bottom-6 left-4 right-4 sm:left-8 sm:right-8 flex items-center justify-between z-20">
-          <div className="flex gap-2.5">
+        <div className="absolute bottom-3 sm:bottom-6 left-3 right-3 sm:left-8 sm:right-8 flex items-center justify-between z-20">
+          <div className="flex gap-2">
             {activeSlides.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => goTo(idx)}
-                className={`h-2.5 rounded-full transition-all duration-300 focus:outline-none ${
+                className={`h-2 rounded-full transition-all duration-300 focus:outline-none ${
                   safeIndex === idx
-                    ? "w-8 bg-emerald-500 shadow-sm shadow-emerald-500/50"
-                    : "w-2.5 bg-white/70 hover:bg-white"
+                    ? "w-7 bg-emerald-500 shadow-sm shadow-emerald-500/50"
+                    : "w-2 bg-white/70 hover:bg-white"
                 }`}
                 aria-label={`Go to slide ${idx + 1}`}
               />
             ))}
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3">
             <button
               onClick={() => goTo(safeIndex - 1)}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-black/35 hover:bg-black/50 backdrop-blur-sm border border-white/20 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-black/35 hover:bg-black/50 backdrop-blur-sm border border-white/20 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
               aria-label="Previous slide"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={() => goTo(safeIndex + 1)}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-black/35 hover:bg-black/50 backdrop-blur-sm border border-white/20 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-black/35 hover:bg-black/50 backdrop-blur-sm border border-white/20 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
               aria-label="Next slide"
             >
               <ChevronRight className="w-5 h-5" />

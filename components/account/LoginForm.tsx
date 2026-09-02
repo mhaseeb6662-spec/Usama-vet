@@ -43,13 +43,13 @@ export default function LoginForm() {
       {error ? <p className="text-rose-600 text-sm">{error}</p> : null}
       <label className="block text-sm">
         <span className="font-medium text-slate-700">Email</span>
-        <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500" placeholder="you@example.com" />
+        <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-3 text-base outline-none focus:ring-2 focus:ring-emerald-500" placeholder="you@example.com" />
       </label>
       <label className="block text-sm">
         <span className="font-medium text-slate-700">Password</span>
-        <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500" />
+        <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-3 text-base outline-none focus:ring-2 focus:ring-emerald-500" />
       </label>
-      <button type="submit" disabled={loading} className="w-full bg-[#009473] hover:bg-[#028467] disabled:opacity-50 text-white font-semibold py-2.5 rounded-lg">
+      <button type="submit" disabled={loading} className="w-full min-h-12 bg-[#009473] hover:bg-[#028467] disabled:opacity-50 text-white font-semibold py-3 rounded-lg">
         {loading ? "Logging in..." : "Login"}
       </button>
       <p className="text-sm text-center text-slate-600">

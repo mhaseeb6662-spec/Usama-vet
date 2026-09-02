@@ -64,7 +64,7 @@ export default function ReviewsSection({ reviews }: { reviews: Review[] }) {
   }, [isHovered, reviews.length, shouldReduceMotion]);
 
   return (
-    <section className="py-12 px-4 max-w-7xl mx-auto overflow-hidden">
+    <section className="py-8 sm:py-12 px-3 sm:px-4 max-w-7xl mx-auto overflow-hidden">
       <FadeUp distance={10}>
         <SectionHeader
           preTitle="Testimonials"
@@ -88,7 +88,7 @@ export default function ReviewsSection({ reviews }: { reviews: Review[] }) {
           onTouchEnd={() => setIsHovered(false)}
         >
           {items.map(({ review, key }) => (
-            <div key={key} className="shrink-0 w-[300px] sm:w-[350px] h-auto flex">
+            <div key={key} className="shrink-0 w-[80vw] max-w-[300px] sm:w-[350px] sm:max-w-none h-auto flex">
               <ReviewCard review={review} />
             </div>
           ))}

@@ -57,9 +57,9 @@ export default async function OrderSuccessPage({
   }
 
   return (
-    <div className="bg-slate-50 min-h-screen pb-16">
-      <div className="max-w-4xl mx-auto px-4 pt-8 space-y-6">
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 text-center">
+    <div className="bg-slate-50 min-h-screen pb-24 sm:pb-16">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 pt-5 sm:pt-8 space-y-6">
+        <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 md:p-8 text-center">
           <CheckCircle2 className="w-14 h-14 text-emerald-600 mx-auto mb-3" />
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Order Placed Successfully</h1>
           <p className="text-slate-600 mt-3">

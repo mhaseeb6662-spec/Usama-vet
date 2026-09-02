@@ -63,12 +63,12 @@ export default function RegisterForm() {
             required
             value={form[name as keyof typeof form]}
             onChange={(e) => setForm((prev) => ({ ...prev, [name]: e.target.value }))}
-            className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500"
+            className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-3 text-base outline-none focus:ring-2 focus:ring-emerald-500"
             placeholder={placeholder}
           />
         </label>
       ))}
-      <button type="submit" disabled={loading} className="w-full bg-[#009473] hover:bg-[#028467] disabled:opacity-50 text-white font-semibold py-2.5 rounded-lg">
+      <button type="submit" disabled={loading} className="w-full min-h-12 bg-[#009473] hover:bg-[#028467] disabled:opacity-50 text-white font-semibold py-3 rounded-lg">
         {loading ? "Creating account..." : "Register"}
       </button>
       <p className="text-sm text-center text-slate-600">

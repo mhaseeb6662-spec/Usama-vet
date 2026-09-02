@@ -49,11 +49,11 @@ export default function TrackOrderForm() {
       <form onSubmit={onSubmit} className="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
         <label className="block text-sm">
           <span className="font-medium text-slate-700">Order Number</span>
-          <input value={orderNumber} onChange={(e) => setOrderNumber(e.target.value)} className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500" placeholder="ORD-20260901-000123" required />
+          <input value={orderNumber} onChange={(e) => setOrderNumber(e.target.value)} className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-3 text-base outline-none focus:ring-2 focus:ring-emerald-500" placeholder="ORD-20260901-000123" required />
         </label>
         <label className="block text-sm">
           <span className="font-medium text-slate-700">Phone Number</span>
-          <input value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500" placeholder="03001234567" required />
+          <input value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 w-full border border-slate-300 rounded-lg px-3 py-3 text-base outline-none focus:ring-2 focus:ring-emerald-500" placeholder="03001234567" required />
         </label>
         {error && <p className="text-rose-600 text-sm">{error}</p>}
         <button type="submit" disabled={loading} className="w-full bg-[#009473] hover:bg-[#028467] text-white font-semibold py-3 rounded-lg disabled:opacity-50">

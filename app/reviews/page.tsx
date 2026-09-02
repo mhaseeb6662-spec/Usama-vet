@@ -41,7 +41,7 @@ export default async function ReviewsPage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 py-12">
+      <div className="max-w-5xl mx-auto px-3 sm:px-4 py-6 sm:py-12">
         <ReviewForm />
         <ReviewsSummary reviews={reviews} />
         <ReviewList reviews={reviews} />

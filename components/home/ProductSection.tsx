@@ -77,7 +77,7 @@ export default function ProductSection({
 
   return (
     <section 
-      className={`py-16 px-4 border-t border-b border-slate-100 ${bgColorClass} overflow-hidden group/section`}
+      className={`py-8 sm:py-16 px-3 sm:px-4 border-t border-b border-slate-100 ${bgColorClass} overflow-hidden group/section`}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={() => setIsPaused(true)}
@@ -117,7 +117,7 @@ export default function ProductSection({
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {products.map((product) => (
-              <div key={product.id} className="w-[85vw] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)] shrink-0 snap-start">
+              <div key={product.id} className="w-[72vw] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)] shrink-0 snap-start">
                 <StaggerItem distance={14} className="h-full">
                   <ProductCard product={product} />
                 </StaggerItem>

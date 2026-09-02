@@ -53,7 +53,7 @@ export default function ReviewForm() {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-12">
-      <div className="p-8 md:p-10">
+      <div className="p-4 sm:p-8 md:p-10">
         <h2 className="text-center text-[22px] font-bold text-slate-900 mb-8">
           Write a review
         </h2>
@@ -108,7 +108,7 @@ export default function ReviewForm() {
 
             <div className="space-y-2">
               <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest ml-1">Review Image</label>
-              <div className="border-2 border-dashed border-slate-200 rounded-xl p-10 flex flex-col items-center justify-center text-center hover:bg-slate-50 hover:border-emerald-200 cursor-pointer transition-all group">
+              <div className="border-2 border-dashed border-slate-200 rounded-xl p-6 sm:p-10 flex flex-col items-center justify-center text-center hover:bg-slate-50 hover:border-emerald-200 cursor-pointer transition-all group">
                 <UploadCloud className="w-8 h-8 text-slate-400 group-hover:text-emerald-500 transition-colors mb-3" />
                 <span className="text-[13px] font-medium text-slate-600 group-hover:text-emerald-600">Click to select images</span>
               </div>
