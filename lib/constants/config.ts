@@ -7,6 +7,8 @@ export const BUSINESS_CONFIG = {
   logo: {
     text: "Usama Vet",
     subtitle: "Animal Health Care",
+    image: "/logo.png",
+    imageAlt: "Veterinary and Surgical Instruments logo",
   },
   contact: {
     phone: "+923048566233",

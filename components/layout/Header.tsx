@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { BUSINESS_CONFIG } from "@/lib/constants/config";
 import {
   Search,
   ShoppingCart,
@@ -23,7 +24,6 @@ import {
 } from "lucide-react";
 import AccountMenu from "@/components/account/AccountMenu";
 import HeaderSearch from "@/components/search/HeaderSearch";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
 import TopBar from "./TopBar";
 import MainNav from "./MainNav";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
@@ -140,7 +140,7 @@ export default function Header() {
           <div className="max-w-7xl mx-auto flex justify-between items-center gap-2 sm:gap-4 lg:gap-6 min-w-0">
             <Link href="/" className="flex items-center gap-2 sm:gap-3 min-w-0 group focus:outline-none">
               <div className="w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full shadow-sm shrink-0 overflow-hidden bg-slate-50 border border-slate-200">
-                <Image src="/logo.jpg" alt="Veterinary Logo" width={64} height={64} className="w-full h-full object-cover" unoptimized />
+                <Image src={BUSINESS_CONFIG.logo.image} alt={BUSINESS_CONFIG.logo.imageAlt} width={64} height={64} className="w-full h-full object-contain" unoptimized />
               </div>
               <div className="leading-tight text-left min-w-0">
                 <span className="block font-bold text-slate-800 text-[13px] sm:text-[16px] lg:text-[20px] group-hover:text-[#009473] transition-colors break-words">

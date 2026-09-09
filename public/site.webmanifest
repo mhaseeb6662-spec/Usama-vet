@@ -1,0 +1,21 @@
+{
+  "name": "Usama Vet Care & Agri Services",
+  "short_name": "Usama Vet",
+  "description": "Trusted Animal Healthcare & Quality Veterinary Products",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#009473",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

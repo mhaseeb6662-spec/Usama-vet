@@ -50,7 +50,7 @@ export default function Footer() {
         <motion.div variants={columnVariants} className="space-y-5 text-left">
           <div className="flex items-center gap-3">
             <div className="w-14 h-14 rounded-full shadow-sm shrink-0 overflow-hidden bg-slate-50 border border-slate-200">
-              <img src="/logo.jpg" alt="Veterinary Logo" className="w-full h-full object-cover" />
+              <img src={BUSINESS_CONFIG.logo.image} alt={BUSINESS_CONFIG.logo.imageAlt} className="w-full h-full object-contain" />
             </div>
             <div>
               <span className="block font-bold text-slate-900 leading-none text-[18px]">

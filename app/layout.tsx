@@ -28,9 +28,13 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: BUSINESS_CONFIG.name }],
   icons: {
-    icon: [{ url: "/logo.jpg", type: "image/jpeg" }],
-    shortcut: "/logo.jpg",
-    apple: "/logo.jpg",
+    icon: [
+      { url: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/logo.png", sizes: "512x512", type: "image/png" },
+    ],
+    shortcut: "/favicon-48x48.png",
+    apple: "/icons/icon-192x192.png",
   },
   robots: {
     index: true,
@@ -52,10 +56,10 @@ export const metadata: Metadata = {
     description: BUSINESS_CONFIG.description,
     images: [
       {
-        url: "/images/og-default.jpg",
-        width: 1200,
-        height: 630,
-        alt: BUSINESS_CONFIG.name,
+        url: BUSINESS_CONFIG.logo.image,
+        width: 512,
+        height: 512,
+        alt: BUSINESS_CONFIG.logo.imageAlt,
       },
     ],
   },
@@ -63,8 +67,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: BUSINESS_CONFIG.name,
     description: BUSINESS_CONFIG.description,
-    images: ["/images/og-default.jpg"],
+    images: [BUSINESS_CONFIG.logo.image],
   },
+  manifest: "/site.webmanifest",
 };
 
 export const viewport: Viewport = {

@@ -11,8 +11,8 @@ export function OrganizationSchema() {
     "@id": `${BUSINESS_CONFIG.url}/#organization`,
     "name": BUSINESS_CONFIG.name,
     "url": BUSINESS_CONFIG.url,
-    "logo": `${BUSINESS_CONFIG.url}/images/logo.png`, // Placeholder for future logo image
-    "image": `${BUSINESS_CONFIG.url}/images/og-default.jpg`,
+    "logo": `${BUSINESS_CONFIG.url}${BUSINESS_CONFIG.logo.image}`,
+    "image": `${BUSINESS_CONFIG.url}/images/logo.png`,
     "description": BUSINESS_CONFIG.description,
     "telephone": BUSINESS_CONFIG.contact.phone,
     "email": BUSINESS_CONFIG.contact.email,
