@@ -4,6 +4,8 @@ import { notFound, redirect } from "next/navigation";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
+import GalleryUploader from "@/components/admin/ui/GalleryUploader";
+import { MAX_PRODUCT_GALLERY_IMAGES } from "@/lib/constants/products";
 import AdminActionError from "@/components/admin/AdminActionError";
 import { runAdminAction } from "@/lib/admin/mutation";
 import { updateAdminProduct } from "@/lib/services/adminProduct";
@@ -42,6 +44,10 @@ export default async function EditProductAdmin({
   if (!product) notFound();
 
   const primaryImage = product.images.find((image) => image.isPrimary) || product.images[0];
+  const galleryImages = product.images
+    .filter((image) => image.id !== primaryImage?.id)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((image) => toServedImageUrl(image.imageUrl));
 
   return (
     <div className="space-y-6 max-w-4xl">
@@ -61,6 +67,15 @@ export default async function EditProductAdmin({
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-slate-700 mb-2">Primary Image</label>
                 <ImageUploader name="primaryImage" defaultImage={toServedImageUrl(primaryImage?.imageUrl || "")} />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Product Gallery (up to {MAX_PRODUCT_GALLERY_IMAGES} extra images)
+                </label>
+                <GalleryUploader name="galleryImages" defaultImages={galleryImages} />
+                <p className="text-xs text-slate-500 mt-2">
+                  These images appear as thumbnails on the product detail page along with the primary image.
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Product Name</label>

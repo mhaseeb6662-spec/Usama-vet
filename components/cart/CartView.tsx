@@ -62,12 +62,13 @@ export default function CartView() {
   }
 
   return (
-    <div className="grid lg:grid-cols-12 gap-6">
-      <div className="lg:col-span-8 space-y-4">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+      <div className="order-2 lg:order-1 lg:col-span-8 space-y-3 sm:space-y-4">
         {error && <p className="text-rose-600 text-sm">{error}</p>}
         {loading && !quote && <p className="text-slate-500 text-sm">Loading cart...</p>}
         {quote?.items.map((item) => (
-          <FadeUp key={item.productId} className="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 flex gap-3 sm:gap-4 min-w-0">
+          <FadeUp key={item.productId} className="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 min-w-0">
+            <div className="flex gap-3 sm:gap-4 min-w-0">
             <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg bg-slate-50 border border-slate-100 overflow-hidden shrink-0">
               {item.image ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -93,11 +94,15 @@ export default function CartView() {
                 </button>
               </div>
             </div>
-            <div className="font-semibold text-slate-900 shrink-0 text-sm sm:text-base">Rs. {(item.unitPrice * item.quantity).toLocaleString()}</div>
+            </div>
+            <div className="mt-3 pt-3 border-t border-slate-100 flex justify-between items-center text-sm sm:text-base">
+              <span className="text-slate-500">Line total</span>
+              <span className="font-semibold text-slate-900">Rs. {(item.unitPrice * item.quantity).toLocaleString()}</span>
+            </div>
           </FadeUp>
         ))}
       </div>
-      <aside className="lg:col-span-4">
+      <aside className="order-1 lg:order-2 lg:col-span-4">
         <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 space-y-3 lg:sticky lg:top-28">
           <h2 className="font-bold text-slate-900">Cart Summary</h2>
           <div className="flex justify-between text-sm"><span>Subtotal</span><span>Rs. {(quote?.subtotal || 0).toLocaleString()}</span></div>

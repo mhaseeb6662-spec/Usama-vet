@@ -7,6 +7,7 @@ import { prisma } from "@/lib/db";
 import { ProductSchema, BreadcrumbsSchema } from "@/lib/seo/schema";
 import { toServedImageUrl } from "@/lib/mediaUrl";
 import ProductAddToCart from "@/components/cart/ProductAddToCart";
+import ProductImageGallery from "@/components/product/ProductImageGallery";
 
 export const dynamic = 'force-dynamic';
 
@@ -86,11 +87,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
   const category = product.category;
   const categoryName = category ? category.name : "Veterinary Products";
-  const primaryImage = toServedImageUrl(
-    product.images.find((img: { isPrimary: boolean; imageUrl: string }) => img.isPrimary)?.imageUrl
-    || product.images[0]?.imageUrl
-    || ""
-  );
+  const galleryImages = product.images
+    .map((img: { imageUrl: string }) => toServedImageUrl(img.imageUrl))
+    .filter((url: string) => url.length > 0);
+  const primaryImage = galleryImages[0] || "";
   const salePrice = Number(product.salePrice || product.price);
   const comparePrice = product.salePrice ? Number(product.price) : null;
   const discountPercent = comparePrice && comparePrice > salePrice
@@ -139,33 +139,13 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
         {/* Product Details Section */}
         <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 md:p-10 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12">
-          {/* Left Side: Image Gallery Placeholder */}
-          <div className="md:col-span-5 flex flex-col gap-4">
-            <div className="aspect-square bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center relative overflow-hidden">
-              {primaryImage ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={primaryImage} alt={product.name} className="w-full h-full object-contain p-3 sm:p-6" />
-              ) : (
-                <div className="w-24 h-24 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                  <ShieldCheck className="w-12 h-12" />
-                </div>
-              )}
-              
-              <div className="absolute top-4 left-4">
-                <span
-                  className={`text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider ${
-                    product.stockQuantity > 0
-                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200/65"
-                      : "bg-rose-50 text-rose-700 border border-rose-200/65"
-                  }`}
-                >
-                  {product.stockQuantity > 0 ? "In Stock" : "Out of Stock"}
-                </span>
-              </div>
-            </div>
-            <span className="text-[10px] text-slate-400 text-center italic">
-              Image displays product type. Design template utilizes verified SVG representations.
-            </span>
+          {/* Left Side: Product image gallery */}
+          <div className="md:col-span-5">
+            <ProductImageGallery
+              images={galleryImages}
+              productName={product.name}
+              inStock={product.stockQuantity > 0}
+            />
           </div>
 
           {/* Right Side: Product Details Content */}

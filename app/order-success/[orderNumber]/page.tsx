@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { CheckCircle2, Phone, MessageCircle } from "lucide-react";
 import { BUSINESS_CONFIG } from "@/lib/constants/config";
+import { ORDER_PAYMENT_METHOD_LABELS } from "@/lib/constants/checkout";
 import { getOrderForReceipt } from "@/lib/services/orders";
 
 export const metadata = {
@@ -72,7 +73,11 @@ export default async function OrderSuccessPage({
           <p><span className="font-semibold">Customer Name:</span> {order.customerName}</p>
           <p><span className="font-semibold">Phone:</span> {order.phone}</p>
           <p><span className="font-semibold">Delivery Address:</span> {order.address}, {order.city}</p>
-          <p><span className="font-semibold">Payment:</span> Cash on Delivery</p>
+          <p>
+            <span className="font-semibold">Payment:</span>{" "}
+            {ORDER_PAYMENT_METHOD_LABELS[order.paymentMethod] || order.paymentMethod}
+            {order.paymentMethod === "ADVANCE" ? " (pending verification)" : ""}
+          </p>
         </div>
 
         <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-3">

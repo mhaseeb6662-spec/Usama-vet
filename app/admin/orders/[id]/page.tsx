@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { ensureOrderSchema } from "@/lib/services/orderSchema";
 import OrderActions from "@/components/admin/OrderActions";
-import type { OrderStatusValue } from "@/lib/constants/checkout";
+import { ORDER_PAYMENT_METHOD_LABELS, type OrderStatusValue } from "@/lib/constants/checkout";
+import { toServedImageUrl } from "@/lib/mediaUrl";
 
 export const dynamic = "force-dynamic";
 
@@ -46,8 +47,21 @@ export default async function AdminOrderDetailPage({
           <p><b>Shipping:</b> Rs. {Number(order.shippingFee).toLocaleString()}</p>
           <p><b>Discount:</b> Rs. {Number(order.discount).toLocaleString()}</p>
           <p><b>Total:</b> Rs. {Number(order.total).toLocaleString()}</p>
-          <p><b>Payment Method:</b> {order.paymentMethod}</p>
+          <p><b>Payment Method:</b> {ORDER_PAYMENT_METHOD_LABELS[order.paymentMethod] || order.paymentMethod}</p>
           <p><b>Payment Status:</b> {order.paymentStatus}</p>
+          {order.paymentProof ? (
+            <div className="pt-2">
+              <p className="font-semibold mb-2">Payment Screenshot</p>
+              <a href={toServedImageUrl(order.paymentProof)} target="_blank" rel="noopener noreferrer">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={toServedImageUrl(order.paymentProof)}
+                  alt="Payment proof"
+                  className="max-w-xs w-full rounded-lg border border-slate-200"
+                />
+              </a>
+            </div>
+          ) : null}
           <p><b>Order Status:</b> {order.status}</p>
           <div className="pt-3">
             <OrderActions orderId={order.id} status={order.status as OrderStatusValue} paymentStatus={order.paymentStatus || "UNPAID"} />

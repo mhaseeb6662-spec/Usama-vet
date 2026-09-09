@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import { prisma } from "@/lib/db";
+import { MAX_PRODUCT_GALLERY_IMAGES } from "@/lib/constants/products";
 import {
   createProductAlert,
   deleteProductAlertsForProduct,
@@ -31,6 +32,30 @@ function productSlug(name: string, sku: string): string {
     slug = `${slug}-${sku}`.replace(/^-+|-+$/g, "");
   }
   return slug;
+}
+
+/**
+ * Extra gallery images posted by the dashboard. The primary image is stored
+ * separately, so it is skipped here to avoid duplicate ProductImage rows.
+ */
+function readGalleryImages(formData: FormData, primaryImage: string): string[] {
+  const seen = new Set<string>();
+  if (primaryImage) {
+    seen.add(primaryImage);
+  }
+  const gallery: string[] = [];
+  for (const raw of formData.getAll("galleryImages")) {
+    const value = String(raw).trim();
+    if (!value || seen.has(value)) {
+      continue;
+    }
+    seen.add(value);
+    gallery.push(value);
+    if (gallery.length === MAX_PRODUCT_GALLERY_IMAGES) {
+      break;
+    }
+  }
+  return gallery;
 }
 
 function readProductFields(formData: FormData, options: { requireSku: boolean }) {
@@ -67,6 +92,7 @@ function readProductFields(formData: FormData, options: { requireSku: boolean })
     shortDescription,
     description,
     primaryImage,
+    galleryImages: readGalleryImages(formData, primaryImage),
     price,
     salePrice,
     stockQuantity,
@@ -103,6 +129,17 @@ export async function createAdminProduct(formData: FormData) {
     slug = `${slug}-${sku}`.replace(/^-+|-+$/g, "");
   }
 
+  const imageRows = [
+    ...(fields.primaryImage
+      ? [{ imageUrl: fields.primaryImage, isPrimary: true, sortOrder: 0 }]
+      : []),
+    ...fields.galleryImages.map((imageUrl, index) => ({
+      imageUrl,
+      isPrimary: false,
+      sortOrder: index + 1,
+    })),
+  ];
+
   const product = await prisma.product.create({
     data: {
       name: fields.name,
@@ -121,13 +158,7 @@ export async function createAdminProduct(formData: FormData) {
       isTrending: fields.isTrending,
       seoTitle: fields.seoTitle,
       metaDescription: fields.metaDescription,
-      ...(fields.primaryImage
-        ? {
-            images: {
-              create: [{ imageUrl: fields.primaryImage, isPrimary: true, sortOrder: 0 }],
-            },
-          }
-        : {}),
+      ...(imageRows.length > 0 ? { images: { create: imageRows } } : {}),
     },
   });
 
@@ -138,6 +169,47 @@ export async function createAdminProduct(formData: FormData) {
   }
 
   return product;
+}
+
+type StoredProductImage = { id: number; imageUrl: string; sortOrder: number; isPrimary: boolean };
+
+/**
+ * Keeps the non-primary ProductImage rows in sync with the gallery posted by
+ * the dashboard: images removed in the form are deleted, new ones created, and
+ * the remaining ones renumbered so the storefront gallery order stays stable.
+ */
+async function syncProductGallery(
+  productId: number,
+  storedImages: StoredProductImage[],
+  primaryImageId: number | null,
+  galleryImages: string[]
+) {
+  const storedGallery = storedImages.filter((image) => image.id !== primaryImageId);
+  const keptUrls = new Set(galleryImages);
+  const removedIds = storedGallery
+    .filter((image) => !keptUrls.has(image.imageUrl))
+    .map((image) => image.id);
+
+  if (removedIds.length > 0) {
+    await prisma.productImage.deleteMany({ where: { id: { in: removedIds } } });
+  }
+
+  for (const [index, imageUrl] of galleryImages.entries()) {
+    const sortOrder = index + 1;
+    const stored = storedGallery.find((image) => image.imageUrl === imageUrl);
+    if (!stored) {
+      await prisma.productImage.create({
+        data: { productId, imageUrl, isPrimary: false, sortOrder },
+      });
+      continue;
+    }
+    if (stored.sortOrder !== sortOrder || stored.isPrimary) {
+      await prisma.productImage.update({
+        where: { id: stored.id },
+        data: { sortOrder, isPrimary: false },
+      });
+    }
+  }
 }
 
 export async function updateAdminProduct(formData: FormData) {
@@ -219,6 +291,8 @@ export async function updateAdminProduct(formData: FormData) {
   } else if (existingPrimary) {
     await prisma.productImage.delete({ where: { id: existingPrimary.id } });
   }
+
+  await syncProductGallery(id, existing.images, existingPrimary?.id ?? null, fields.galleryImages);
 
   try {
     await createProductAlert(id, "UPDATED", fields.name);

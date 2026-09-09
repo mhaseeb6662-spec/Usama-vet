@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import ImageUploader from "@/components/admin/ui/ImageUploader";
+import GalleryUploader from "@/components/admin/ui/GalleryUploader";
+import { MAX_PRODUCT_GALLERY_IMAGES } from "@/lib/constants/products";
 import AdminActionError from "@/components/admin/AdminActionError";
 import { runAdminAction } from "@/lib/admin/mutation";
 import { createAdminProduct } from "@/lib/services/adminProduct";
@@ -49,6 +51,15 @@ export default async function NewProductAdmin({
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-slate-700 mb-2">Primary Image</label>
                 <ImageUploader name="primaryImage" />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Product Gallery (up to {MAX_PRODUCT_GALLERY_IMAGES} extra images)
+                </label>
+                <GalleryUploader name="galleryImages" />
+                <p className="text-xs text-slate-500 mt-2">
+                  These images appear as thumbnails on the product detail page along with the primary image.
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Product Name</label>

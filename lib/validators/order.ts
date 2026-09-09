@@ -42,8 +42,17 @@ export const checkoutSchema = z.object({
   address: z.string().trim().min(8, "Complete address is required."),
   landmark: z.string().trim().optional(),
   notes: z.string().trim().optional(),
-  paymentMethod: z.literal("COD"),
+  paymentMethod: z.enum(["COD", "ADVANCE"]),
+  paymentProof: z.string().trim().optional(),
   items: z.array(cartItemInputSchema).min(1, "Your cart is empty."),
+}).superRefine((data, ctx) => {
+  if (data.paymentMethod === "ADVANCE" && !data.paymentProof?.trim()) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["paymentProof"],
+      message: "Upload your payment screenshot before placing an advance payment order.",
+    });
+  }
 });
 
 export const trackOrderSchema = z.object({

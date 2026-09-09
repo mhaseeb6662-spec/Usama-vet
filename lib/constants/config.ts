@@ -14,8 +14,23 @@ export const BUSINESS_CONFIG = {
     whatsapp: "https://wa.me/923048566233",
     whatsappDisplay: "+92 304 8566233",
     email: "info@usamavetsurgical.com",
-    address: "Veterinary Complex, G.T. Road, Gujranwala, Punjab, Pakistan",
-    mapEmbeddedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d108253.94723906473!2d74.12071661603507!3d32.16104273295982!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391f29ef194553df%3A0xc3f1738e404b901!2sGujranwala%2C%20Punjab%2C%20Pakistan!5e0!3m2!1sen!2s!4v1700000000000!5m2!1sen!2s", // Placeholder for embedded Google Map
+    address: "13 Jiyani Wala Road, Near Taj Palace Marriage Hall, Chishtian, Punjab, Pakistan",
+    city: "Chishtian",
+    mapUrl: "https://www.google.com/maps?q=29.8032309,72.8755473&z=17&hl=en",
+    mapEmbeddedUrl: "https://www.google.com/maps?q=29.8032309,72.8755473&z=17&hl=en&output=embed",
+  },
+  payment: {
+    accountTitle: "Muhammad Usama",
+    bank: {
+      name: "Meezan Bank",
+      accountNumber: "65010102624143",
+      iban: "PK13MEZN0065010102624143",
+      branch: "Chishtian Branch",
+    },
+    jazzCash: {
+      name: "JazzCash",
+      accountNumber: "03048566233",
+    },
   },
   hours: [
     { days: "Monday - Saturday", time: "09:00 AM - 09:00 PM" },

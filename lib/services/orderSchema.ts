@@ -47,6 +47,7 @@ const STATEMENTS = [
   "ALTER TABLE `Order` MODIFY `notes` VARCHAR(1000) NULL",
   "ALTER TABLE `OrderItem` ADD COLUMN `imageSnapshot` VARCHAR(500) NULL",
   "ALTER TABLE `Order` ADD COLUMN `customerId` INTEGER NULL",
+  "ALTER TABLE `Order` ADD COLUMN `paymentProof` VARCHAR(500) NULL",
 ];
 
 export async function ensureOrderSchema(): Promise<void> {

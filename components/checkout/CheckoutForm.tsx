@@ -5,6 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FadeUp } from "@/components/shared/AnimationComponents";
 import { useCart } from "@/components/cart/CartProvider";
+import PaymentProofUploader from "@/components/checkout/PaymentProofUploader";
+import { BUSINESS_CONFIG } from "@/lib/constants/config";
+import type { PaymentMethodValue } from "@/lib/constants/checkout";
 import type { CartQuote } from "@/lib/services/cartQuote";
 
 const emptyForm = {
@@ -31,6 +34,8 @@ export default function CheckoutForm() {
   const [submitError, setSubmitError] = useState("");
   const [placing, setPlacing] = useState(false);
   const [accountName, setAccountName] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodValue>("ADVANCE");
+  const [paymentProof, setPaymentProof] = useState("");
 
   useEffect(() => {
     fetch("/api/account/me")
@@ -89,6 +94,9 @@ export default function CheckoutForm() {
     if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = "Enter a valid email.";
     if (form.city.trim().length < 2) next.city = "City is required.";
     if (form.address.trim().length < 8) next.address = "Complete address is required.";
+    if (paymentMethod === "ADVANCE" && !paymentProof.trim()) {
+      next.paymentProof = "Upload your payment screenshot before placing the order.";
+    }
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -109,7 +117,8 @@ export default function CheckoutForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
-          paymentMethod: "COD",
+          paymentMethod,
+          paymentProof: paymentMethod === "ADVANCE" ? paymentProof : undefined,
           items,
         }),
       });
@@ -222,11 +231,63 @@ export default function CheckoutForm() {
             className={fieldClass}
           />
         </label>
-        <div className="border border-emerald-200 bg-emerald-50 rounded-xl p-4">
-          <label className="flex items-center gap-3 cursor-pointer min-h-11">
-            <input type="radio" name="paymentMethod" value="COD" defaultChecked className="text-emerald-600" />
-            <span className="font-semibold text-slate-900">Cash on Delivery (COD)</span>
-          </label>
+        <div className="space-y-3">
+          <h2 className="font-semibold text-slate-900">Payment Method</h2>
+          <div className="border border-emerald-200 bg-emerald-50 rounded-xl p-4 space-y-3">
+            <label className="flex items-start gap-3 cursor-pointer min-h-11">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="ADVANCE"
+                checked={paymentMethod === "ADVANCE"}
+                onChange={() => setPaymentMethod("ADVANCE")}
+                className="text-emerald-600 mt-1"
+              />
+              <span>
+                <span className="font-semibold text-slate-900 block">Advance Payment (Bank / JazzCash)</span>
+                <span className="text-xs text-slate-600 block mt-1">
+                  Pay in advance and upload your payment screenshot below.
+                </span>
+              </span>
+            </label>
+            {paymentMethod === "ADVANCE" && (
+              <div className="bg-white border border-emerald-100 rounded-lg p-4 space-y-3 text-sm">
+                <div>
+                  <p className="font-semibold text-slate-900">Meezan Bank</p>
+                  <p className="text-slate-600">Account Title: {BUSINESS_CONFIG.payment.accountTitle}</p>
+                  <p className="text-slate-600">Account No: {BUSINESS_CONFIG.payment.bank.accountNumber}</p>
+                  <p className="text-slate-600">IBAN: {BUSINESS_CONFIG.payment.bank.iban}</p>
+                  <p className="text-slate-600">Branch: {BUSINESS_CONFIG.payment.bank.branch}</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-900">JazzCash</p>
+                  <p className="text-slate-600">Account Title: {BUSINESS_CONFIG.payment.accountTitle}</p>
+                  <p className="text-slate-600">Number: {BUSINESS_CONFIG.payment.jazzCash.accountNumber}</p>
+                </div>
+                <div>
+                  <p className="font-medium text-slate-700 mb-2">Payment Screenshot *</p>
+                  <PaymentProofUploader
+                    value={paymentProof}
+                    onChange={setPaymentProof}
+                    error={errors.paymentProof}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="border border-slate-200 bg-white rounded-xl p-4">
+            <label className="flex items-center gap-3 cursor-pointer min-h-11">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="COD"
+                checked={paymentMethod === "COD"}
+                onChange={() => setPaymentMethod("COD")}
+                className="text-emerald-600"
+              />
+              <span className="font-semibold text-slate-900">Cash on Delivery (COD)</span>
+            </label>
+          </div>
         </div>
         <div className="lg:hidden">{placeOrderButton}</div>
       </FadeUp>

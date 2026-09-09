@@ -127,16 +127,27 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <a
-            href="https://maps.google.com/?q=Veterinary+Complex+GT+Road+Gujranwala"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:border-emerald-300 transition-colors"
-          >
-            <h3 className="text-slate-900 font-semibold text-[13px] uppercase mb-2">Find Us On Map</h3>
+          <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-sm space-y-3">
+            <h3 className="text-slate-900 font-semibold text-[13px] uppercase">Find Us On Map</h3>
             <p className="text-sm text-slate-600">{BUSINESS_CONFIG.contact.address}</p>
-            <span className="inline-block mt-3 text-emerald-700 font-semibold text-sm">Open Google Maps</span>
-          </a>
+            <div className="rounded-lg overflow-hidden border border-slate-200">
+              <iframe
+                src={BUSINESS_CONFIG.contact.mapEmbeddedUrl}
+                title={`${BUSINESS_CONFIG.shortName} location on Google Maps`}
+                className="w-full h-[220px] sm:h-[260px] block"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+            <a
+              href={BUSINESS_CONFIG.contact.mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center text-emerald-700 font-semibold text-sm"
+            >
+              Open in Google Maps
+            </a>
+          </div>
         </div>
       </section>
     </div>

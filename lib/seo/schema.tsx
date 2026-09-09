@@ -19,7 +19,7 @@ export function OrganizationSchema() {
     "address": {
       "@type": "PostalAddress",
       "streetAddress": BUSINESS_CONFIG.contact.address,
-      "addressLocality": "Gujranwala",
+      "addressLocality": BUSINESS_CONFIG.contact.city,
       "addressRegion": "Punjab",
       "addressCountry": "PK",
     },

@@ -96,8 +96,9 @@ export async function placeOrder(raw: unknown, customerId?: number) {
               shippingFee: quote.shippingFee,
               discount: quote.discount,
               total: quote.total,
-              paymentMethod: "COD",
+              paymentMethod: input.paymentMethod,
               paymentStatus: "UNPAID",
+              paymentProof: input.paymentMethod === "ADVANCE" ? input.paymentProof?.trim() || null : null,
               status: "PENDING",
               stockRestored: false,
               items: {

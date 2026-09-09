@@ -257,6 +257,7 @@ model Order {
   status        OrderStatus @default(PENDING)
   paymentMethod String      @default("COD")
   paymentStatus String      @default("UNPAID")
+  paymentProof  String?     @db.VarChar(500)
   stockRestored Boolean     @default(false)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
