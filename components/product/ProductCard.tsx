@@ -28,7 +28,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="bg-white border border-slate-100 rounded-xl overflow-hidden hover:shadow-md hover:border-slate-200/80 hover:-translate-y-1 transition-all duration-200 ease-out flex flex-col group h-full">
       {/* 1. IMAGE CONTAINER (Clean square container, no overlays) */}
-      <div className="aspect-square bg-[#fbfdfc] relative flex items-center justify-center border-b border-slate-100 overflow-hidden shrink-0 p-4">
+      <Link href={`/products/${slug}`} className="aspect-square bg-[#fbfdfc] relative flex items-center justify-center border-b border-slate-100 overflow-hidden shrink-0 p-4 block w-full focus:outline-none cursor-pointer">
         {showImage ? (
           <img 
             src={imageSrc} 
@@ -59,12 +59,12 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Stock Status Badge (Bottom Left) */}
         {!inStock && (
           <div className="absolute bottom-2 left-2 z-10">
-            <span className="bg-rose-50 text-rose-700 border border-rose-200/50 text-[10px] font-semibold px-1.5 py-0.5 rounded uppercase">
+            <span className="bg-rose-50 text-rose-700 border border-rose-200/50 text-[10px] font-semibold px-1.5 py-0.5 rounded uppercase pointer-events-none">
               Out of Stock
             </span>
           </div>
         )}
-      </div>
+      </Link>
 
       {/* 2. PRODUCT INFO AREA */}
       <div className="p-3 sm:p-4 flex-grow flex flex-col text-left">
