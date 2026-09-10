@@ -43,7 +43,13 @@ export const getCategoryListing = cache(async (slug: string): Promise<CategoryLi
   }
 
   const products = await prisma.product.findMany({
-    where: { isActive: true, categoryId: category.id },
+    where: { 
+      isActive: true, 
+      OR: [
+        { categoryId: category.id },
+        { subcategory: { categoryId: category.id } }
+      ]
+    },
     include: { images: true, category: true, brand: true },
     orderBy: { createdAt: "desc" },
     take: 48,
