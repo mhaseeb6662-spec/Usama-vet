@@ -7,8 +7,8 @@ export const metadata = {
 
 export default function CheckoutPage() {
   return (
-    <div className="bg-slate-50 min-h-screen pb-24 sm:pb-16">
-      <div className="max-w-6xl mx-auto px-3 sm:px-4 pt-5 sm:pt-8">
+    <div className="bg-slate-50 min-h-screen pb-24 sm:pb-16 overflow-x-hidden">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 pt-5 sm:pt-8 w-full">
         <h1 className="sr-only">Checkout</h1>
         <CheckoutForm />
       </div>

@@ -156,7 +156,7 @@ export default function CheckoutForm() {
   );
 
   return (
-    <form onSubmit={onSubmit} className="grid lg:grid-cols-12 gap-4 sm:gap-6">
+    <form onSubmit={onSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 w-full">
       <FadeUp className="order-2 lg:order-1 lg:col-span-7 bg-white border border-slate-200 rounded-xl p-4 sm:p-5 md:p-6 space-y-4">
         <h1 className="text-lg sm:text-xl font-bold text-slate-900">Shipping Details</h1>
         {accountName ? (
@@ -254,15 +254,15 @@ export default function CheckoutForm() {
               <div className="bg-white border border-emerald-100 rounded-lg p-4 space-y-3 text-sm">
                 <div>
                   <p className="font-semibold text-slate-900">Meezan Bank</p>
-                  <p className="text-slate-600">Account Title: {BUSINESS_CONFIG.payment.accountTitle}</p>
-                  <p className="text-slate-600">Account No: {BUSINESS_CONFIG.payment.bank.accountNumber}</p>
-                  <p className="text-slate-600">IBAN: {BUSINESS_CONFIG.payment.bank.iban}</p>
-                  <p className="text-slate-600">Branch: {BUSINESS_CONFIG.payment.bank.branch}</p>
+                  <p className="text-slate-600 break-words">Account Title: {BUSINESS_CONFIG.payment.accountTitle}</p>
+                  <p className="text-slate-600 break-all">Account No: {BUSINESS_CONFIG.payment.bank.accountNumber}</p>
+                  <p className="text-slate-600 break-all">IBAN: {BUSINESS_CONFIG.payment.bank.iban}</p>
+                  <p className="text-slate-600 break-words">Branch: {BUSINESS_CONFIG.payment.bank.branch}</p>
                 </div>
                 <div>
                   <p className="font-semibold text-slate-900">JazzCash</p>
-                  <p className="text-slate-600">Account Title: {BUSINESS_CONFIG.payment.accountTitle}</p>
-                  <p className="text-slate-600">Number: {BUSINESS_CONFIG.payment.jazzCash.accountNumber}</p>
+                  <p className="text-slate-600 break-words">Account Title: {BUSINESS_CONFIG.payment.accountTitle}</p>
+                  <p className="text-slate-600 break-all">Number: {BUSINESS_CONFIG.payment.jazzCash.accountNumber}</p>
                 </div>
                 <div>
                   <p className="font-medium text-slate-700 mb-2">Payment Screenshot *</p>
