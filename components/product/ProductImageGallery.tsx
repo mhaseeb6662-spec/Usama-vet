@@ -88,7 +88,7 @@ export default function ProductImageGallery({
           <img
             src={activeImage}
             alt={productName}
-            className="w-full h-full object-contain p-3 sm:p-6 select-none"
+            className="w-full h-full object-cover select-none"
             draggable={false}
           />
         ) : (
@@ -125,7 +125,7 @@ export default function ProductImageGallery({
               aria-label={`View image ${index + 1}`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={image} alt={`${productName} view ${index + 1}`} className="w-full h-full object-contain p-1" draggable={false} />
+              <img src={image} alt={`${productName} view ${index + 1}`} className="w-full h-full object-cover" draggable={false} />
             </button>
           ))}
         </div>
