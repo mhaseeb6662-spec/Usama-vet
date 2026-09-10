@@ -16,10 +16,10 @@ export const BUSINESS_CONFIG = {
     whatsapp: "https://wa.me/923048566233",
     whatsappDisplay: "+92 304 8566233",
     email: "info@usamavetsurgical.com",
-    address: "13 Jiyani Wala Road, Near Taj Palace Marriage Hall, Chishtian, Punjab, Pakistan",
+    address: "13 Gajiani Road, near Taj Palace Marriage Hall, Chishtian",
     city: "Chishtian",
-    mapUrl: "https://www.google.com/maps?q=29.8032309,72.8755473&z=17&hl=en",
-    mapEmbeddedUrl: "https://www.google.com/maps?q=29.8032309,72.8755473&z=17&hl=en&output=embed",
+    mapUrl: "https://www.google.com/maps?q=13+Gajiani+Road,+near+Taj+Palace+Marriage+Hall,+Chishtian&z=17&hl=en",
+    mapEmbeddedUrl: "https://www.google.com/maps?q=13+Gajiani+Road,+near+Taj+Palace+Marriage+Hall,+Chishtian&z=17&hl=en&output=embed",
   },
   payment: {
     accountTitle: "Muhammad Usama",
