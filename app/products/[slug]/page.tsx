@@ -145,6 +145,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               images={galleryImages}
               productName={product.name}
               inStock={product.stockQuantity > 0}
+              videoUrl={product.videoUrl}
             />
           </div>
 

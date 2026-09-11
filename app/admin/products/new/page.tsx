@@ -140,6 +140,18 @@ export default async function NewProductAdmin({
             </div>
           </div>
 
+          {/* Video Overview */}
+          <div>
+            <h2 className="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Product Video Overview</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">YouTube Video URL (Optional)</label>
+                <input name="videoUrl" type="url" className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="e.g. https://www.youtube.com/watch?v=..." />
+                <p className="text-xs text-slate-500 mt-1">If provided, this video will appear in the product image gallery.</p>
+              </div>
+            </div>
+          </div>
+
           {/* SEO */}
           <div>
             <h2 className="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">SEO (Search Engine Optimization)</h2>

@@ -38,6 +38,7 @@ export function mapProductToUI(p: FullPrismaProduct): UIProduct {
     stockCount: Number(p.stockQuantity || 0),
     seoTitle: p.seoTitle || p.name,
     seoDescription: p.metaDescription || p.shortDescription || "",
+    videoUrl: p.videoUrl || null,
   };
 }
 

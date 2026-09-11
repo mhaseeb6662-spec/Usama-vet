@@ -19,6 +19,7 @@ export interface Product {
   specifications?: Record<string, string>;
   dosageInstruction?: string;
   targetAnimals?: string[]; // e.g. ["Livestock", "Poultry", "Pets", "Sheep"]
+  videoUrl?: string | null;
 }
 
 export interface Category {

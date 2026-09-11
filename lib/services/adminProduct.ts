@@ -104,6 +104,7 @@ function readProductFields(formData: FormData, options: { requireSku: boolean })
     isTrending: formData.get("isTrending") === "on",
     seoTitle: String(formData.get("seoTitle") || ""),
     metaDescription: String(formData.get("metaDescription") || ""),
+    videoUrl: String(formData.get("videoUrl") || "").trim() || null,
   };
 }
 
@@ -158,6 +159,7 @@ export async function createAdminProduct(formData: FormData) {
       isTrending: fields.isTrending,
       seoTitle: fields.seoTitle,
       metaDescription: fields.metaDescription,
+      videoUrl: fields.videoUrl,
       ...(imageRows.length > 0 ? { images: { create: imageRows } } : {}),
     },
   });
@@ -266,6 +268,7 @@ export async function updateAdminProduct(formData: FormData) {
       isTrending: fields.isTrending,
       seoTitle: fields.seoTitle,
       metaDescription: fields.metaDescription,
+      videoUrl: fields.videoUrl,
     },
   });
 

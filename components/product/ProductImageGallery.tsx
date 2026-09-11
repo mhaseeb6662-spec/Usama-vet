@@ -7,15 +7,18 @@ interface ProductImageGalleryProps {
   images: string[];
   productName: string;
   inStock: boolean;
+  videoUrl?: string | null;
 }
 
 export default function ProductImageGallery({
   images,
   productName,
   inStock,
+  videoUrl,
 }: ProductImageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeImage = images[activeIndex] || "";
+  const totalItems = images.length + (videoUrl ? 1 : 0);
 
   // Touch and scroll state
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -25,14 +28,14 @@ export default function ProductImageGallery({
   const minSwipeDistance = 40;
 
   const handleNextPrev = useCallback((direction: number) => {
-    if (images.length <= 1) return;
+    if (totalItems <= 1) return;
     setActiveIndex((prev) => {
       let newIndex = prev + direction;
-      if (newIndex >= images.length) newIndex = 0;
-      if (newIndex < 0) newIndex = images.length - 1;
+      if (newIndex >= totalItems) newIndex = 0;
+      if (newIndex < 0) newIndex = totalItems - 1;
       return newIndex;
     });
-  }, [images.length]);
+  }, [totalItems]);
 
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
@@ -57,7 +60,7 @@ export default function ProductImageGallery({
   };
 
   const onWheel = (e: React.WheelEvent) => {
-    if (images.length <= 1) return;
+    if (totalItems <= 1) return;
     
     // Check if the scroll is mostly horizontal
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 15) {
@@ -74,6 +77,23 @@ export default function ProductImageGallery({
     }
   };
 
+  const getEmbedUrl = (url: string) => {
+    try {
+      const u = new URL(url);
+      if (u.hostname.includes("youtube.com") && u.searchParams.has("v")) {
+        return `https://www.youtube.com/embed/${u.searchParams.get("v")}`;
+      }
+      if (u.hostname === "youtu.be") {
+        return `https://www.youtube.com/embed${u.pathname}`;
+      }
+      return url;
+    } catch {
+      return url;
+    }
+  };
+
+  const isVideoActive = videoUrl && activeIndex === images.length;
+
   return (
     <div className="flex flex-col gap-3">
       <div 
@@ -83,7 +103,15 @@ export default function ProductImageGallery({
         onTouchEnd={onTouchEndHandler}
         onWheel={onWheel}
       >
-        {activeImage ? (
+        {isVideoActive ? (
+          <iframe
+            src={getEmbedUrl(videoUrl!)}
+            className="w-full h-full"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        ) : activeImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={activeImage}
@@ -110,7 +138,7 @@ export default function ProductImageGallery({
         </div>
       </div>
 
-      {images.length > 1 && (
+      {totalItems > 1 && (
         <div className="flex gap-2 overflow-x-auto pb-1">
           {images.map((image, index) => (
             <button
@@ -128,6 +156,25 @@ export default function ProductImageGallery({
               <img src={image} alt={`${productName} view ${index + 1}`} className="w-full h-full object-contain" draggable={false} />
             </button>
           ))}
+          {videoUrl && (
+            <button
+              type="button"
+              onClick={() => setActiveIndex(images.length)}
+              className={`shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg border overflow-hidden bg-slate-900 text-white flex items-center justify-center transition-all ${
+                activeIndex === images.length
+                  ? "border-emerald-500 ring-2 ring-emerald-200"
+                  : "border-slate-800 hover:border-emerald-500"
+              }`}
+              aria-label="View product video"
+            >
+              <div className="flex flex-col items-center">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 mb-1" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                </svg>
+                <span className="text-[10px] sm:text-xs font-semibold">Video</span>
+              </div>
+            </button>
+          )}
         </div>
       )}
     </div>

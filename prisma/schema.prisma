@@ -60,6 +60,7 @@ model Product {
   focusKeyword     String?
   canonicalUrl     String?
   indexable        Boolean        @default(true)
+  videoUrl         String?        @db.VarChar(500)
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
   categoryId       Int?
