@@ -130,7 +130,7 @@ export default function ProductImageGallery({
           <img
             src={activeImage}
             alt={productName}
-            className="w-full h-full object-contain select-none"
+            className="w-full h-full object-cover select-none"
             draggable={false}
           />
         ) : (
