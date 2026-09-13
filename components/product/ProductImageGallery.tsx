@@ -174,16 +174,24 @@ export default function ProductImageGallery({
             <button
               type="button"
               onClick={() => setActiveIndex(images.length)}
-              className={`shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg border overflow-hidden bg-slate-900 text-white flex items-center justify-center transition-all ${
+              className={`shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg border overflow-hidden bg-slate-900 text-white flex items-center justify-center transition-all relative ${
                 activeIndex === images.length
                   ? "border-emerald-500 ring-2 ring-emerald-200"
                   : "border-slate-800 hover:border-emerald-500"
               }`}
               aria-label="View product video"
             >
-              <div className="flex flex-col items-center">
-                <Video className="w-5 h-5 sm:w-6 sm:h-6 mb-1 text-emerald-400" />
-                <span className="text-[10px] sm:text-xs font-semibold">Video</span>
+              {!isYouTubeUrl(videoUrl) && (
+                <video
+                  src={`${videoUrl}#t=0.1`}
+                  className="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none"
+                  preload="metadata"
+                  muted
+                />
+              )}
+              <div className="relative z-10 flex flex-col items-center justify-center">
+                <Video className="w-5 h-5 sm:w-6 sm:h-6 mb-1 text-emerald-400 drop-shadow" />
+                <span className="text-[10px] sm:text-xs font-semibold drop-shadow">Video</span>
               </div>
             </button>
           )}

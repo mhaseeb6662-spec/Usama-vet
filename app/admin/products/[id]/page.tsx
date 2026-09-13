@@ -78,6 +78,15 @@ export default async function EditProductAdmin({
                   These images appear as thumbnails on the product detail page along with the primary image.
                 </p>
               </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Product Video (Optional)
+                </label>
+                <VideoUploader name="videoUrl" defaultVideo={product.videoUrl || ""} />
+                <p className="text-xs text-slate-500 mt-1">
+                  Upload a video directly from your laptop (MP4, WEBM, MOV up to 50 MB). It will appear in the product gallery along with the 7 images.
+                </p>
+              </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Product Name</label>
                 <input name="name" type="text" required defaultValue={product.name} className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 outline-none" />
@@ -156,15 +165,6 @@ export default async function EditProductAdmin({
             </div>
           </div>
 
-          {/* Video Overview */}
-          <div>
-            <h2 className="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Product Video Overview</h2>
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Product Video (Optional)</label>
-              <VideoUploader name="videoUrl" defaultVideo={product.videoUrl || ""} />
-              <p className="text-xs text-slate-500 mt-1">Upload a video directly from your laptop (MP4, WEBM, MOV up to 50 MB). It will appear in the product image gallery.</p>
-            </div>
-          </div>
 
           <div>
             <h2 className="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">SEO (Search Engine Optimization)</h2>
