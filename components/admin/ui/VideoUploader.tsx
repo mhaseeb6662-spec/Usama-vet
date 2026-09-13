@@ -85,7 +85,7 @@ export default function VideoUploader({ name, defaultVideo }: VideoUploaderProps
       <input type="hidden" name={name} value={videoUrl} />
 
       {videoUrl ? (
-        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-900 shadow-sm">
+        <div className="relative w-full max-w-sm aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-900 shadow-sm">
           {isYouTube ? (
             <iframe src={videoUrl} className="w-full h-full object-cover" allowFullScreen />
           ) : (
@@ -101,7 +101,7 @@ export default function VideoUploader({ name, defaultVideo }: VideoUploaderProps
           </button>
         </div>
       ) : (
-        <label className="flex flex-col items-center justify-center w-full aspect-square border-2 border-dashed border-slate-300 rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors relative overflow-hidden">
+        <label className="flex flex-col items-center justify-center w-full max-w-sm aspect-square border-2 border-dashed border-slate-300 rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors relative overflow-hidden">
           <div className="flex flex-col items-center justify-center p-5 text-center">
             {isUploading ? (
               <div className="flex flex-col items-center w-full px-6">

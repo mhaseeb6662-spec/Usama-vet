@@ -66,7 +66,7 @@ export default function ImageUploader({ name, defaultImage }: ImageUploaderProps
       <input type="hidden" name={name} value={imageUrl} />
       
       {imageUrl ? (
-        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-50 shadow-sm">
+        <div className="relative w-full max-w-xs aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-50 shadow-sm">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={imageUrl} alt="Uploaded" className="object-cover w-full h-full" />
           <button 
@@ -78,7 +78,7 @@ export default function ImageUploader({ name, defaultImage }: ImageUploaderProps
           </button>
         </div>
       ) : (
-        <label className="flex flex-col items-center justify-center w-full aspect-square border-2 border-dashed border-slate-300 rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors">
+        <label className="flex flex-col items-center justify-center w-full max-w-xs aspect-square border-2 border-dashed border-slate-300 rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors">
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
             {isUploading ? (
               <Loader2 className="w-8 h-8 text-emerald-500 animate-spin mb-3" />
