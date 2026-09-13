@@ -102,7 +102,7 @@ export default function GalleryUploader({
             className="relative aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-50"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={url} alt={`Gallery image ${index + 1}`} className="object-contain w-full h-full" />
+            <img src={url} alt={`Gallery image ${index + 1}`} className="object-cover w-full h-full" />
             <button
               type="button"
               onClick={() => removeImage(url)}

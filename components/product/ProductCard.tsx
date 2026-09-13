@@ -33,7 +33,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <img 
             src={imageSrc} 
             alt={product.imageAlt || product.name} 
-            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 ease-out"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
             loading="lazy"
             decoding="async"
             onError={() => setImageFailed(true)}

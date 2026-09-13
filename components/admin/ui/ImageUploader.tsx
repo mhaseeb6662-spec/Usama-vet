@@ -66,26 +66,26 @@ export default function ImageUploader({ name, defaultImage }: ImageUploaderProps
       <input type="hidden" name={name} value={imageUrl} />
       
       {imageUrl ? (
-        <div className="relative w-full max-w-xs aspect-video rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-50 shadow-sm">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={imageUrl} alt="Uploaded" className="object-contain w-full h-full" />
+          <img src={imageUrl} alt="Uploaded" className="object-cover w-full h-full" />
           <button 
             type="button" 
             onClick={() => setImageUrl("")}
-            className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full hover:bg-red-600 transition-colors"
+            className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full hover:bg-red-600 transition-colors shadow"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
       ) : (
-        <label className="flex flex-col items-center justify-center w-full max-w-xs aspect-video border-2 border-dashed border-slate-300 rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors">
+        <label className="flex flex-col items-center justify-center w-full aspect-square border-2 border-dashed border-slate-300 rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors">
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
             {isUploading ? (
               <Loader2 className="w-8 h-8 text-emerald-500 animate-spin mb-3" />
             ) : (
               <UploadCloud className="w-8 h-8 text-slate-400 mb-3" />
             )}
-            <p className="mb-2 text-sm text-slate-500 font-semibold">
+            <p className="mb-2 text-sm text-slate-500 font-semibold text-center px-2">
               {isUploading ? "Uploading..." : "Click to upload"}
             </p>
             <p className="text-xs text-slate-400">PNG, JPG or WEBP</p>

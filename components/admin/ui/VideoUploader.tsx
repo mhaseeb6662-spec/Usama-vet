@@ -85,29 +85,29 @@ export default function VideoUploader({ name, defaultVideo }: VideoUploaderProps
       <input type="hidden" name={name} value={videoUrl} />
 
       {videoUrl ? (
-        <div className="relative w-full max-w-md aspect-video rounded-xl overflow-hidden border border-slate-200 bg-slate-900 shadow-sm">
+        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-900 shadow-sm">
           {isYouTube ? (
-            <iframe src={videoUrl} className="w-full h-full" allowFullScreen />
+            <iframe src={videoUrl} className="w-full h-full object-cover" allowFullScreen />
           ) : (
-            <video src={videoUrl} className="w-full h-full object-contain" controls preload="metadata" />
+            <video src={videoUrl} className="w-full h-full object-cover" controls preload="metadata" />
           )}
           <button
             type="button"
             onClick={() => setVideoUrl("")}
             title="Remove video"
-            className="absolute top-2 right-2 bg-red-600/90 text-white p-1.5 rounded-full hover:bg-red-700 shadow transition-colors"
+            className="absolute top-2 right-2 bg-red-600/90 text-white p-1.5 rounded-full hover:bg-red-700 shadow transition-colors z-10"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
       ) : (
-        <label className="flex flex-col items-center justify-center w-full max-w-md aspect-video border-2 border-dashed border-slate-300 rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors relative overflow-hidden">
+        <label className="flex flex-col items-center justify-center w-full aspect-square border-2 border-dashed border-slate-300 rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors relative overflow-hidden">
           <div className="flex flex-col items-center justify-center p-5 text-center">
             {isUploading ? (
               <div className="flex flex-col items-center w-full px-6">
                 <Loader2 className="w-9 h-9 text-emerald-600 animate-spin mb-3" />
                 <p className="text-sm font-semibold text-slate-700 mb-1">
-                  Uploading video... {uploadProgress}%
+                  Uploading... {uploadProgress}%
                 </p>
                 <div className="w-full bg-slate-200 rounded-full h-2 mt-2 overflow-hidden">
                   <div
@@ -119,8 +119,8 @@ export default function VideoUploader({ name, defaultVideo }: VideoUploaderProps
             ) : (
               <>
                 <UploadCloud className="w-9 h-9 text-slate-400 mb-3" />
-                <p className="mb-1 text-sm text-slate-700 font-semibold">
-                  Click to select video from your laptop
+                <p className="mb-1 text-sm text-slate-700 font-semibold px-2">
+                  Click to select video
                 </p>
                 <p className="text-xs text-slate-400">MP4, WEBM or MOV (Max 50 MB)</p>
               </>
