@@ -150,93 +150,104 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           </div>
 
           {/* Right Side: Product Details Content */}
-          <div className="md:col-span-7 space-y-6">
-            <div>
-              <span className="text-xs uppercase font-bold text-slate-400 tracking-widest block mb-1">
-                Brand: {product.brand?.name || "Usama Vet"}
+          <div className="md:col-span-7 flex flex-col justify-center space-y-7 lg:pl-6">
+            <div className="space-y-2">
+              <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full uppercase tracking-wider mb-2">
+                {product.brand?.name || "Usama Vet"}
               </span>
-              <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 leading-tight break-words">
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight break-words">
                 {product.name}
               </h1>
-              <span className="block mt-2 text-xs text-slate-400 font-medium">
-                SKU: {product.sku} | Category: <span className="text-slate-650 font-semibold">{categoryName}</span>
-              </span>
+              <div className="flex items-center gap-4 mt-3 text-sm text-slate-500 font-medium">
+                <span>SKU: <span className="text-slate-800">{product.sku}</span></span>
+                <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+                <span>Category: <Link href={`/categories/${category?.slug || ""}`} className="text-emerald-650 hover:underline">{categoryName}</Link></span>
+              </div>
             </div>
 
             {/* Price display */}
-            <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="bg-gradient-to-br from-emerald-50/80 to-slate-50 border border-emerald-100/60 p-5 sm:p-6 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-sm">
               <div>
-                <span className="text-[10px] text-slate-450 uppercase font-bold block mb-0.5">Price</span>
-                <div className="flex items-end gap-2">
+                <span className="text-[11px] text-slate-500 uppercase font-bold tracking-wider block mb-1">Price</span>
+                <div className="flex items-center gap-3">
                   {comparePrice && comparePrice > salePrice && (
-                    <span className="text-slate-400 line-through text-sm">PKR {comparePrice.toLocaleString()}</span>
+                    <span className="text-slate-400 line-through text-lg">PKR {comparePrice.toLocaleString()}</span>
                   )}
-                  <span className="text-2xl font-black text-slate-900">
+                  <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
                     PKR {salePrice.toLocaleString()}
                   </span>
                   {discountPercent > 0 && (
-                    <span className="text-rose-600 text-xs font-bold">{discountPercent}% OFF</span>
+                    <span className="bg-rose-500 text-white px-2 py-0.5 rounded text-xs font-bold shadow-sm">
+                      {discountPercent}% OFF
+                    </span>
                   )}
                 </div>
-                <span className="text-xs text-slate-500 mt-1 block">Stock: {product.stockQuantity}</span>
+                <div className="mt-2 flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${product.stockQuantity > 0 ? "bg-emerald-500" : "bg-rose-500"}`}></div>
+                  <span className="text-sm font-medium text-slate-600">
+                    {product.stockQuantity > 0 ? `${product.stockQuantity} in stock` : "Out of stock"}
+                  </span>
+                </div>
               </div>
-              <span className="text-[10px] text-slate-500 font-medium max-w-[150px] text-right">
-                * Prices are inclusive of all import duties.
+              <span className="text-xs text-slate-500 font-medium max-w-[150px] sm:text-right">
+                * Prices are inclusive of all import duties and taxes.
               </span>
             </div>
 
             {/* Product short description */}
-            <p className="text-xs text-slate-600 leading-relaxed">
-              {product.description || product.shortDescription}
-            </p>
+            {product.shortDescription && (
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed border-l-4 border-slate-200 pl-4 py-1">
+                {product.shortDescription}
+              </p>
+            )}
 
             {/* CTA action buttons */}
-            <div className="flex flex-wrap gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4 pt-4 border-t border-slate-100">
               <ProductAddToCart productId={product.id} stockCount={product.stockQuantity} />
               <a
                 href={`${BUSINESS_CONFIG.contact.whatsapp}?text=Hi,%20I%20want%20to%20order%20${encodeURIComponent(product.name)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold px-6 py-3 rounded-lg text-center text-sm flex items-center justify-center gap-1.5 flex-grow sm:flex-grow-0"
+                className="bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 text-[#075E54] font-bold px-8 py-3 rounded-xl text-center text-sm sm:text-base flex items-center justify-center gap-2 flex-grow sm:flex-grow-0 transition-all duration-200"
               >
-                <MessageCircle className="w-4 h-4 text-emerald-600" /> Order via WhatsApp
+                <MessageCircle className="w-5 h-5 text-[#25D366]" /> Order via WhatsApp
               </a>
             </div>
 
             {/* Delivery Strip */}
-            <div className="border-t border-slate-100 pt-4 flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs text-slate-500">
-              <span className="flex items-center gap-1">
-                <Truck className="w-4 h-4 text-emerald-600 shrink-0" /> Safe Cold-Chain Shipment
+            <div className="pt-2 flex flex-col sm:flex-row gap-3 sm:gap-6 text-sm text-slate-600 font-medium">
+              <span className="flex items-center gap-2">
+                <Truck className="w-5 h-5 text-emerald-600 shrink-0" /> Safe Cold-Chain Shipment
               </span>
-              <span className="hidden sm:inline">|</span>
-              <span className="flex items-center gap-1">
-                <ShieldCheck className="w-4 h-4 text-emerald-650 shrink-0" /> 100% Genuine Batch-Coded
+              <span className="hidden sm:inline text-slate-300">|</span>
+              <span className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" /> 100% Genuine Batch-Coded
               </span>
             </div>
           </div>
         </div>
 
         {/* Detailed specifications tab */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-8 sm:mt-12">
           {/* Specifications list (Left) */}
-          <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm space-y-5">
-            <h2 className="text-base font-bold text-slate-900 border-b border-slate-100 pb-2">
+          <div className="lg:col-span-8 bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-sm space-y-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 border-b border-slate-100 pb-4">
               Product Overview
             </h2>
             
-            <div className="text-xs text-slate-600 leading-relaxed">
+            <div className="text-sm sm:text-base text-slate-700 leading-relaxed whitespace-pre-line prose prose-slate max-w-none">
               {product.description || product.shortDescription || "No detailed description available."}
             </div>
           </div>
 
           {/* Legal Warn (Right) */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-4 space-y-6">
             {/* Legal Warning Notice */}
-            <div className="bg-amber-50/70 border border-amber-200 rounded-2xl p-6 space-y-3">
-              <h3 className="font-bold text-amber-900 text-sm flex items-center gap-1.5">
-                <AlertTriangle className="w-4.5 h-4.5 text-amber-600" /> Prescription Policy
+            <div className="bg-amber-50/70 border border-amber-200 rounded-3xl p-6 sm:p-8 space-y-4">
+              <h3 className="font-bold text-amber-900 text-base flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-amber-600" /> Prescription Policy
               </h3>
-              <p className="text-xs text-amber-800 leading-relaxed">
+              <p className="text-sm text-amber-800 leading-relaxed">
                 Veterinary medicines must be administered in accordance with registered veterinary recommendations. Use strictly as directed by a qualified animal health professional.
               </p>
             </div>
