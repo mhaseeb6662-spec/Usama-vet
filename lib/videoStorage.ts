@@ -3,19 +3,27 @@ import path from "path";
 import crypto from "crypto";
 import { getUploadDir, getUploadLookupDirs } from "@/lib/uploadPath";
 
-const MAX_VIDEO_BYTES = 40 * 1024 * 1024;
-const ALLOWED_VIDEO_TYPES = new Set(["video/mp4", "video/webm", "video/quicktime"]);
+const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
+const ALLOWED_VIDEO_TYPES = new Set([
+  "video/mp4",
+  "video/webm",
+  "video/quicktime",
+  "video/x-m4v",
+  "video/ogg",
+]);
+const ALLOWED_EXTENSIONS = new Set([".mp4", ".webm", ".mov", ".m4v", ".ogv"]);
 
 export async function uploadVideo(file: File): Promise<string> {
-  if (!ALLOWED_VIDEO_TYPES.has(file.type)) {
+  const extension = path.extname(file.name).toLowerCase() || ".mp4";
+  const isAllowed = ALLOWED_VIDEO_TYPES.has(file.type) || ALLOWED_EXTENSIONS.has(extension);
+  if (!isAllowed) {
     throw new Error("Only MP4, WEBM, or MOV videos are allowed.");
   }
 
   if (file.size > MAX_VIDEO_BYTES) {
-    throw new Error("Video is too large. Compress it under 40 MB.");
+    throw new Error("Video is too large. Compress it under 50 MB.");
   }
 
-  const extension = path.extname(file.name).toLowerCase() || ".mp4";
   const uniqueName = crypto.randomBytes(16).toString("hex") + extension;
   const uploadPath = getUploadDir();
   const filePath = path.join(uploadPath, uniqueName);

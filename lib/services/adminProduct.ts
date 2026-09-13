@@ -6,6 +6,7 @@ import {
   deleteProductAlertsForProduct,
   isMissingTableError,
 } from "@/lib/services/productAlerts";
+import { deleteVideo } from "@/lib/videoStorage";
 
 export async function resolveOptionalCategoryId(raw: string): Promise<number | null> {
   const trimmed = raw.trim();
@@ -272,6 +273,10 @@ export async function updateAdminProduct(formData: FormData) {
     },
   });
 
+  if (existing.videoUrl && existing.videoUrl !== fields.videoUrl) {
+    await deleteVideo(existing.videoUrl);
+  }
+
   const existingPrimary = existing.images.find((image) => image.isPrimary) || existing.images[0] || null;
   if (fields.primaryImage) {
     if (existingPrimary) {
@@ -329,7 +334,7 @@ function isForeignKeyError(error: unknown): boolean {
 export async function deleteAdminProduct(id: number) {
   const existing = await prisma.product.findUnique({
     where: { id },
-    select: { id: true },
+    select: { id: true, videoUrl: true },
   });
   if (!existing) {
     throw new Error("Product was not found.");
@@ -356,6 +361,9 @@ export async function deleteAdminProduct(id: number) {
 
   try {
     await prisma.product.delete({ where: { id } });
+    if (existing.videoUrl) {
+      await deleteVideo(existing.videoUrl);
+    }
     return;
   } catch (error) {
     if (!isForeignKeyError(error)) {
@@ -364,6 +372,9 @@ export async function deleteAdminProduct(id: number) {
     await detachOrderItems(id);
     try {
       await prisma.product.delete({ where: { id } });
+      if (existing.videoUrl) {
+        await deleteVideo(existing.videoUrl);
+      }
     } catch (retryError) {
       throw new Error("This product is on existing orders and cannot be deleted.", {
         cause: retryError,

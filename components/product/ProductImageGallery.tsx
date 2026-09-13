@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck, Video } from "lucide-react";
 
 interface ProductImageGalleryProps {
   images: string[];
@@ -77,6 +77,10 @@ export default function ProductImageGallery({
     }
   };
 
+  const isYouTubeUrl = (url: string) => {
+    return /youtube\.com|youtu\.be/.test(url);
+  };
+
   const getEmbedUrl = (url: string) => {
     try {
       const u = new URL(url);
@@ -104,13 +108,23 @@ export default function ProductImageGallery({
         onWheel={onWheel}
       >
         {isVideoActive ? (
-          <iframe
-            src={getEmbedUrl(videoUrl!)}
-            className="w-full h-full"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
+          isYouTubeUrl(videoUrl!) ? (
+            <iframe
+              src={getEmbedUrl(videoUrl!)}
+              className="w-full h-full"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          ) : (
+            <video
+              src={videoUrl!}
+              controls
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-contain bg-black"
+            />
+          )
         ) : activeImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -168,9 +182,7 @@ export default function ProductImageGallery({
               aria-label="View product video"
             >
               <div className="flex flex-col items-center">
-                <svg className="w-6 h-6 sm:w-8 sm:h-8 mb-1" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
-                </svg>
+                <Video className="w-5 h-5 sm:w-6 sm:h-6 mb-1 text-emerald-400" />
                 <span className="text-[10px] sm:text-xs font-semibold">Video</span>
               </div>
             </button>
