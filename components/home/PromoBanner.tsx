@@ -21,9 +21,9 @@ export default function PromoBanner({ image, mobileImage }: PromoBannerProps) {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 overflow-hidden">
+    <div className="w-full overflow-hidden my-4">
       <FadeUp distance={14} duration={0.45}>
-        <div className="rounded-xl overflow-hidden bg-slate-100">
+        <div className="w-full bg-slate-100">
           <picture>
             {mobile && mobile !== desktop ? (
               <source media="(max-width: 767px)" srcSet={mobile} />
@@ -32,7 +32,7 @@ export default function PromoBanner({ image, mobileImage }: PromoBannerProps) {
             <img
               src={src}
               alt="Promotional banner"
-              className="block w-full h-[160px] sm:h-[220px] md:h-auto md:max-h-[70vh] object-cover object-center md:object-contain"
+              className="block w-full h-[160px] sm:h-[220px] md:h-auto object-cover object-center"
             />
           </picture>
         </div>

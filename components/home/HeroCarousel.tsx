@@ -25,7 +25,7 @@ function slideSources(slide: HeroSlideImage | undefined) {
 }
 
 const BANNER_IMG_CLASS =
-  "block w-full h-[210px] sm:h-[280px] md:h-auto md:max-h-[70vh] object-cover object-center md:object-contain";
+  "block w-full h-[210px] sm:h-[280px] md:h-auto w-full object-cover object-center";
 
 export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
