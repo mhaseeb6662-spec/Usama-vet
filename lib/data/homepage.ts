@@ -115,7 +115,11 @@ export const getHomepageCatalog = cache(async () => {
           { isBestSeller: true },
           { isRecommended: true },
           { isTrending: true },
-          { category: { slug: { in: ["livestock-care", "pet-care", "animal-supplements"] } } },
+          { category: { slug: { contains: "livestock" } } },
+          { category: { slug: { contains: "cattle" } } },
+          { category: { slug: { contains: "pet" } } },
+          { category: { slug: { contains: "supplement" } } },
+          { category: { slug: { contains: "vitamin" } } },
         ],
       },
       include: {
@@ -145,9 +149,18 @@ export const getHomepageCatalog = cache(async () => {
       bestSellers: toCards(products.filter((item) => item.isBestSeller)),
       recommended: toCards(products.filter((item) => item.isRecommended)),
       trending: toCards(products.filter((item) => item.isTrending)),
-      livestock: toCards(products.filter((item) => item.category?.slug === "livestock-care")),
-      petCare: toCards(products.filter((item) => item.category?.slug === "pet-care")),
-      supplements: toCards(products.filter((item) => item.category?.slug === "animal-supplements")),
+      livestock: toCards(products.filter((item) => {
+        const slug = item.category?.slug || "";
+        return slug.includes("livestock") || slug.includes("cattle") || slug.includes("dairy");
+      })),
+      petCare: toCards(products.filter((item) => {
+        const slug = item.category?.slug || "";
+        return slug.includes("pet") || slug.includes("dog") || slug.includes("cat");
+      })),
+      supplements: toCards(products.filter((item) => {
+        const slug = item.category?.slug || "";
+        return slug.includes("supplement") || slug.includes("vitamin");
+      })),
     };
   } catch (error) {
     console.error("[DB] getHomepageCatalog failed:", error);
