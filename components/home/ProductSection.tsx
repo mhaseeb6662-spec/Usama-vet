@@ -46,43 +46,61 @@ export default function ProductSection({
     return () => window.removeEventListener("resize", checkScrollState);
   }, [products]);
 
+  const exactPositionRef = useRef(0);
   const directionRef = useRef<1 | -1>(1);
+  const isInitializedRef = useRef(false);
 
-  // Auto-scroll logic (Snap-compatible Ping-Pong)
+  // Smooth Continuous Auto-scroll logic (Marquee Ping-Pong)
   useEffect(() => {
-    if (isPaused) return;
+    let animationFrameId: number;
+    let lastTime = performance.now();
 
-    const interval = setInterval(() => {
+    if (!isInitializedRef.current && scrollRef.current) {
+      exactPositionRef.current = scrollRef.current.scrollLeft;
+      isInitializedRef.current = true;
+    }
+
+    const renderLoop = (time: number) => {
+      const deltaTime = time - lastTime;
+      lastTime = time;
+
       if (scrollRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth, children } = scrollRef.current;
+        const { scrollWidth, clientWidth } = scrollRef.current;
         const maxScroll = Math.max(0, scrollWidth - clientWidth);
-        
-        // Find the width of one product card to scroll exactly one item
-        const cardWidth = children[0] ? (children[0] as HTMLElement).offsetWidth : 320;
-        
-        // Change direction if we hit the ends
-        if (directionRef.current === 1 && Math.ceil(scrollLeft + clientWidth) >= scrollWidth - 10) {
-          directionRef.current = -1;
-        } else if (directionRef.current === -1 && scrollLeft <= 10) {
-          directionRef.current = 1;
+
+        if (maxScroll > 5 && !isPaused) {
+          if (directionRef.current === 1 && exactPositionRef.current >= maxScroll - 1) {
+            directionRef.current = -1;
+          } else if (directionRef.current === -1 && exactPositionRef.current <= 1) {
+            directionRef.current = 1;
+          }
+
+          // Very smooth slow continuous scroll
+          exactPositionRef.current += 0.05 * deltaTime * directionRef.current;
+          
+          // Clamp values just in case
+          if (exactPositionRef.current < 0) exactPositionRef.current = 0;
+          if (exactPositionRef.current > maxScroll) exactPositionRef.current = maxScroll;
+          
+          scrollRef.current.scrollLeft = exactPositionRef.current;
         }
 
-        // Scroll by one card width in the current direction
-        scrollRef.current.scrollBy({ 
-          left: cardWidth * directionRef.current, 
-          behavior: "smooth" 
-        });
+        // Keep internal exact position in sync if user manually scrolled
+        if (isPaused || Math.abs(scrollRef.current.scrollLeft - exactPositionRef.current) > 2) {
+          exactPositionRef.current = scrollRef.current.scrollLeft;
+        }
       }
-    }, 2500); // Scroll every 2.5 seconds
+      animationFrameId = requestAnimationFrame(renderLoop);
+    };
 
-    return () => clearInterval(interval);
+    animationFrameId = requestAnimationFrame(renderLoop);
+    return () => cancelAnimationFrame(animationFrameId);
   }, [isPaused, products]);
 
   const scrollByAmount = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const scrollAmount = direction === "left" ? -400 : 400;
       scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-      // Change direction matching the button click
       directionRef.current = direction === "left" ? -1 : 1;
     }
   };
@@ -120,16 +138,16 @@ export default function ProductSection({
           </button>
         )}
 
-        {/* Product Slider Track */}
+        {/* Product Slider Track (Removed snap properties to allow continuous scrolling) */}
         <StaggerContainer staggerDelay={0.04}>
           <div
             ref={scrollRef}
             onScroll={checkScrollState}
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-6 pt-2 px-1"
+            className="flex gap-6 overflow-x-auto scrollbar-none pb-6 pt-2 px-1"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {products.map((product) => (
-              <div key={product.id} className="w-[72vw] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)] shrink-0 snap-start">
+              <div key={product.id} className="w-[72vw] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)] shrink-0">
                 <StaggerItem distance={14} className="h-full">
                   <ProductCard product={product} />
                 </StaggerItem>
