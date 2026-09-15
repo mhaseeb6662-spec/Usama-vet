@@ -46,56 +46,42 @@ export default function ProductSection({
     return () => window.removeEventListener("resize", checkScrollState);
   }, [products]);
 
-  const exactPositionRef = useRef(0);
-  const directionRef = useRef<1 | -1>(1); // 1 = right, -1 = left
-  const isInitializedRef = useRef(false);
+  const directionRef = useRef<1 | -1>(1);
 
-  // Smooth Continuous Auto-scroll logic (Ping-Pong)
+  // Auto-scroll logic (Snap-compatible Ping-Pong)
   useEffect(() => {
-    let animationFrameId: number;
-    let lastTime = performance.now();
+    if (isPaused) return;
 
-    if (!isInitializedRef.current && scrollRef.current) {
-      exactPositionRef.current = scrollRef.current.scrollLeft;
-      isInitializedRef.current = true;
-    }
-
-    const renderLoop = (time: number) => {
-      const deltaTime = time - lastTime;
-      lastTime = time;
-
+    const interval = setInterval(() => {
       if (scrollRef.current) {
-        const { scrollWidth, clientWidth } = scrollRef.current;
+        const { scrollLeft, scrollWidth, clientWidth, children } = scrollRef.current;
         const maxScroll = Math.max(0, scrollWidth - clientWidth);
-
-        if (maxScroll > 8 && !isPaused) {
-          if (directionRef.current === 1 && exactPositionRef.current >= maxScroll - 2) {
-            directionRef.current = -1;
-          } else if (directionRef.current === -1 && exactPositionRef.current <= 2) {
-            directionRef.current = 1;
-          }
-
-          // Slow, smooth scroll speed
-          exactPositionRef.current += 0.04 * deltaTime * directionRef.current;
-          scrollRef.current.scrollLeft = exactPositionRef.current;
+        
+        // Find the width of one product card to scroll exactly one item
+        const cardWidth = children[0] ? (children[0] as HTMLElement).offsetWidth : 320;
+        
+        // Change direction if we hit the ends
+        if (directionRef.current === 1 && Math.ceil(scrollLeft + clientWidth) >= scrollWidth - 10) {
+          directionRef.current = -1;
+        } else if (directionRef.current === -1 && scrollLeft <= 10) {
+          directionRef.current = 1;
         }
 
-        if (isPaused || Math.abs(scrollRef.current.scrollLeft - exactPositionRef.current) > 2) {
-          exactPositionRef.current = scrollRef.current.scrollLeft;
-        }
+        // Scroll by one card width in the current direction
+        scrollRef.current.scrollBy({ 
+          left: cardWidth * directionRef.current, 
+          behavior: "smooth" 
+        });
       }
-      animationFrameId = requestAnimationFrame(renderLoop);
-    };
+    }, 2500); // Scroll every 2.5 seconds
 
-    animationFrameId = requestAnimationFrame(renderLoop);
-    return () => cancelAnimationFrame(animationFrameId);
+    return () => clearInterval(interval);
   }, [isPaused, products]);
 
   const scrollByAmount = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const scrollAmount = direction === "left" ? -400 : 400;
       scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-      exactPositionRef.current = scrollRef.current.scrollLeft + scrollAmount;
       // Change direction matching the button click
       directionRef.current = direction === "left" ? -1 : 1;
     }
