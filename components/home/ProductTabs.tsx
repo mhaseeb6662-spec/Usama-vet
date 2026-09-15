@@ -96,13 +96,7 @@ export default function ProductTabs({
   }, [isPaused, activeTab, currentProducts]);
 
   return (
-    <section 
-      className="py-8 sm:py-12 px-3 sm:px-4 max-w-7xl mx-auto overflow-hidden group/tabs"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={() => setIsPaused(true)}
-      onTouchEnd={() => setIsPaused(false)}
-    >
+    <section className="py-8 sm:py-12 px-3 sm:px-4 max-w-7xl mx-auto overflow-hidden group/tabs">
       {/* Tab Controls Row */}
       <div className="flex justify-start sm:justify-center border-b border-slate-200 mb-6 sm:mb-8 gap-1 sm:gap-2 overflow-x-auto scrollbar-none -mx-3 px-3 sm:mx-0 sm:px-0 sm:flex-wrap">
         {tabs.map((tab) => (
@@ -146,6 +140,10 @@ export default function ProductTabs({
             y: shouldReduceMotion ? 0 : 4,
             transition: { duration: 0.15, ease: [0.22, 1, 0.36, 1] } 
           }}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
           className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-none pb-6 pt-2 px-1"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >

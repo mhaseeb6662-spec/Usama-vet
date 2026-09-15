@@ -106,13 +106,7 @@ export default function ProductSection({
   };
 
   return (
-    <section 
-      className={`py-8 sm:py-16 px-3 sm:px-4 border-t border-b border-slate-100 ${bgColorClass} overflow-hidden group/section`}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={() => setIsPaused(true)}
-      onTouchEnd={() => setIsPaused(false)}
-    >
+    <section className={`py-8 sm:py-16 px-3 sm:px-4 border-t border-b border-slate-100 ${bgColorClass} overflow-hidden group/section`}>
       <div className="max-w-7xl mx-auto relative">
         <FadeUp distance={10}>
           <SectionHeader preTitle={preTitle} title={title} description={description} />
@@ -143,6 +137,10 @@ export default function ProductSection({
           <div
             ref={scrollRef}
             onScroll={checkScrollState}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onTouchStart={() => setIsPaused(true)}
+            onTouchEnd={() => setIsPaused(false)}
             className="flex gap-6 overflow-x-auto scrollbar-none pb-6 pt-2 px-1"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
