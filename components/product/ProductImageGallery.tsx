@@ -24,6 +24,7 @@ export default function ProductImageGallery({
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [lastWheelTime, setLastWheelTime] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   const minSwipeDistance = 40;
 
@@ -98,8 +99,26 @@ export default function ProductImageGallery({
 
   const isVideoActive = videoUrl && activeIndex === images.length;
 
+  // Auto-play the gallery
+  useEffect(() => {
+    if (totalItems <= 1) return;
+    if (isHovered || isVideoActive) return;
+
+    const interval = setInterval(() => {
+      handleNextPrev(1);
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [totalItems, isHovered, isVideoActive, handleNextPrev]);
+
   return (
-    <div className="flex flex-col gap-3">
+    <div 
+      className="flex flex-col gap-3"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={() => setIsHovered(true)}
+      onTouchEnd={() => setIsHovered(false)}
+    >
       <div 
         className="aspect-square bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center relative overflow-hidden touch-pan-y"
         onTouchStart={onTouchStart}
