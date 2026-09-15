@@ -152,22 +152,7 @@ export default function HomeStorefront() {
         viewAllHref="/#products"
       />
       <PromoBanner image={promo2?.image} mobileImage={promo2?.mobileImage} />
-      <ProductSection
-        preTitle="Dogs, Cats & Birds"
-        title="Pet & Animal Care"
-        description="Premium skin oils, hair fall control supplements, and flea/tick sprays for companion animals."
-        products={catalog.petCare}
-        bgColorClass="bg-white/70 backdrop-blur-md"
-        viewAllHref="/categories/pet-care"
-      />
-      <ProductSection
-        preTitle="Nutrition & Growth"
-        title="Veterinary Supplements"
-        description="High concentration vitamin AD3E injections, mycotoxin binders, and digestive rumen yeast premixes."
-        products={catalog.supplements}
-        bgColorClass="bg-teal-50/70 backdrop-blur-md"
-        viewAllHref="/categories/animal-supplements"
-      />
+
       <ProductSection
         preTitle="Market Pulse"
         title="Trending Now"
