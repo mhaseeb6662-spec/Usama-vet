@@ -135,14 +135,7 @@ export default function HomeStorefront() {
         bgColorClass="bg-emerald-50/70 backdrop-blur-md"
         viewAllHref="/#products"
       />
-      <ProductSection
-        preTitle="Cattle & Sheep"
-        title="Livestock Essentials"
-        description="Heavy-duty healthcare, deworming drenches, and milk production boosts for dairy herds."
-        products={catalog.livestock}
-        bgColorClass="bg-white/70 backdrop-blur-md"
-        viewAllHref="/categories/livestock-care"
-      />
+
       <ProductSection
         preTitle="Personalized Picks"
         title="Recommended For You"
