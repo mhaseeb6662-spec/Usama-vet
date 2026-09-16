@@ -140,7 +140,7 @@ export const getHomepageCatalog = cache(async () => {
           console.error("[DB] Product card mapping failed:", error);
         }
       }
-      return cards.slice(0, 8);
+      return cards;
     };
 
     return {
