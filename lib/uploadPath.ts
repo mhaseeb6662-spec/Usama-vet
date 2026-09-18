@@ -14,13 +14,20 @@ function uniqueDirs(dirs: string[]): string[] {
   return resolved;
 }
 
-function getHostingerDomainRoot(): string | null {
-  const parts = path.resolve(process.cwd()).split(path.sep);
-  const index = parts.lastIndexOf("hbuilds");
+function getDomainRoot(): string | null {
+  const cwd = process.cwd();
+  const parts = path.resolve(cwd).split(path.sep);
+  
+  let index = parts.lastIndexOf("hbuilds");
   if (index <= 0) {
-    return null;
+    index = parts.lastIndexOf("public_html");
   }
-  return parts.slice(0, index).join(path.sep);
+  
+  if (index > 0) {
+    return parts.slice(0, index).join(path.sep);
+  }
+  
+  return null;
 }
 
 /**
@@ -35,7 +42,7 @@ export function getUploadDir(): string {
       : path.resolve(process.cwd(), configured);
   }
 
-  const domainRoot = getHostingerDomainRoot();
+  const domainRoot = getDomainRoot();
   if (domainRoot) {
     return path.join(domainRoot, "persistent-uploads");
   }
@@ -49,7 +56,7 @@ export function getLegacyUploadDir(): string {
 
 export function getUploadLookupDirs(): string[] {
   const cwd = process.cwd();
-  const domainRoot = getHostingerDomainRoot();
+  const domainRoot = getDomainRoot();
   return uniqueDirs([
     getUploadDir(),
     path.resolve(cwd, "..", "persistent-uploads"),
@@ -61,6 +68,7 @@ export function getUploadLookupDirs(): string[] {
           path.join(domainRoot, "hbuilds", "current", "persistent-uploads"),
           path.join(domainRoot, "hbuilds", "current", "nodejs", "persistent-uploads"),
           path.join(domainRoot, "hbuilds", "current", "nodejs", "public", "uploads"),
+          path.join(domainRoot, "persistent-uploads"),
         ]
       : []),
   ]);

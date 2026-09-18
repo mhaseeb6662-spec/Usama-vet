@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Eye, Heart, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { Product } from "@/types";
@@ -30,12 +31,13 @@ export default function ProductCard({ product }: ProductCardProps) {
       {/* 1. IMAGE CONTAINER (Clean square container, no overlays) */}
       <Link href={`/products/${slug}`} className="aspect-square bg-[#fbfdfc] relative flex items-center justify-center border-b border-slate-100 overflow-hidden shrink-0 block w-full focus:outline-none cursor-pointer">
         {showImage ? (
-          <img 
-            src={imageSrc} 
-            alt={product.imageAlt || product.name} 
+          <Image
+            src={imageSrc}
+            alt={product.imageAlt || product.name}
+            fill
+            sizes="(max-width: 640px) 72vw, (max-width: 768px) 50vw, 33vw"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
             loading="lazy"
-            decoding="async"
             onError={() => setImageFailed(true)}
           />
         ) : (
