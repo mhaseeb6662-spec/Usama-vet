@@ -125,7 +125,7 @@ export default function HomeStorefront() {
         description="Explore the latest additions to our animal pharmacy and feed reserves. Verified for safety."
         products={catalog.newArrivals}
         bgColorClass="bg-white/70 backdrop-blur-md"
-        viewAllHref="/#products"
+        viewAllHref="/products"
       />
       <ProductSection
         preTitle="Top Demand"
@@ -133,7 +133,7 @@ export default function HomeStorefront() {
         description="Our most popular veterinary medicines and enhancers, trusted by commercial dairy farms nationwide."
         products={catalog.bestSellers}
         bgColorClass="bg-emerald-50/70 backdrop-blur-md"
-        viewAllHref="/#products"
+        viewAllHref="/products"
       />
 
       <ProductSection
@@ -142,7 +142,7 @@ export default function HomeStorefront() {
         description="Specially configured combinations of trace minerals and farm hygiene products for active keepers."
         products={catalog.recommended}
         bgColorClass="bg-cyan-50/70 backdrop-blur-md"
-        viewAllHref="/#products"
+        viewAllHref="/products"
       />
       <PromoBanner image={promo2?.image} mobileImage={promo2?.mobileImage} />
 
@@ -152,7 +152,7 @@ export default function HomeStorefront() {
         description="Rapidly moving vaccines, ear tag guns, and biosecurity spray disinfectants across major farms."
         products={catalog.trending}
         bgColorClass="bg-white/70 backdrop-blur-md"
-        viewAllHref="/#products"
+        viewAllHref="/products"
       />
       <LowerTrustStrip />
       <NewsletterSection />
