@@ -100,7 +100,7 @@ export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[
       </AnimatePresence>
 
       {/* Animated Call to Action Button */}
-      <div className="absolute inset-0 z-10 flex items-center justify-start pointer-events-none px-6 sm:px-12 md:px-20 lg:px-24">
+      <div className="absolute inset-0 z-10 flex items-center justify-start pointer-events-none px-6 sm:px-12 md:px-20 lg:px-24 pt-20 sm:pt-32">
         <motion.div
           initial={{ opacity: 0, x: -30, scale: 0.95 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
