@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { isPersistentPublicImage } from "@/lib/mediaUrl";
@@ -97,6 +98,30 @@ export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[
           )}
         </motion.div>
       </AnimatePresence>
+
+      {/* Animated Call to Action Button */}
+      <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.3, type: "spring", stiffness: 100 }}
+          className="pointer-events-auto"
+        >
+          <Link
+            href="/products"
+            className="group relative flex items-center justify-center gap-3 px-8 py-3.5 sm:px-10 sm:py-4 bg-emerald-600/95 hover:bg-emerald-500 text-white font-bold text-sm sm:text-base uppercase tracking-widest rounded-full shadow-[0_8px_30px_rgba(0,148,115,0.5)] transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_40px_rgba(0,148,115,0.7)] active:scale-95 overflow-hidden border border-emerald-400/30 backdrop-blur-sm"
+          >
+            {/* Glossy shine overlay */}
+            <span className="absolute inset-0 w-full h-full bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            
+            <span className="relative z-10">Shop Collections</span>
+            
+            <span className="relative z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors duration-300">
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300" />
+            </span>
+          </Link>
+        </motion.div>
+      </div>
 
       {activeSlides.length > 1 ? (
         <div className="absolute bottom-3 sm:bottom-6 left-3 right-3 sm:left-8 sm:right-8 flex items-center justify-between z-20">
