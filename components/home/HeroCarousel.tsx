@@ -100,24 +100,24 @@ export default function HeroCarousel({ slides = [] }: { slides?: HeroSlideImage[
       </AnimatePresence>
 
       {/* Animated Call to Action Button */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none px-4">
+      <div className="absolute inset-0 z-10 flex items-center justify-start pointer-events-none px-6 sm:px-12 md:px-20 lg:px-24">
         <motion.div
-          initial={{ opacity: 0, y: 40, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.3, type: "spring", stiffness: 100 }}
+          initial={{ opacity: 0, x: -30, scale: 0.95 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{ duration: 0.7, delay: 0.2, type: "spring", stiffness: 100 }}
           className="pointer-events-auto"
         >
           <Link
             href="/products"
-            className="group relative flex items-center justify-center gap-3 px-8 py-3.5 sm:px-10 sm:py-4 bg-emerald-600/95 hover:bg-emerald-500 text-white font-bold text-sm sm:text-base uppercase tracking-widest rounded-full shadow-[0_8px_30px_rgba(0,148,115,0.5)] transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_40px_rgba(0,148,115,0.7)] active:scale-95 overflow-hidden border border-emerald-400/30 backdrop-blur-sm"
+            className="group relative flex items-center justify-center gap-2 px-6 py-2.5 sm:px-8 sm:py-3 bg-emerald-600/95 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-full shadow-[0_8px_25px_rgba(0,148,115,0.4)] transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_30px_rgba(0,148,115,0.6)] active:scale-95 overflow-hidden border border-emerald-400/30 backdrop-blur-sm"
           >
             {/* Glossy shine overlay */}
             <span className="absolute inset-0 w-full h-full bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             
             <span className="relative z-10">Shop Collections</span>
             
-            <span className="relative z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors duration-300">
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300" />
+            <span className="relative z-10 flex items-center justify-center w-5 h-5 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors duration-300">
+              <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform duration-300" />
             </span>
           </Link>
         </motion.div>
