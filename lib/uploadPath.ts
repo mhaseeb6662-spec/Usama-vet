@@ -47,7 +47,20 @@ export function getUploadDir(): string {
     return path.join(domainRoot, "persistent-uploads");
   }
 
-  return path.resolve(process.cwd(), "public", "uploads");
+  // Bulletproof fallback: use the user's home directory
+  try {
+    const os = require("os");
+    const homeDir = os.homedir();
+    if (homeDir && fs.existsSync(homeDir)) {
+      return path.join(homeDir, "usamavet-persistent-uploads");
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  // If all else fails, store it one level above the current working directory
+  // so that git pulls/deployments inside cwd do not wipe it.
+  return path.resolve(process.cwd(), "..", "usamavet-persistent-uploads");
 }
 
 export function getLegacyUploadDir(): string {
@@ -57,8 +70,19 @@ export function getLegacyUploadDir(): string {
 export function getUploadLookupDirs(): string[] {
   const cwd = process.cwd();
   const domainRoot = getDomainRoot();
+  
+  let homeUploads = "";
+  try {
+    const os = require("os");
+    homeUploads = path.join(os.homedir(), "usamavet-persistent-uploads");
+  } catch (e) {
+    // ignore
+  }
+
   return uniqueDirs([
     getUploadDir(),
+    ...(homeUploads ? [homeUploads] : []),
+    path.resolve(cwd, "..", "usamavet-persistent-uploads"),
     path.resolve(cwd, "..", "persistent-uploads"),
     path.resolve(cwd, "..", "..", "persistent-uploads"),
     path.resolve(cwd, "public", "uploads"),
