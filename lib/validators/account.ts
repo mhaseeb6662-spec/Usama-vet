@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { normalizePakistanPhone } from "@/lib/validators/order";
+import { normalizePakistanPhone } from "../../lib/validators/order";
 
 const pakistanPhone = z
   .string()

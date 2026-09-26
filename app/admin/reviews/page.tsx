@@ -1,11 +1,11 @@
 import React from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/db";
+import { prisma } from "../../../lib/db";
 import { redirect } from "next/navigation";
 import { CheckCircle, XCircle, Trash2, Star, Plus, Edit } from "lucide-react";
-import AdminActionError from "@/components/admin/AdminActionError";
-import { runAdminAction } from "@/lib/admin/mutation";
-import { isMissingTableError } from "@/lib/services/productAlerts";
+import AdminActionError from "../../../components/admin/AdminActionError";
+import { runAdminAction } from "../../../lib/admin/mutation";
+import { isMissingTableError } from "../../../lib/services/productAlerts";
 
 function readReviewFields(formData: FormData) {
   const displayName = String(formData.get("displayName") || "").trim();

@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import ReviewForm from "@/components/reviews/ReviewForm";
-import ReviewsSummary from "@/components/reviews/ReviewsSummary";
-import ReviewList from "@/components/reviews/ReviewList";
-import { prisma } from "@/lib/db";
+import ReviewForm from "../../components/reviews/ReviewForm";
+import ReviewsSummary from "../../components/reviews/ReviewsSummary";
+import ReviewList from "../../components/reviews/ReviewList";
+import { prisma } from "../../lib/db";
 import { Metadata } from "next";
 
 export const dynamic = 'force-dynamic';

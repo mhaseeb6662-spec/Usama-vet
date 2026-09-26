@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { prisma } from "@/lib/db";
+import { prisma } from "../../lib/db";
 
 export type AboutVideoItem = {
   id: string;

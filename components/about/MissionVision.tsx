@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useRef, MouseEvent } from "react";
-import { ABOUT_DATA } from "@/lib/data/aboutData";
+import { ABOUT_DATA } from "../../lib/data/aboutData";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
-import { StaggerContainer, StaggerItem } from "@/components/shared/AnimationComponents";
+import { StaggerContainer, StaggerItem } from "../../components/shared/AnimationComponents";
 
 function Tilt3DCard({ data, index }: { data: any; index: number }) {
   const ref = useRef<HTMLDivElement>(null);

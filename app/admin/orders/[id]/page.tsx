@@ -1,11 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/db";
-import { ensureOrderSchema } from "@/lib/services/orderSchema";
-import OrderActions from "@/components/admin/OrderActions";
-import { ORDER_PAYMENT_METHOD_LABELS, type OrderStatusValue } from "@/lib/constants/checkout";
-import { toServedImageUrl } from "@/lib/mediaUrl";
+import { prisma } from "../../../../lib/db";
+import { ensureOrderSchema } from "../../../../lib/services/orderSchema";
+import OrderActions from "../../../../components/admin/OrderActions";
+import { ORDER_PAYMENT_METHOD_LABELS, type OrderStatusValue } from "../../../../lib/constants/checkout";
+import { toServedImageUrl } from "../../../../lib/mediaUrl";
 
 export const dynamic = "force-dynamic";
 

@@ -1,7 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/db";
-import { createSession } from "@/lib/session";
+import { prisma } from "../../../lib/db";
+import { createSession } from "../../../lib/session";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 

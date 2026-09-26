@@ -1,12 +1,12 @@
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/db";
-import { createCustomerSession, getCustomerSession } from "@/lib/customerSession";
-import { ensureCustomerSchema } from "@/lib/services/customerSchema";
+import { prisma } from "../../lib/db";
+import { createCustomerSession, getCustomerSession } from "../../lib/customerSession";
+import { ensureCustomerSchema } from "../../lib/services/customerSchema";
 import {
   loginCustomerSchema,
   normalizePakistanPhone,
   registerCustomerSchema,
-} from "@/lib/validators/account";
+} from "../../lib/validators/account";
 
 export class AccountApplicationError extends Error {
   constructor(

@@ -1,11 +1,11 @@
 import React from "react";
-import { prisma } from "@/lib/db";
+import { prisma } from "../../../lib/db";
 import Link from "next/link";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { redirect } from "next/navigation";
-import AdminActionError from "@/components/admin/AdminActionError";
-import { runAdminAction } from "@/lib/admin/mutation";
-import { deleteAdminProduct } from "@/lib/services/adminProduct";
+import AdminActionError from "../../../components/admin/AdminActionError";
+import { runAdminAction } from "../../../lib/admin/mutation";
+import { deleteAdminProduct } from "../../../lib/services/adminProduct";
 
 async function loadProductList() {
   return prisma.product.findMany({

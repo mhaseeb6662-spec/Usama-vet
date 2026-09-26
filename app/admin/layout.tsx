@@ -14,7 +14,7 @@ import {
   Video,
   FileText
 } from "lucide-react";
-import { logout } from "@/lib/session";
+import { logout } from "../../lib/session";
 import { redirect } from "next/navigation";
 
 export const metadata = {

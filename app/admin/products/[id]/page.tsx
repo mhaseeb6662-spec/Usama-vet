@@ -1,16 +1,16 @@
 import React from "react";
-import { prisma } from "@/lib/db";
+import { prisma } from "../../../../lib/db";
 import { notFound, redirect } from "next/navigation";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
-import ImageUploader from "@/components/admin/ui/ImageUploader";
-import GalleryUploader from "@/components/admin/ui/GalleryUploader";
-import VideoUploader from "@/components/admin/ui/VideoUploader";
-import { MAX_PRODUCT_GALLERY_IMAGES } from "@/lib/constants/products";
-import AdminActionError from "@/components/admin/AdminActionError";
-import { runAdminAction } from "@/lib/admin/mutation";
-import { updateAdminProduct } from "@/lib/services/adminProduct";
-import { toServedImageUrl } from "@/lib/mediaUrl";
+import ImageUploader from "../../../../components/admin/ui/ImageUploader";
+import GalleryUploader from "../../../../components/admin/ui/GalleryUploader";
+import VideoUploader from "../../../../components/admin/ui/VideoUploader";
+import { MAX_PRODUCT_GALLERY_IMAGES } from "../../../../lib/constants/products";
+import AdminActionError from "../../../../components/admin/AdminActionError";
+import { runAdminAction } from "../../../../lib/admin/mutation";
+import { updateAdminProduct } from "../../../../lib/services/adminProduct";
+import { toServedImageUrl } from "../../../../lib/mediaUrl";
 
 async function updateProduct(formData: FormData) {
   "use server";

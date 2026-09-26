@@ -1,7 +1,7 @@
-import { prisma } from "@/lib/db";
+import { prisma } from "../../lib/db";
 import { cache } from "react";
 import { mapProductToUI, mapCategoryToUI } from "./adapters";
-import { isPersistentPublicImage, toServedImageUrl } from "@/lib/mediaUrl";
+import { isPersistentPublicImage, toServedImageUrl } from "../../lib/mediaUrl";
 
 function serialize<T>(data: T): T {
   return JSON.parse(JSON.stringify(data, (_, value) =>

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { UploadCloud, X, Loader2 } from "lucide-react";
-import { MAX_PRODUCT_GALLERY_IMAGES } from "@/lib/constants/products";
+import { MAX_PRODUCT_GALLERY_IMAGES } from "../../../lib/constants/products";
 
 interface GalleryUploaderProps {
   name: string; // The name shared by every hidden input

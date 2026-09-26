@@ -1,6 +1,6 @@
 import React from "react";
-import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/AnimationComponents";
-import { ABOUT_DATA } from "@/lib/data/aboutData";
+import { FadeUp, StaggerContainer, StaggerItem } from "../../components/shared/AnimationComponents";
+import { ABOUT_DATA } from "../../lib/data/aboutData";
 
 export default function ReachSection() {
   const validStats = ABOUT_DATA.reach.stats.filter(stat => stat.value !== "CLIENT_TO_PROVIDE");

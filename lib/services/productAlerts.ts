@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/db";
-import { ensureCustomerSchema } from "@/lib/services/customerSchema";
+import { prisma } from "../../lib/db";
+import { ensureCustomerSchema } from "../../lib/services/customerSchema";
 
 export type ProductAlertKind = "NEW" | "UPDATED";
 

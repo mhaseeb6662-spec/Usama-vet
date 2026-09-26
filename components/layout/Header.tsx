@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
+import { BUSINESS_CONFIG } from "../../lib/constants/config";
 import {
   Search,
   ShoppingCart,
@@ -22,12 +22,12 @@ import {
   Sparkles,
   Shield,
 } from "lucide-react";
-import AccountMenu from "@/components/account/AccountMenu";
-import HeaderSearch from "@/components/search/HeaderSearch";
+import AccountMenu from "../../components/account/AccountMenu";
+import HeaderSearch from "../../components/search/HeaderSearch";
 import TopBar from "./TopBar";
 import MainNav from "./MainNav";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { useCart } from "@/components/cart/CartProvider";
+import { useCart } from "../../components/cart/CartProvider";
 
 type NavCategory = {
   id: string;

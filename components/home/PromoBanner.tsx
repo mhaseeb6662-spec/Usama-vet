@@ -1,6 +1,6 @@
 import React from "react";
-import { FadeUp } from "@/components/shared/AnimationComponents";
-import { isPersistentPublicImage } from "@/lib/mediaUrl";
+import { FadeUp } from "../../components/shared/AnimationComponents";
+import { isPersistentPublicImage } from "../../lib/mediaUrl";
 
 interface PromoBannerProps {
   image?: string | null;

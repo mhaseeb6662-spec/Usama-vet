@@ -1,6 +1,6 @@
 import { cache } from "react";
-import { prisma } from "@/lib/db";
-import { mapProductToUI } from "@/lib/data/adapters";
+import { prisma } from "../../lib/db";
+import { mapProductToUI } from "../../lib/data/adapters";
 import type { Product as UIProduct } from "@/types";
 
 export class CategoryApplicationError extends Error {

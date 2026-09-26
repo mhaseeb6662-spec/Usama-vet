@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createReadStream, statSync } from "fs";
 import { Readable } from "stream";
 import path from "path";
-import { resolveUploadedFile } from "@/lib/uploadPath";
+import { resolveUploadedFile } from "../../../../lib/uploadPath";
 
 function videoContentType(filename: string): string {
   const ext = path.extname(filename).toLowerCase();

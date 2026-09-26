@@ -1,7 +1,7 @@
 import { writeFile, unlink, mkdir } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
-import { getUploadDir, getUploadLookupDirs } from "@/lib/uploadPath";
+import { getUploadDir, getUploadLookupDirs } from "../lib/uploadPath";
 
 export async function uploadImage(file: File): Promise<string> {
   const bytes = await file.arrayBuffer();

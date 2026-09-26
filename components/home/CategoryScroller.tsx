@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/AnimationComponents";
+import { FadeUp, StaggerContainer, StaggerItem } from "../../components/shared/AnimationComponents";
 
 export default function CategoryScroller({ categories = [] }: { categories?: any[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);

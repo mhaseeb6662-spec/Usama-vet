@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/session";
-import { ORDER_STATUSES } from "@/lib/constants/checkout";
-import { OrderApplicationError, updateOrderStatus } from "@/lib/services/orders";
+import { getSession } from "../../../../../../lib/session";
+import { ORDER_STATUSES } from "../../../../../../lib/constants/checkout";
+import { OrderApplicationError, updateOrderStatus } from "../../../../../../lib/services/orders";
 
 export const dynamic = "force-dynamic";
 

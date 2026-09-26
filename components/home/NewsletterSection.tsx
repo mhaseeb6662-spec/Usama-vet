@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { Mail, MessageCircle } from "lucide-react";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
-import { StaggerContainer, StaggerItem } from "@/components/shared/AnimationComponents";
+import { BUSINESS_CONFIG } from "../../lib/constants/config";
+import { StaggerContainer, StaggerItem } from "../../components/shared/AnimationComponents";
 
 export default function NewsletterSection() {
   const [email, setEmail] = useState("");

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ShoppingCart } from "lucide-react";
-import { useCart } from "@/components/cart/CartProvider";
+import { useCart } from "../../components/cart/CartProvider";
 
 type AddToCartButtonProps = {
   productId: number;

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readFile } from "fs/promises";
 import path from "path";
-import { resolveUploadedFile } from "@/lib/uploadPath";
+import { resolveUploadedFile } from "../../../../lib/uploadPath";
 
 export async function GET(
   request: NextRequest,

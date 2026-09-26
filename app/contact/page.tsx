@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
-import ContactForm from "@/components/contact/ContactForm";
-import { BreadcrumbsSchema } from "@/lib/seo/schema";
+import { BUSINESS_CONFIG } from "../../lib/constants/config";
+import ContactForm from "../../components/contact/ContactForm";
+import { BreadcrumbsSchema } from "../../lib/seo/schema";
 
 export const metadata = {
   title: "Contact Us",

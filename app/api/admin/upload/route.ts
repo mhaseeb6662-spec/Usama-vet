@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { uploadImage } from "@/lib/imageStorage";
-import { getSession } from "@/lib/session";
+import { uploadImage } from "../../../../lib/imageStorage";
+import { getSession } from "../../../../lib/session";
 
 export async function POST(request: NextRequest) {
   try {

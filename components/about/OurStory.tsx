@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import { FadeUp } from "@/components/shared/AnimationComponents";
-import { ABOUT_DATA } from "@/lib/data/aboutData";
+import { FadeUp } from "../../components/shared/AnimationComponents";
+import { ABOUT_DATA } from "../../lib/data/aboutData";
 
 export default function OurStory() {
   return (

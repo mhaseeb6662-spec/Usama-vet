@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { pingDatabase } from "@/lib/db";
+import { pingDatabase } from "../../../lib/db";
 
 export const dynamic = "force-dynamic";
 

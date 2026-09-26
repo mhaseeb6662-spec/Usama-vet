@@ -2,10 +2,10 @@ import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Layers, ArrowLeft } from "lucide-react";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
-import ProductCard from "@/components/product/ProductCard";
-import { BreadcrumbsSchema } from "@/lib/seo/schema";
-import { CategoryApplicationError, getCategoryListing } from "@/lib/data/categories";
+import { BUSINESS_CONFIG } from "../../../lib/constants/config";
+import ProductCard from "../../../components/product/ProductCard";
+import { BreadcrumbsSchema } from "../../../lib/seo/schema";
+import { CategoryApplicationError, getCategoryListing } from "../../../lib/data/categories";
 import type { Product } from "@/types";
 
 export const dynamic = "force-dynamic";

@@ -2,9 +2,9 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { CheckCircle2, Phone, MessageCircle } from "lucide-react";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
-import { ORDER_PAYMENT_METHOD_LABELS } from "@/lib/constants/checkout";
-import { getOrderForReceipt } from "@/lib/services/orders";
+import { BUSINESS_CONFIG } from "../../../lib/constants/config";
+import { ORDER_PAYMENT_METHOD_LABELS } from "../../../lib/constants/checkout";
+import { getOrderForReceipt } from "../../../lib/services/orders";
 
 export const metadata = {
   title: "Order Placed",

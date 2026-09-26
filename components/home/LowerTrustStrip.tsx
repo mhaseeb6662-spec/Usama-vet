@@ -1,6 +1,6 @@
 import React from "react";
 import { ShieldAlert, Award, Truck, BadgeCheck } from "lucide-react";
-import { StaggerContainer, StaggerItem } from "@/components/shared/AnimationComponents";
+import { StaggerContainer, StaggerItem } from "../../components/shared/AnimationComponents";
 
 export default function LowerTrustStrip() {
   return (

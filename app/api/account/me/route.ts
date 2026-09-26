@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAuthenticatedCustomer, publicCustomerFromUser } from "@/lib/services/customerAuth";
-import { getUnreadAlertCount } from "@/lib/services/productAlerts";
+import { getAuthenticatedCustomer, publicCustomerFromUser } from "../../../../lib/services/customerAuth";
+import { getUnreadAlertCount } from "../../../../lib/services/productAlerts";
 
 export const dynamic = "force-dynamic";
 

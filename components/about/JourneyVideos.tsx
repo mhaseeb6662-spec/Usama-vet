@@ -3,8 +3,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
-import { FadeUp } from "@/components/shared/AnimationComponents";
-import type { AboutVideoItem } from "@/lib/data/aboutVideos";
+import { FadeUp } from "../../components/shared/AnimationComponents";
+import type { AboutVideoItem } from "../../lib/data/aboutVideos";
 
 function VideoCard({
   video,

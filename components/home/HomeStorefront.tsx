@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import HeroCarousel from "@/components/home/HeroCarousel";
-import CategoryScroller from "@/components/home/CategoryScroller";
-import TrustStrip from "@/components/home/TrustStrip";
-import PromoBanner from "@/components/home/PromoBanner";
-import ProductTabs from "@/components/home/ProductTabs";
-import ReviewsSection from "@/components/home/ReviewsSection";
-import PromoSearchSection from "@/components/home/PromoSearchSection";
-import ProductSection from "@/components/home/ProductSection";
-import LowerTrustStrip from "@/components/home/LowerTrustStrip";
-import NewsletterSection from "@/components/home/NewsletterSection";
+import HeroCarousel from "../../components/home/HeroCarousel";
+import CategoryScroller from "../../components/home/CategoryScroller";
+import TrustStrip from "../../components/home/TrustStrip";
+import PromoBanner from "../../components/home/PromoBanner";
+import ProductTabs from "../../components/home/ProductTabs";
+import ReviewsSection from "../../components/home/ReviewsSection";
+import PromoSearchSection from "../../components/home/PromoSearchSection";
+import ProductSection from "../../components/home/ProductSection";
+import LowerTrustStrip from "../../components/home/LowerTrustStrip";
+import NewsletterSection from "../../components/home/NewsletterSection";
 
 const EMPTY_CATALOG = {
   featured: [],

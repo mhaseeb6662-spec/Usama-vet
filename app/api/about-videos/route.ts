@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAboutVideos } from "@/lib/data/aboutVideos";
+import { getAboutVideos } from "../../../lib/data/aboutVideos";
 
 export const dynamic = "force-dynamic";
 

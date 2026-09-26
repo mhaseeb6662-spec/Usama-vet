@@ -1,6 +1,6 @@
 import Link from "next/link";
-import ProductCard from "@/components/product/ProductCard";
-import { SearchApplicationError, searchProducts } from "@/lib/services/productSearch";
+import ProductCard from "../../components/product/ProductCard";
+import { SearchApplicationError, searchProducts } from "../../lib/services/productSearch";
 import type { Product } from "@/types";
 
 export const dynamic = "force-dynamic";

@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
+import { BUSINESS_CONFIG } from "../lib/constants/config";
 
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = BUSINESS_CONFIG.url;

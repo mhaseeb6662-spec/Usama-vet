@@ -1,12 +1,12 @@
 import crypto from "crypto";
-import { prisma } from "@/lib/db";
-import { MAX_PRODUCT_GALLERY_IMAGES } from "@/lib/constants/products";
+import { prisma } from "../../lib/db";
+import { MAX_PRODUCT_GALLERY_IMAGES } from "../../lib/constants/products";
 import {
   createProductAlert,
   deleteProductAlertsForProduct,
   isMissingTableError,
-} from "@/lib/services/productAlerts";
-import { deleteVideo } from "@/lib/videoStorage";
+} from "../../lib/services/productAlerts";
+import { deleteVideo } from "../../lib/videoStorage";
 
 export async function resolveOptionalCategoryId(raw: string): Promise<number | null> {
   const trimmed = raw.trim();

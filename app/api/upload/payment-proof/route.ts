@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { uploadImage } from "@/lib/imageStorage";
+import { uploadImage } from "../../../../lib/imageStorage";
 
 export async function POST(request: NextRequest) {
   try {

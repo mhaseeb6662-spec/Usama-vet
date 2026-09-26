@@ -1,14 +1,14 @@
 import React from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/db";
+import { prisma } from "../../../lib/db";
 import { redirect } from "next/navigation";
 import { Plus, Trash2, Edit } from "lucide-react";
-import ImageUploader from "@/components/admin/ui/ImageUploader";
-import AdminActionError from "@/components/admin/AdminActionError";
-import { runAdminAction } from "@/lib/admin/mutation";
-import { toServedImageUrl } from "@/lib/mediaUrl";
-import { deleteImage } from "@/lib/imageStorage";
-import { ensureHowToOrderPostTable } from "@/lib/data/howToOrderPosts";
+import ImageUploader from "../../../components/admin/ui/ImageUploader";
+import AdminActionError from "../../../components/admin/AdminActionError";
+import { runAdminAction } from "../../../lib/admin/mutation";
+import { toServedImageUrl } from "../../../lib/mediaUrl";
+import { deleteImage } from "../../../lib/imageStorage";
+import { ensureHowToOrderPostTable } from "../../../lib/data/howToOrderPosts";
 
 function readPostFields(formData: FormData) {
   const image = String(formData.get("image") || "").trim();

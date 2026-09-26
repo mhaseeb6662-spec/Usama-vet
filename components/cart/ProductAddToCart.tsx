@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Minus, Plus } from "lucide-react";
-import AddToCartButton from "@/components/cart/AddToCartButton";
+import AddToCartButton from "../../components/cart/AddToCartButton";
 
 export default function ProductAddToCart({
   productId,

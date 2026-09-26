@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { prisma } from "../../lib/db";
 
 const STATEMENTS = [
   `CREATE TABLE IF NOT EXISTS \`Order\` (

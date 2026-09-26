@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { OrderApplicationError, trackOrder } from "@/lib/services/orders";
+import { OrderApplicationError, trackOrder } from "../../../../lib/services/orders";
 
 export const dynamic = "force-dynamic";
 

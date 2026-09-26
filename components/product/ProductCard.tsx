@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Eye, Heart, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { Product } from "@/types";
-import AddToCartButton from "@/components/cart/AddToCartButton";
+import AddToCartButton from "../../components/cart/AddToCartButton";
 
 interface ProductCardProps {
   product: Product;

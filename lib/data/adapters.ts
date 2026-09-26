@@ -1,6 +1,6 @@
 import { Product as PrismaProduct, ProductImage, Category as PrismaCategory, Brand } from "@prisma/client";
 import { Product as UIProduct, Category as UICategory } from "@/types";
-import { toServedImageUrl } from "@/lib/mediaUrl";
+import { toServedImageUrl } from "../../lib/mediaUrl";
 
 type FullPrismaProduct = PrismaProduct & {
   images?: ProductImage[];

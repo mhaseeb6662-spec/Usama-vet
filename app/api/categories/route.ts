@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAllActiveCategories } from "@/lib/data/homepage";
+import { getAllActiveCategories } from "../../../lib/data/homepage";
 
 export const dynamic = "force-dynamic";
 

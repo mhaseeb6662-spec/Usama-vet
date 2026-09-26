@@ -4,9 +4,9 @@ import {
   getHomepageCategories,
   getActiveHeroSlides,
   getActiveBanners,
-} from "@/lib/data/homepage";
-import { getApprovedHomeReviews } from "@/lib/data/reviews";
-import { withDatabaseRetry } from "@/lib/db";
+} from "../../../lib/data/homepage";
+import { getApprovedHomeReviews } from "../../../lib/data/reviews";
+import { withDatabaseRetry } from "../../../lib/db";
 
 export const dynamic = "force-dynamic";
 

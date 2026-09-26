@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { execSync } from "child_process";
-import { prisma } from "@/lib/db";
+import { prisma } from "../../../lib/db";
 import bcrypt from "bcryptjs";
 
 import fs from "fs";

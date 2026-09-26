@@ -1,6 +1,6 @@
 import React from "react";
-import { OrganizationSchema, WebSiteSchema } from "@/lib/seo/schema";
-import HomeStorefront from "@/components/home/HomeStorefront";
+import { OrganizationSchema, WebSiteSchema } from "../lib/seo/schema";
+import HomeStorefront from "../components/home/HomeStorefront";
 
 export const dynamic = "force-dynamic";
 

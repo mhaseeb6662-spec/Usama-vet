@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { FadeUp } from "@/components/shared/AnimationComponents";
-import { useCart } from "@/components/cart/CartProvider";
-import type { CartQuote } from "@/lib/services/cartQuote";
+import { FadeUp } from "../../components/shared/AnimationComponents";
+import { useCart } from "../../components/cart/CartProvider";
+import type { CartQuote } from "../../lib/services/cartQuote";
 
 export default function CartView() {
   const { items, setQuantity, removeItem } = useCart();

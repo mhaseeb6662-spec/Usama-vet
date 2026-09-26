@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { OrderApplicationError, placeOrder } from "@/lib/services/orders";
-import { getAuthenticatedCustomer } from "@/lib/services/customerAuth";
+import { OrderApplicationError, placeOrder } from "../../../lib/services/orders";
+import { getAuthenticatedCustomer } from "../../../lib/services/customerAuth";
 
 export const dynamic = "force-dynamic";
 

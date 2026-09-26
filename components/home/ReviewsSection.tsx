@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useRef, useState, useEffect, useMemo } from "react";
-import SectionHeader from "@/components/shared/SectionHeader";
-import ReviewCard from "@/components/reviews/ReviewCard";
+import SectionHeader from "../../components/shared/SectionHeader";
+import ReviewCard from "../../components/reviews/ReviewCard";
 import type { Review } from "@/types";
-import { FadeUp } from "@/components/shared/AnimationComponents";
+import { FadeUp } from "../../components/shared/AnimationComponents";
 import { useReducedMotion } from "framer-motion";
 
 function loopedReviews(reviews: Review[]) {

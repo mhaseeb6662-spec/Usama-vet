@@ -1,15 +1,15 @@
 import React from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/db";
+import { prisma } from "../../../lib/db";
 import { redirect } from "next/navigation";
 import { Plus, Trash2, Edit } from "lucide-react";
-import AdminActionError from "@/components/admin/AdminActionError";
-import { runAdminAction } from "@/lib/admin/mutation";
-import { ensureAboutVideoTable } from "@/lib/data/aboutVideos";
-import VideoUploader from "@/components/admin/ui/VideoUploader";
-import ImageUploader from "@/components/admin/ui/ImageUploader";
-import { deleteVideo } from "@/lib/videoStorage";
-import { deleteImage } from "@/lib/imageStorage";
+import AdminActionError from "../../../components/admin/AdminActionError";
+import { runAdminAction } from "../../../lib/admin/mutation";
+import { ensureAboutVideoTable } from "../../../lib/data/aboutVideos";
+import VideoUploader from "../../../components/admin/ui/VideoUploader";
+import ImageUploader from "../../../components/admin/ui/ImageUploader";
+import { deleteVideo } from "../../../lib/videoStorage";
+import { deleteImage } from "../../../lib/imageStorage";
 
 function readVideoFields(formData: FormData) {
   const title = String(formData.get("title") || "").trim();

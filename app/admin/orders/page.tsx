@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/db";
-import { ensureOrderSchema } from "@/lib/services/orderSchema";
-import { ORDER_STATUSES, type OrderStatusValue } from "@/lib/constants/checkout";
+import { prisma } from "../../../lib/db";
+import { ensureOrderSchema } from "../../../lib/services/orderSchema";
+import { ORDER_STATUSES, type OrderStatusValue } from "../../../lib/constants/checkout";
 
 export const dynamic = "force-dynamic";
 

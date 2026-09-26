@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { cartQuoteSchema } from "@/lib/validators/order";
-import { quoteCartItems } from "@/lib/services/cartQuote";
+import { cartQuoteSchema } from "../../../../lib/validators/order";
+import { quoteCartItems } from "../../../../lib/services/cartQuote";
 
 export const dynamic = "force-dynamic";
 

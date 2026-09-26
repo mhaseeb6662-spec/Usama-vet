@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { isPersistentPublicImage } from "@/lib/mediaUrl";
+import { isPersistentPublicImage } from "../../lib/mediaUrl";
 
 type HeroSlideImage = {
   desktopImage?: string | null;

@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/db";
-import { toServedImageUrl } from "@/lib/mediaUrl";
-import { SHIPPING_FEE } from "@/lib/constants/checkout";
+import { prisma } from "../../lib/db";
+import { toServedImageUrl } from "../../lib/mediaUrl";
+import { SHIPPING_FEE } from "../../lib/constants/checkout";
 
 export type QuotedCartItem = {
   productId: number;

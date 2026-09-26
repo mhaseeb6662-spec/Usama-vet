@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { uploadVideo } from "@/lib/videoStorage";
-import { getSession } from "@/lib/session";
+import { uploadVideo } from "../../../../lib/videoStorage";
+import { getSession } from "../../../../lib/session";
 
 export const maxDuration = 60;
 

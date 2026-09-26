@@ -1,7 +1,7 @@
 import { writeFile, unlink, mkdir } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
-import { getUploadDir, getUploadLookupDirs } from "@/lib/uploadPath";
+import { getUploadDir, getUploadLookupDirs } from "../lib/uploadPath";
 
 const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
 const ALLOWED_VIDEO_TYPES = new Set([

@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
-import { prisma } from "@/lib/db";
-import { toServedImageUrl } from "@/lib/mediaUrl";
+import { prisma } from "../../lib/db";
+import { toServedImageUrl } from "../../lib/mediaUrl";
 
 export type HowToOrderPostItem = {
   id: number;

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { FormEvent, useState } from "react";
-import { TRACKING_STEPS } from "@/lib/constants/checkout";
+import { TRACKING_STEPS } from "../../lib/constants/checkout";
 
 type TrackedOrder = {
   orderNumber: string;

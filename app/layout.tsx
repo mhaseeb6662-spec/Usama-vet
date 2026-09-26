@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import AnimatedBackground from "@/components/layout/AnimatedBackground";
-import FloatingWhatsApp from "@/components/shared/FloatingWhatsApp";
-import AppProviders from "@/components/providers/AppProviders";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
+import AnimatedBackground from "../components/layout/AnimatedBackground";
+import FloatingWhatsApp from "../components/shared/FloatingWhatsApp";
+import AppProviders from "../components/providers/AppProviders";
+import { BUSINESS_CONFIG } from "../lib/constants/config";
 import "./globals.css";
 
 export const metadata: Metadata = {

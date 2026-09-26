@@ -1,19 +1,19 @@
 import React from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/db";
+import { prisma } from "../../../lib/db";
 import { redirect } from "next/navigation";
 import { Plus, Trash2, Edit } from "lucide-react";
-import ImageUploader from "@/components/admin/ui/ImageUploader";
-import AdminActionError from "@/components/admin/AdminActionError";
-import { runAdminAction } from "@/lib/admin/mutation";
-import { toServedImageUrl } from "@/lib/mediaUrl";
-import { ensureCategorySchema } from "@/lib/services/categorySchema";
+import ImageUploader from "../../../components/admin/ui/ImageUploader";
+import AdminActionError from "../../../components/admin/AdminActionError";
+import { runAdminAction } from "../../../lib/admin/mutation";
+import { toServedImageUrl } from "../../../lib/mediaUrl";
+import { ensureCategorySchema } from "../../../lib/services/categorySchema";
 import {
   createAdminCategory,
   deleteAdminCategory,
   toggleAdminCategoryHomepage,
   updateAdminCategory,
-} from "@/lib/services/adminCategory";
+} from "../../../lib/services/adminCategory";
 
 async function loadCategoryList() {
   return prisma.category.findMany({

@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { FadeUp } from "@/components/shared/AnimationComponents";
-import { ABOUT_DATA } from "@/lib/data/aboutData";
+import { FadeUp } from "../../components/shared/AnimationComponents";
+import { ABOUT_DATA } from "../../lib/data/aboutData";
 import { motion } from "framer-motion";
 
 export default function AboutFinalCTA() {

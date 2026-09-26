@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import SectionHeader from "@/components/shared/SectionHeader";
-import ProductCard from "@/components/product/ProductCard";
-import ViewAllButton from "@/components/shared/ViewAllButton";
+import SectionHeader from "../../components/shared/SectionHeader";
+import ProductCard from "../../components/product/ProductCard";
+import ViewAllButton from "../../components/shared/ViewAllButton";
 import { Product } from "@/types";
-import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/AnimationComponents";
+import { FadeUp, StaggerContainer, StaggerItem } from "../../components/shared/AnimationComponents";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ProductSectionProps {

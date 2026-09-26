@@ -2,12 +2,12 @@ import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ShieldCheck, Truck, MessageCircle, AlertTriangle } from "lucide-react";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
-import { prisma } from "@/lib/db";
-import { ProductSchema, BreadcrumbsSchema } from "@/lib/seo/schema";
-import { toServedImageUrl } from "@/lib/mediaUrl";
-import ProductAddToCart from "@/components/cart/ProductAddToCart";
-import ProductImageGallery from "@/components/product/ProductImageGallery";
+import { BUSINESS_CONFIG } from "../../../lib/constants/config";
+import { prisma } from "../../../lib/db";
+import { ProductSchema, BreadcrumbsSchema } from "../../../lib/seo/schema";
+import { toServedImageUrl } from "../../../lib/mediaUrl";
+import ProductAddToCart from "../../../components/cart/ProductAddToCart";
+import ProductImageGallery from "../../../components/product/ProductImageGallery";
 
 export const dynamic = 'force-dynamic';
 

@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { decrypt, encrypt } from "@/lib/session";
+import { decrypt, encrypt } from "../lib/session";
 
 const COOKIE_NAME = "customer_session";
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;

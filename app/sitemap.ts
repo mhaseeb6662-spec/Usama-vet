@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
-import { prisma } from "@/lib/db";
+import { BUSINESS_CONFIG } from "../lib/constants/config";
+import { prisma } from "../lib/db";
 
 export const dynamic = "force-dynamic";
 

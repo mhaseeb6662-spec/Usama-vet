@@ -3,12 +3,12 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FadeUp } from "@/components/shared/AnimationComponents";
-import { useCart } from "@/components/cart/CartProvider";
-import PaymentProofUploader from "@/components/checkout/PaymentProofUploader";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
-import type { PaymentMethodValue } from "@/lib/constants/checkout";
-import type { CartQuote } from "@/lib/services/cartQuote";
+import { FadeUp } from "../../components/shared/AnimationComponents";
+import { useCart } from "../../components/cart/CartProvider";
+import PaymentProofUploader from "../../components/checkout/PaymentProofUploader";
+import { BUSINESS_CONFIG } from "../../lib/constants/config";
+import type { PaymentMethodValue } from "../../lib/constants/checkout";
+import type { CartQuote } from "../../lib/services/cartQuote";
 
 const emptyForm = {
   customerName: "",

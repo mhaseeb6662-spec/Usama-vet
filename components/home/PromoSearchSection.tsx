@@ -4,7 +4,7 @@ import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Search } from "lucide-react";
-import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/AnimationComponents";
+import { FadeUp, StaggerContainer, StaggerItem } from "../../components/shared/AnimationComponents";
 
 const popularSearches = ["Cattle Care", "Poultry", "Supplements", "Pet Care", "Vitamins"];
 

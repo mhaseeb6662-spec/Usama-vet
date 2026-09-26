@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import Button from "@/components/ui/Button";
+import Button from "../../components/ui/Button";
 
 interface FormFields {
   name: string;

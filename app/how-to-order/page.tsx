@@ -1,4 +1,4 @@
-import { getActiveHowToOrderPosts } from "@/lib/data/howToOrderPosts";
+import { getActiveHowToOrderPosts } from "../../lib/data/howToOrderPosts";
 
 export const dynamic = "force-dynamic";
 

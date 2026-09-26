@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import ProductCard from "@/components/product/ProductCard";
-import { prisma } from "@/lib/db";
-import { mapProductToUI } from "@/lib/data/adapters";
+import ProductCard from "../../components/product/ProductCard";
+import { prisma } from "../../lib/db";
+import { mapProductToUI } from "../../lib/data/adapters";
 import type { Product } from "@/types";
 
 export const metadata = {

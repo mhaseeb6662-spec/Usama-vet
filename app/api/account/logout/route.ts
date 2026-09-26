@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { logoutCustomer } from "@/lib/customerSession";
+import { logoutCustomer } from "../../../../lib/customerSession";
 
 export const dynamic = "force-dynamic";
 

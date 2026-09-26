@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/db";
-import { isMissingTableError } from "@/lib/services/productAlerts";
+import { prisma } from "../../lib/db";
+import { isMissingTableError } from "../../lib/services/productAlerts";
 
 let schemaReady = false;
 

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ALLOWED_STATUS_TRANSITIONS, ORDER_PAYMENT_STATUSES, type OrderStatusValue } from "@/lib/constants/checkout";
+import { ALLOWED_STATUS_TRANSITIONS, ORDER_PAYMENT_STATUSES, type OrderStatusValue } from "../../lib/constants/checkout";
 
 export default function OrderActions({
   orderId,

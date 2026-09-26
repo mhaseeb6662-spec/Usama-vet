@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { SearchApplicationError, searchProducts } from "@/lib/services/productSearch";
+import { SearchApplicationError, searchProducts } from "../../../lib/services/productSearch";
 
 export const dynamic = "force-dynamic";
 

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
+import { BUSINESS_CONFIG } from "../../lib/constants/config";
 import { motion, useReducedMotion } from "framer-motion";
 
 export default function Footer() {

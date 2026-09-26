@@ -3,7 +3,7 @@
 import React, { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { safeAccountNext } from "@/lib/accountRedirect";
+import { safeAccountNext } from "../../lib/accountRedirect";
 
 export default function LoginForm() {
   const router = useRouter();

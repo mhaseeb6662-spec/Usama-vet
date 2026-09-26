@@ -8,7 +8,7 @@ import {
   subscribeCart,
   writeCart,
   type StoredCartItem,
-} from "@/lib/cart/storage";
+} from "../../lib/cart/storage";
 
 type CartContextValue = {
   items: StoredCartItem[];

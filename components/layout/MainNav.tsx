@@ -7,7 +7,7 @@ import {
   Menu, ChevronDown, ChevronRight, Phone, MapPin, 
   Pill, Milk, Activity, Feather, Heart, Grid, Sparkles, Shield 
 } from "lucide-react";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
+import { BUSINESS_CONFIG } from "../../lib/constants/config";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ICON_MAP: Record<string, React.ElementType> = {

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import ProductCard from "@/components/product/ProductCard";
+import ProductCard from "../../components/product/ProductCard";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 type TabName = "Featured Products" | "New Arrivals" | "Best Selling Products";

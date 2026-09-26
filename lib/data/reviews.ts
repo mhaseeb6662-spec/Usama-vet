@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { prisma } from "../../lib/db";
 import { cache } from "react";
 import type { Review as UIReview } from "@/types";
 import type { Review as PrismaReview } from "@prisma/client";

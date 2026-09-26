@@ -1,7 +1,7 @@
 import crypto from "crypto";
-import { prisma } from "@/lib/db";
-import { ensureCategorySchema } from "@/lib/services/categorySchema";
-import { isMissingTableError } from "@/lib/services/productAlerts";
+import { prisma } from "../../lib/db";
+import { ensureCategorySchema } from "../../lib/services/categorySchema";
+import { isMissingTableError } from "../../lib/services/productAlerts";
 
 function categorySlug(name: string): string {
   const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");

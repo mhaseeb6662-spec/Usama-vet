@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { AccountApplicationError, loginCustomer } from "@/lib/services/customerAuth";
+import { AccountApplicationError, loginCustomer } from "../../../../lib/services/customerAuth";
 
 export const dynamic = "force-dynamic";
 

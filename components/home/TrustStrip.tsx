@@ -1,6 +1,6 @@
 import React from "react";
 import { Truck, RotateCcw, ShieldCheck } from "lucide-react";
-import { StaggerContainer, StaggerItem } from "@/components/shared/AnimationComponents";
+import { StaggerContainer, StaggerItem } from "../../components/shared/AnimationComponents";
 
 export default function TrustStrip() {
   return (

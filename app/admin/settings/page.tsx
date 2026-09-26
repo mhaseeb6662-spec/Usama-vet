@@ -1,5 +1,5 @@
 import React from "react";
-import { BUSINESS_CONFIG } from "@/lib/constants/config";
+import { BUSINESS_CONFIG } from "../../../lib/constants/config";
 
 export default function SettingsAdmin() {
   return (
