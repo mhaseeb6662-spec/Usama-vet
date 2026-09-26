@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import RegisterForm from "@/components/account/RegisterForm";
+import RegisterForm from "../../../components/account/RegisterForm";
 
 export const dynamic = "force-dynamic";
 

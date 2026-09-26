@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/db";
-import { getAuthenticatedCustomer } from "@/lib/services/customerAuth";
-import { getAlertsForCustomer, markAlertsSeen } from "@/lib/services/productAlerts";
-import { ensureOrderSchema } from "@/lib/services/orderSchema";
-import AccountLogoutButton from "@/components/account/AccountLogoutButton";
-import { toServedImageUrl } from "@/lib/mediaUrl";
+import { prisma } from "../../lib/db";
+import { getAuthenticatedCustomer } from "../../lib/services/customerAuth";
+import { getAlertsForCustomer, markAlertsSeen } from "../../lib/services/productAlerts";
+import { ensureOrderSchema } from "../../lib/services/orderSchema";
+import AccountLogoutButton from "../../components/account/AccountLogoutButton";
+import { toServedImageUrl } from "../../lib/mediaUrl";
 
 export const dynamic = "force-dynamic";
 
